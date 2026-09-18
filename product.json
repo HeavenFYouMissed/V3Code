@@ -40,7 +40,7 @@
 	"darwinBundleIdentifier": "dev.v3code.code",
 	"linuxIconName": "v3code",
 	"licenseFileName": "LICENSE-V3CODE.txt",
-	"reportIssueUrl": "https://github.com/KandDLabs/v3code/issues/new",
+	"reportIssueUrl": "https://github.com/HeavenFYouMissed/V3Code/issues/new",
 	"updateUrl": "https://update.v3code.dev",
 	"v3codeBroadcastUrl": "https://update.v3code.dev/api/notifications",
 	"v3codeAgentsBetaVoteUrl": "https://update.v3code.dev/api/votes/agents-beta",
@@ -57,7 +57,7 @@
 	"linkProtectionTrustedDomains": [
 		"https://v3code.dev",
 		"https://app.v3code.dev",
-		"https://github.com/KandDLabs/v3code",
+		"https://github.com/HeavenFYouMissed/V3Code",
 		"https://ollama.com"
 	],
 	"openToWelcomeMainPage": false,

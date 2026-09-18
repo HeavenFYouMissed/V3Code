@@ -15,7 +15,6 @@ import { StorageTarget, StorageScope } from '../../../../platform/storage/common
 import { IApplicationStorageMainService } from '../../../../platform/storage/electron-main/storageMainService.js';
 
 import { IMetricsService } from '../common/metricsService.js';
-import { PostHog } from 'posthog-node'
 import { OPT_OUT_KEY } from '../common/storageKeys.js';
 
 
@@ -37,8 +36,6 @@ const osInfo = _getOSInfo()
 
 export class MetricsMainService extends Disposable implements IMetricsService {
 	_serviceBrand: undefined;
-
-	private readonly client: PostHog
 
 	private _initProperties: object = {}
 
@@ -91,10 +88,6 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 		@IApplicationStorageMainService private readonly _appStorage: IApplicationStorageMainService,
 	) {
 		super()
-		this.client = new PostHog('phc_UanIdujHiLp55BkUTjB1AuBXcasVkdqRwgnwRlWESH2', {
-			host: 'https://us.i.posthog.com',
-		})
-
 		this.initialize() // async
 	}
 
@@ -128,16 +121,8 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 			properties: this._initProperties,
 		}
 
-		// Telemetry is OFF, unconditionally. The PostHog project this reported to is Void's, not
-		// V3Code's — the key arrived with the upstream import and was never repointed — so every
-		// event a V3Code user generated went to a third party's analytics and V3Code learned
-		// nothing from it. Opting the client out is the whole fix: nothing identifies, nothing
-		// sends, and no device or user id leaves the machine.
-		//
-		// The ~40 capture() call sites are left in place deliberately. They are harmless while
-		// the sink is closed, and deleting them would make it much harder to point this at a
-		// V3Code-owned project later, with consent, if that is ever wanted. See capture() below.
-		this.client.optOut()
+		// Telemetry is off. Capture sites remain local no-ops unless a future,
+		// consent-gated V3Code-owned sink is added.
 		void identifyMessage
 	}
 
@@ -163,5 +148,4 @@ export class MetricsMainService extends Disposable implements IMetricsService {
 		return this._initProperties
 	}
 }
-
 

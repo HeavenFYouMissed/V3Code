@@ -1,7 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "v3index",
-	"account_id": "ccc21ee52b1ee0531162c3b2215e2f85",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-06-01",
 	// nodejs_compat: node:crypto (sync sha256 in core/hashing.ts) — verified supported.
@@ -37,7 +36,7 @@
 		{ "binding": "BLOBS", "bucket_name": "v3index-blobs" }
 	],
 	"kv_namespaces": [
-		{ "binding": "KEYS", "id": "4759bde42e744333a9d6f1ea2f489040" }
+		{ "binding": "KEYS", "id": "REPLACE_WITH_YOUR_KV_NAMESPACE_ID" }
 	],
 	"queues": {
 		"producers": [

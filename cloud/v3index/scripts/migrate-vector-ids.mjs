@@ -18,7 +18,8 @@
 // editor syncs: a concurrently re-embedded chunk is already written salted, and
 // its bare copy (if any) is just another unsalted id this migration will re-key.
 
-const ACCOUNT_ID = 'ccc21ee52b1ee0531162c3b2215e2f85';
+const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
+if (!ACCOUNT_ID) { console.error('set CLOUDFLARE_ACCOUNT_ID'); process.exit(1); }
 const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/vectorize/v2/indexes`;
 const LIST_PAGE = 1000;
 const ACCUM = 100;        // ids accumulated per migrateBatch (drives upsert/delete calls)

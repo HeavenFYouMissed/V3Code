@@ -21,7 +21,7 @@ const MANIFEST: ReleaseManifest = {
 	version: NEW_COMMIT,
 	productVersion: '1.5.0',
 	timestamp: 1_770_000_000_000,
-	url: `https://v3update.kevinbakon463.workers.dev/download/${QUALITY}/${PLATFORM}/V3Code-1.5.0.zip`,
+	url: `https://update.v3code.dev/download/${QUALITY}/${PLATFORM}/V3Code-1.5.0.zip`,
 	sha256hash: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
 	name: '1.5.0',
 	supersedes: [OLD_COMMIT],

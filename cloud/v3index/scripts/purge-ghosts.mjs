@@ -10,7 +10,7 @@
 // and deletes the difference.
 //
 //   node scripts/purge-ghosts.mjs \
-//     --base https://v3index.kevinbakon463.workers.dev \
+//     --base https://your-v3index-worker.example.com \
 //     --ws <workspaceId>:<writeToken> [--ws ...] \
 //     [--index v3index-chunks] [--apply] [--limit N] [--all-workspaces-listed]
 //
@@ -32,7 +32,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-const ACCOUNT_ID = 'ccc21ee52b1ee0531162c3b2215e2f85'; // wrangler.jsonc account_id
+const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID;
 const WORKER_DIR = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const LIST_PAGE = 1000;   // list-vectors max per call
 const DELETE_BATCH = 100; // delete_by_ids hard cap ("max id count is 100", code 40007)
@@ -49,7 +49,7 @@ function optAll(name) {
 	return out;
 }
 
-const BASE = opt('base', 'https://v3index.kevinbakon463.workers.dev').replace(/\/+$/, '');
+const BASE = opt('base', '').replace(/\/+$/, '');
 const INDEX = opt('index', 'v3index-chunks');
 const APPLY = flag('apply');
 const LIMIT = Number(opt('limit', '0')) || 0; // 0 = no cap
@@ -63,6 +63,14 @@ const wsSpecs = optAll('ws').map(spec => {
 });
 if (wsSpecs.length === 0) {
 	console.error('usage: node scripts/purge-ghosts.mjs --base <url> --ws <wsId>:<writeToken> [--ws ...] [--apply] [--limit N] [--all-workspaces-listed]');
+	process.exit(1);
+}
+if (!BASE) {
+	console.error('pass --base with the deployed v3index worker URL');
+	process.exit(1);
+}
+if (API_TOKEN && !ACCOUNT_ID) {
+	console.error('set CLOUDFLARE_ACCOUNT_ID when using CLOUDFLARE_API_TOKEN');
 	process.exit(1);
 }
 

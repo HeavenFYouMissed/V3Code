@@ -1,7 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "v3update",
-	"account_id": "ccc21ee52b1ee0531162c3b2215e2f85",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-06-01",
 	"triggers": {
@@ -30,6 +29,6 @@
 		// Download + install analytics. Written non-blocking via ctx.waitUntil in
 		// the download/update paths; a D1 failure never affects serving bytes.
 		// Read back via GET /api/stats?token=<ADMIN_TOKEN>. See migrations/.
-		{ "binding": "ANALYTICS", "database_name": "v3code-analytics", "database_id": "ef7d82ed-8729-4529-8702-55bab9f02414" }
+		{ "binding": "ANALYTICS", "database_name": "v3code-analytics", "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID" }
 	]
 }

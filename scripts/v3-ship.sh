@@ -23,7 +23,7 @@ fi
 unset ELECTRON_RUN_AS_NODE 2>/dev/null || true
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-REPO="HeavenFYouMissed/VSElite"
+REPO="HeavenFYouMissed/V3Code"
 MAC=1; WIN=1; BUMP=""
 while [ $# -gt 0 ]; do
 	case "$1" in

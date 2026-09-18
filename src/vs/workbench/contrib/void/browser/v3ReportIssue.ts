@@ -37,7 +37,7 @@ export const V3CODE_REPORT_ISSUE_COMMAND_ID = 'v3code.reportIssue';
 export const V3CODE_SEND_FEEDBACK_COMMAND_ID = 'v3code.sendFeedback';
 export const V3CODE_VOTE_AGENTS_BETA_COMMAND_ID = 'v3code.voteAgentsBeta';
 
-const FALLBACK_REPORT_ISSUE_URL = 'https://github.com/KandDLabs/v3code/issues/new';
+const FALLBACK_REPORT_ISSUE_URL = 'https://github.com/HeavenFYouMissed/V3Code/issues/new';
 
 const osDisplayName = isMacintosh ? 'macOS' : isWindows ? 'Windows' : isLinux ? 'Linux' : 'Unknown';
 
