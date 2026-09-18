@@ -70,12 +70,8 @@ Do not remove those notices when modifying or redistributing the project.
 
 The Beast indexer contains adaptations and query data from multiple projects;
 see `beast/PROVENANCE.md`, `beast/THIRD_PARTY_NOTICES.md` and its component license.
-The public snapshot retains the workbench stylesheet with Microsoft MIT,
-embedded third-party notices and V3Code distribution attribution. The maintainer
-has confirmed that its product modifications are original V3Code work.
-The native diff renderer uses the reviewed replacement implementation.
-Optional branded themes and design reference data are excluded from the public
-snapshot without removing them from the private working source.
+Third-party material incorporated elsewhere in V3Code is recorded in `NOTICE.txt`
+and in the component records it references.
 
 Some runtime npm dependencies use vendor terms rather than an Open Source license.
 Building or packaging V3Code may require accepting those vendors' terms separately.

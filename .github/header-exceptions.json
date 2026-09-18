@@ -1,25 +1,3 @@
 {
-	"exceptions": [
-		{
-			"path": "LICENSE-V3CODE.txt",
-			"beforeSha256": "25dfe76d31d3fcfe75ffb0f015db1fc88bce4c3e248c683cc6e6ac61d16aa6d2",
-			"afterSha256": "2124a413068ea137e885c4362f649d047c41d81717e4e97f884072f9dcb2c180",
-			"reason": "Replace the rejected proprietary draft with Daniel's approved BSL 1.1 source-release terms.",
-			"evidence": "Reviewed against the official BSL 1.1 text and the mixed-license component boundary documented in SOURCE-LICENSE-REVIEW.md."
-		},
-		{
-			"path": "LICENSING.md",
-			"beforeSha256": "ae5d7dec18a2e65e694bded9307e89f2d7c757b0fc3a29fb63b3311fee98d8ce",
-			"afterSha256": "6e347314d879c2a84b7e630cf9e581fee5cade7fd868476d559da7ce92aa2add",
-			"reason": "Replace inaccurate repository-wide proprietary claims with an explicit mixed-license component map.",
-			"evidence": "The new map preserves MIT, Apache-2.0 and file-specific licenses and limits BSL coverage to KandD-owned material and modifications."
-		},
-		{
-			"path": "NOTICE.txt",
-			"beforeSha256": "904e34c287605a47394d3419dd548bee20c28bf4eb206c91d8971132a1a1fd54",
-			"afterSha256": "99e574256944d9514b9aa20029a026bfc16d9ab41aaf376cb35318566da2beb0",
-			"reason": "Add the missing Copilot Chat notice and align KandD's notice with the mixed-license BSL package.",
-			"evidence": "extensions/copilot retains its bundled MIT license; Code - OSS, Void Editor and Cline notices remain intact."
-		}
-	]
+	"exceptions": []
 }

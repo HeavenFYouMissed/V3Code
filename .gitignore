@@ -70,7 +70,6 @@ dist
 .github/skills/.local/
 
 backend/.env
-docs/cursor-blueprint/source/cursor-workbench.js
 .v3code/workspace-id
 # Per-workspace active plan (update_plan persistence): runtime state, per-user, never commit.
 .v3code/active-plan.json
@@ -86,8 +85,6 @@ mcps/
 .firecrawl/
 .tools/
 
-# retrieval-eval scratch bundles (esbuild output, regenerated each run)
-scripts/retrieval-eval/.ab-bundle/
 
 # Generated development helper staging; release packaging builds its own helper.
 /resources/computerUse/darwin/v3code-computer-use-helper

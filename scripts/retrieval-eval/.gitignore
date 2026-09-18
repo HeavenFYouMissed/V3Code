@@ -1,5 +1,0 @@
-# Run artifacts are regenerated every run: results JSON + the runtime esbuild
-# bundle. Keep the runner, miner, README, sets/ and baselines/ in git —
-# baselines/ holds BLESSED runs that gate ranking changes (--baseline).
-results/
-.scratch/
