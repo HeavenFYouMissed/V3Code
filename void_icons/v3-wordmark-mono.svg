@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 160" role="img" aria-label="V3">
+  <title>V3</title>
+  <defs>
+    <symbol id="v3-V-mono" viewBox="0 0 130 130" overflow="visible">
+      <path d="M 0 0 L 28 0 L 65 92 L 102 0 L 130 0 L 82 130 L 48 130 Z"/>
+    </symbol>
+    <symbol id="v3-3-mono" viewBox="0 0 130 130" overflow="visible">
+      <path d="M 4 16 C 22 -8, 110 -8, 122 28 C 130 60, 92 70, 70 70 C 92 70, 130 78, 122 110 C 110 144, 22 144, 4 118 L 30 102 C 38 120, 92 124, 96 100 C 98 80, 60 80, 50 80 L 50 60 C 60 60, 98 60, 96 40 C 92 16, 38 20, 30 38 Z"/>
+    </symbol>
+  </defs>
+  <g transform="translate(17 15)" fill="currentColor">
+    <use href="#v3-V-mono" x="0"   y="0" width="130" height="130"/>
+    <use href="#v3-3-mono" x="155" y="0" width="130" height="130"/>
+  </g>
+</svg>

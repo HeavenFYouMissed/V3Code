@@ -1,0 +1,71 @@
+V3Code - Third-Party Notices
+Copyright (c) 2025-2026 KandD Labs
+
+This product incorporates third-party software. The following notices apply to
+those portions. KandD-owned V3Code material is source-available under the
+Business Source License 1.1 where identified in LICENSING.md.
+
+================================================================================
+Microsoft Visual Studio Code (Code - OSS)
+================================================================================
+Copyright (c) 2015-present Microsoft Corporation
+License: MIT License
+Source: https://github.com/microsoft/vscode
+Full license text: LICENSE.txt
+
+================================================================================
+Void Editor
+================================================================================
+Copyright Void Editor contributors
+License: Apache License 2.0
+Source: https://github.com/voideditor/void
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this portion except in compliance with the License. You may obtain a copy of the
+License at: http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+================================================================================
+GitHub Copilot Chat
+================================================================================
+Copyright (c) Microsoft Corporation
+License: MIT License
+Source: https://github.com/microsoft/vscode-copilot-chat
+Vendored source: extensions/copilot/
+Full license text: extensions/copilot/LICENSE.txt
+
+================================================================================
+Cline SDK agent runtime design
+================================================================================
+Copyright (c) 2026 Cline Bot Inc.
+License: Apache License 2.0
+Source: https://github.com/cline/cline
+Reference: sdk/v0.0.65, commit f33ab3a872091952f44e43d0c8f5438099a60ada
+
+V3Code's local agent runtime policy is an adapted host integration. V3Code retains
+its own model transport, prompts, tools, approvals, MCP services, and UI, and adds
+finite iteration, repeated-call, timeout, and consecutive-mistake controls around
+the model-turn/tool-result lifecycle.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this portion except in compliance with the License. You may obtain a copy of the
+License at: http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+
+================================================================================
+V3Code BSL-Covered Components
+================================================================================
+Copyright (c) 2025-2026 KandD Labs LLC.
+License: LICENSE-V3CODE.txt
+Scope: see LICENSING.md
+
+The distribution label added to source files is not an ownership or license
+claim. File-specific and upstream notices remain applicable.

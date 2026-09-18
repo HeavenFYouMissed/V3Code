@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code — The Split Prism</title>
+  <defs>
+    <!-- Rounded-rect background -->
+    <linearGradient id="bgFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#0F1220"/>
+      <stop offset="100%" stop-color="#06070C"/>
+    </linearGradient>
+    <!-- Purple half (top-left) — flat-shaded with inner falloff -->
+    <linearGradient id="purpleHalf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#A788FF"/>
+      <stop offset="60%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#5E3BB8"/>
+    </linearGradient>
+    <!-- Green half (bottom-right) -->
+    <linearGradient id="greenHalf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#5FBF38"/>
+      <stop offset="50%" stop-color="#7FE650"/>
+      <stop offset="100%" stop-color="#A8F58A"/>
+    </linearGradient>
+    <!-- Subtle inner glow for each half -->
+    <filter id="halfGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feComposite in="b" in2="SourceAlpha" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Clip to rounded-rect "squircle" silhouette -->
+    <clipPath id="squircle">
+      <rect x="112" y="112" width="800" height="800" rx="180" ry="180"/>
+    </clipPath>
+  </defs>
+
+  <!-- Dark canvas -->
+  <rect width="1024" height="1024" fill="#0B0D14"/>
+
+  <!-- Rounded-rect icon body -->
+  <rect x="112" y="112" width="800" height="800" rx="180" ry="180" fill="url(#bgFill)"/>
+
+  <!-- Inside the squircle: split prism -->
+  <g clip-path="url(#squircle)">
+    <!-- Top-left purple half (offset up-left from center diagonal to leave V-gap) -->
+    <polygon points="112,112 912,112 912,440 440,912 112,912" fill="url(#purpleHalf)" filter="url(#halfGlow)"/>
+    <!-- Bottom-right green half (offset down-right) -->
+    <polygon points="912,512 912,912 512,912 584,440" fill="url(#greenHalf)" filter="url(#halfGlow)"/>
+
+    <!-- Negative-space V gap between halves (dark) -->
+    <polygon points="440,912 912,440 912,512 584,440 512,912" fill="#0B0D14"/>
+
+    <!-- Crisp inner edges along the split -->
+    <polyline points="912,440 440,912" fill="none" stroke="#C8B0FF" stroke-width="3" opacity="0.7"/>
+    <polyline points="912,512 512,912" fill="none" stroke="#A8F58A" stroke-width="3" opacity="0.65"/>
+
+    <!-- Subtle facet bevels for flat-3D feel -->
+    <polygon points="112,112 912,112 912,180 180,180" fill="#FFFFFF" opacity="0.05"/>
+    <polygon points="700,700 912,512 912,912 760,912" fill="#FFFFFF" opacity="0.06"/>
+  </g>
+
+  <!-- Outer hairline for crispness -->
+  <rect x="112" y="112" width="800" height="800" rx="180" ry="180"
+        fill="none" stroke="#1F2235" stroke-width="2"/>
+</svg>

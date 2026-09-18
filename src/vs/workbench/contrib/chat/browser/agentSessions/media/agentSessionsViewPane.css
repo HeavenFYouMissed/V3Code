@@ -1,0 +1,59 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* Cursor-referenced interaction tokens: 4px spacing grid, neutral workbench surfaces,
+ * 1px semantic selection edge, and 150ms state transitions. */
+.agent-sessions-workbench-view {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	min-width: 0;
+	overflow: hidden;
+
+	.agent-sessions-workbench-list {
+		display: flex;
+		flex: 1 1 auto;
+		min-height: 0;
+		min-width: 0;
+	}
+
+	.agent-sessions-viewer .monaco-list-row {
+		transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1), box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
+	}
+
+	.agent-sessions-viewer .monaco-list-row.selected {
+		box-shadow: inset 2px 0 0 #3A3A42;
+	}
+
+	.agent-sessions-viewer .monaco-list-row:focus-visible {
+		outline: 1px solid var(--vscode-focusBorder);
+		outline-offset: -1px;
+	}
+
+	.agent-session-icon.codicon-session-in-progress {
+		animation: agent-session-working-spin 1.2s linear infinite;
+	}
+}
+
+@keyframes agent-session-working-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.agent-sessions-workbench-view {
+		.agent-sessions-viewer .monaco-list-row {
+			transition: none;
+		}
+
+		.agent-session-icon.codicon-session-in-progress {
+			animation: none;
+		}
+	}
+}

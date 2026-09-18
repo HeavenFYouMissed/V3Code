@@ -1,0 +1,73 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "v3index",
+	"account_id": "ccc21ee52b1ee0531162c3b2215e2f85",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-06-01",
+	// nodejs_compat: node:crypto (sync sha256 in core/hashing.ts) — verified supported.
+	"compatibility_flags": ["nodejs_compat"],
+	"limits": { "cpu_ms": 300000 },
+	"durable_objects": {
+		"bindings": [
+			{ "name": "WORKSPACE", "class_name": "WorkspaceDO" }
+		]
+	},
+	"migrations": [
+		{ "tag": "v1", "new_sqlite_classes": ["WorkspaceDO"] }
+	],
+	"vectorize": [
+		// 1024-dim (qwen3-embedding-0.6b). Shared index; per-workspace isolation is
+		// BOTH the query `namespace` AND a `${workspaceId}:` prefix on every vector id
+		// (chunk id = hash(file:start:end) is not workspace-unique, so an unprefixed id
+		// let one workspace's prune deleteByIds another's colliding vector). Create with:
+		// wrangler vectorize create v3index-chunks --dimensions=1024 --metric=cosine
+		{ "binding": "VECTORS", "index_name": "v3index-chunks" },
+		// Voyage Code 3 is a different mathematical space despite also being
+		// 1024-dimensional. A separate physical index makes mixing impossible and
+		// permits independent rollout, rollback, and quality evaluation. Create with:
+		// wrangler vectorize create v3index-voyage-code3-1024 --dimensions=1024 --metric=cosine
+		{ "binding": "VECTORS_VOYAGE", "index_name": "v3index-voyage-code3-1024" }
+		// (Removed VECTORS_V2 / v3index-potion: the 256-dim static-embedder "fast path"
+		// lost the retrieval eval to qwen3 and was never written by any code path — a
+		// dead binding with no delete plumbing is a latent ghost-vector footgun.)
+	],
+	"r2_buckets": [
+		// Chunk-text blobs, `full` privacy mode only. Packed per upload batch (Class A
+		// ops dominate cost for small objects — see docs/RESEARCH.md).
+		{ "binding": "BLOBS", "bucket_name": "v3index-blobs" }
+	],
+	"kv_namespaces": [
+		{ "binding": "KEYS", "id": "4759bde42e744333a9d6f1ea2f489040" }
+	],
+	"queues": {
+		"producers": [
+			{ "binding": "EMBED_QUEUE", "queue": "v3index-embed" }
+		],
+		"consumers": [
+			// max_concurrency: 2 is the fix for "DO overloaded / requests queued too long".
+			// Without it, Cloudflare fans the consumer out to MANY parallel invocations,
+			// each hitting the SINGLE workspace DO with /embed-text + /vector-done WHILE
+			// the editor is streaming /chunks — the DO's request queue overflows, ingest
+			// 500s, and the editor restarts the whole sync ("starts over"). Capping
+			// concurrency lets ingest breathe; embeds drain steadily behind it.
+			{ "queue": "v3index-embed", "max_batch_size": 25, "max_batch_timeout": 5, "max_concurrency": 2, "max_retries": 5, "dead_letter_queue": "v3index-embed-dlq" },
+			// DLQ consumer: drains jobs that exhausted retries and marks their chunks
+			// embed_failed (observable in /status), leaving pending_embed_text for
+			// /requeue. No dead_letter_queue here — a DLQ handler failure just retries
+			// once then drops. Requires: wrangler queues create v3index-embed-dlq
+			{ "queue": "v3index-embed-dlq", "max_batch_size": 20, "max_batch_timeout": 30, "max_retries": 1 }
+		]
+	},
+	"ai": { "binding": "AI" },
+	"vars": {
+		// Embedder for the hosted default tier. Identity is salted with the
+		// embed-text scheme (core/embedIdentity.ts) exactly like the editor.
+		"EMBED_MODEL": "@cf/qwen/qwen3-embedding-0.6b",
+		"EMBED_DIM": "1024",
+		"VOYAGE_MODEL": "voyage-code-3",
+		"VOYAGE_DIM": "1024"
+	}
+	// Secrets (wrangler secret put): MASTER_KEY_SECRET — admin/bootstrap HMAC;
+	// SESSION_KEY_SECRET — shared only with Superclaw for 15-minute paid sessions;
+	// VOYAGE_API_KEY — Advanced embedding only, never exposed to the control plane/editor.
+}

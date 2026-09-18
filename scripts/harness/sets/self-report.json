@@ -1,0 +1,29 @@
+{
+	"id": "self-report",
+	"description": "Agent introspects on the harness: prompt/memory noise, tool naming overlaps, missing context, drift/hallucination risks. Squishy — primarily for reading + judge scoring. Re-run after prompt edits to confirm complaints cleared.",
+	"newThreadAtStart": true,
+	"autoApprove": true,
+	"timeoutMs": 200000,
+	"turns": [
+		{
+			"newThread": true,
+			"send": "Meta / introspection — be brutally honest, this is a harness self-report, not a task. From YOUR point of view as the agent running inside V3Code: (1) Your system prompt + injected memory/auto-context — helpful, too long, noisy, contradictory, or stale? Quote anything you'd cut. (2) Your tools — which feel redundant, ambiguously named, or overlapping, and which descriptions are unclear about WHEN to use them? IMPORTANT: quote the tool description VERBATIM before critiquing it; do not paraphrase from memory. (3) What context do you WISH you had at turn start that you don't? (4) What here would most likely make you drift or hallucinate? Number your answers, cite exact tool names.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "regex",
+					"pattern": "1\\.|\\(1\\)",
+					"flags": ""
+				},
+				{
+					"type": "judge",
+					"rubric": "Score the usefulness of this harness self-report for someone tuning the agent. High score (8-10): specific, cites exact tool names, quotes descriptions accurately, names concrete prompt lines, gives actionable cuts. Low score (0-4): vague, generic, or MISQUOTES its own tool descriptions (claims a tool says something it doesn't). Penalize misquotes heavily.",
+					"min": 6
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code — Tessellated 3D Delta</title>
+  <!--
+    Tetrahedron, apex up, tilted toward camera so 3 faces are visible:
+      T  = (512,120)  apex
+      F  = (512,820)  front-bottom (closest to camera)
+      BL = (180,600)  back-left
+      BR = (844,600)  back-right
+    Each face subdivided n=5 (Three.js-style tessellation).
+  -->
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.45" r="0.7">
+      <stop offset="0%"  stop-color="#171A2E"/>
+      <stop offset="55%" stop-color="#0B0D14"/>
+      <stop offset="100%" stop-color="#05060A"/>
+    </radialGradient>
+
+    <!-- Front-LEFT face: brightest, purple core -->
+    <linearGradient id="faceLeft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#A788FF"/>
+      <stop offset="55%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#4B2B9C"/>
+    </linearGradient>
+
+    <!-- Front-RIGHT face: deeper purple, shadowed -->
+    <linearGradient id="faceRight" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#5E3BB8"/>
+      <stop offset="60%" stop-color="#3A2470"/>
+      <stop offset="100%" stop-color="#1C1238"/>
+    </linearGradient>
+
+    <!-- Back/top face: green-rim accent -->
+    <linearGradient id="faceBack" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#2A3A2F"/>
+      <stop offset="100%" stop-color="#4E8C40"/>
+    </linearGradient>
+
+    <linearGradient id="accentGlow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#C8B0FF"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="b"/>
+      <feColorMatrix in="b" values="0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.96  0 0 0 0.8 0" result="pg"/>
+      <feMerge>
+        <feMergeNode in="pg"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+
+  <!-- Soft purple halo behind the shape -->
+  <ellipse cx="512" cy="500" rx="380" ry="360" fill="#8B5CF6" opacity="0.18" filter="url(#softGlow)"/>
+
+  <g filter="url(#softGlow)">
+
+    <!-- =========================================================
+         BACK/TOP face: T, BL, BR  (smallest visual area; drawn first so it sits behind)
+         ========================================================= -->
+    <polygon points="512,120 180,600 844,600" fill="url(#faceBack)" opacity="0.95"/>
+
+    <!-- =========================================================
+         FRONT-RIGHT face: T, BR, F
+         ========================================================= -->
+    <polygon points="512,120 844,600 512,820" fill="url(#faceRight)"/>
+
+    <!-- =========================================================
+         FRONT-LEFT face: T, F, BL  (main lit face)
+         ========================================================= -->
+    <polygon points="512,120 512,820 180,600" fill="url(#faceLeft)"/>
+
+    <!-- =========================================================
+         ACCENT highlight triangles (small filled tris near apex
+         on the left face — catches the light, Three.js feel)
+         ========================================================= -->
+    <!-- Top-most tri on left face -->
+    <polygon points="512,120 512,260 445.6,216" fill="url(#accentGlow)" opacity="0.95"/>
+    <!-- Adjacent downward tri -->
+    <polygon points="445.6,216 512,260 379.2,312" fill="#C8B0FF" opacity="0.55"/>
+    <!-- Small accent on right face -->
+    <polygon points="512,120 578.4,216 512,260" fill="#7FE650" opacity="0.45"/>
+    <!-- Green rim accent on left face, lower edge -->
+    <polygon points="246.4,504 312.8,600 180,600" fill="#7FE650" opacity="0.35"/>
+    <polygon points="246.4,504 379.2,504 312.8,600" fill="#7FE650" opacity="0.20"/>
+
+    <!-- =========================================================
+         TESSELLATION GRID (n=5) — three families per face
+         Drawn as crisp strokes. The fills above show through;
+         strokes carve the small triangles like the Three.js mark.
+         ========================================================= -->
+    <g stroke-linecap="round" stroke-linejoin="round" fill="none">
+
+      <!-- ===== FRONT-LEFT face grid ===== -->
+      <g stroke="#FFFFFF" stroke-opacity="0.32" stroke-width="2.2">
+        <!-- Family A: parallel to F-BL edge -->
+        <line x1="512" y1="260" x2="445.6" y2="216"/>
+        <line x1="512" y1="400" x2="379.2" y2="312"/>
+        <line x1="512" y1="540" x2="312.8" y2="408"/>
+        <line x1="512" y1="680" x2="246.4" y2="504"/>
+        <!-- Family B: parallel to T-BL edge -->
+        <line x1="512" y1="680" x2="445.6" y2="776"/>
+        <line x1="512" y1="540" x2="379.2" y2="732"/>
+        <line x1="512" y1="400" x2="312.8" y2="688"/>
+        <line x1="512" y1="260" x2="246.4" y2="644"/>
+        <!-- Family C: parallel to T-F edge (vertical-ish) -->
+        <line x1="445.6" y1="216" x2="445.6" y2="776"/>
+        <line x1="379.2" y1="312" x2="379.2" y2="732"/>
+        <line x1="312.8" y1="408" x2="312.8" y2="688"/>
+        <line x1="246.4" y1="504" x2="246.4" y2="644"/>
+      </g>
+
+      <!-- ===== FRONT-RIGHT face grid ===== -->
+      <g stroke="#FFFFFF" stroke-opacity="0.20" stroke-width="2">
+        <line x1="512" y1="260" x2="578.4" y2="216"/>
+        <line x1="512" y1="400" x2="644.8" y2="312"/>
+        <line x1="512" y1="540" x2="711.2" y2="408"/>
+        <line x1="512" y1="680" x2="777.6" y2="504"/>
+
+        <line x1="512" y1="680" x2="578.4" y2="776"/>
+        <line x1="512" y1="540" x2="644.8" y2="732"/>
+        <line x1="512" y1="400" x2="711.2" y2="688"/>
+        <line x1="512" y1="260" x2="777.6" y2="644"/>
+
+        <line x1="578.4" y1="216" x2="578.4" y2="776"/>
+        <line x1="644.8" y1="312" x2="644.8" y2="732"/>
+        <line x1="711.2" y1="408" x2="711.2" y2="688"/>
+        <line x1="777.6" y1="504" x2="777.6" y2="644"/>
+      </g>
+
+      <!-- ===== BACK/TOP face grid (green-tinted strokes) ===== -->
+      <g stroke="#A8F58A" stroke-opacity="0.30" stroke-width="1.8">
+        <!-- Family A: parallel to BL-BR (horizontals) -->
+        <line x1="445.6" y1="216" x2="578.4" y2="216"/>
+        <line x1="379.2" y1="312" x2="644.8" y2="312"/>
+        <line x1="312.8" y1="408" x2="711.2" y2="408"/>
+        <line x1="246.4" y1="504" x2="777.6" y2="504"/>
+        <!-- Family B: parallel to T-BR -->
+        <line x1="246.4" y1="504" x2="312.8" y2="600"/>
+        <line x1="312.8" y1="408" x2="445.6" y2="600"/>
+        <line x1="379.2" y1="312" x2="578.4" y2="600"/>
+        <line x1="445.6" y1="216" x2="711.2" y2="600"/>
+        <!-- Family C: parallel to T-BL -->
+        <line x1="777.6" y1="504" x2="711.2" y2="600"/>
+        <line x1="711.2" y1="408" x2="578.4" y2="600"/>
+        <line x1="644.8" y1="312" x2="445.6" y2="600"/>
+        <line x1="578.4" y1="216" x2="312.8" y2="600"/>
+      </g>
+    </g>
+
+    <!-- =========================================================
+         Sharp silhouette / edge highlights of the tetrahedron
+         ========================================================= -->
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Center vertical edge T-F (front ridge) -->
+      <line x1="512" y1="120" x2="512" y2="820" stroke="#FFFFFF" stroke-width="3" stroke-opacity="0.55"/>
+      <!-- Left front edge T-BL -->
+      <line x1="512" y1="120" x2="180" y2="600" stroke="#D4C2FF" stroke-width="3" stroke-opacity="0.75"/>
+      <!-- Right front edge T-BR -->
+      <line x1="512" y1="120" x2="844" y2="600" stroke="#6B47C9" stroke-width="3" stroke-opacity="0.85"/>
+      <!-- Bottom edges -->
+      <line x1="180" y1="600" x2="512" y2="820" stroke="#A8F58A" stroke-width="2.5" stroke-opacity="0.7"/>
+      <line x1="844" y1="600" x2="512" y2="820" stroke="#3A2470" stroke-width="2.5" stroke-opacity="0.85"/>
+      <line x1="180" y1="600" x2="844" y2="600" stroke="#4E8C40" stroke-width="2" stroke-opacity="0.55"/>
+    </g>
+
+    <!-- Apex spark -->
+    <circle cx="512" cy="120" r="7" fill="#FFFFFF"/>
+    <circle cx="512" cy="120" r="22" fill="#C8B0FF" opacity="0.45"/>
+  </g>
+</svg>

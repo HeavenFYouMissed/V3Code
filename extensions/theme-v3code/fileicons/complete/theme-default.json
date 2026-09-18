@@ -1,0 +1,422 @@
+{
+	"iconDefinitions": {
+		"file-duo": {
+			"iconPath": "./file-duo.svg"
+		},
+		"file-duo_light": {
+			"iconPath": "./file-duo-light.svg"
+		},
+		"file-text-duo": {
+			"iconPath": "./file-text-duo.svg"
+		},
+		"file-text-duo_light": {
+			"iconPath": "./file-text-duo-light.svg"
+		},
+		"image-duo": {
+			"iconPath": "./image-duo.svg"
+		},
+		"image-duo_light": {
+			"iconPath": "./image-duo-light.svg"
+		},
+		"folder-duo": {
+			"iconPath": "./folder-duo.svg"
+		},
+		"folder-duo_light": {
+			"iconPath": "./folder-duo-light.svg"
+		},
+		"folder-open-duo": {
+			"iconPath": "./folder-open-duo.svg"
+		},
+		"folder-open-duo_light": {
+			"iconPath": "./folder-open-duo-light.svg"
+		},
+		"lang-javascript-duo": {
+			"iconPath": "./lang-javascript-duo.svg"
+		},
+		"lang-javascript-duo_light": {
+			"iconPath": "./lang-javascript-duo-light.svg"
+		},
+		"lang-typescript-duo": {
+			"iconPath": "./lang-typescript-duo.svg"
+		},
+		"lang-typescript-duo_light": {
+			"iconPath": "./lang-typescript-duo-light.svg"
+		},
+		"lang-css-duo": {
+			"iconPath": "./lang-css-duo.svg"
+		},
+		"lang-css-duo_light": {
+			"iconPath": "./lang-css-duo-light.svg"
+		},
+		"lang-html-duo": {
+			"iconPath": "./lang-html-duo.svg"
+		},
+		"lang-html-duo_light": {
+			"iconPath": "./lang-html-duo-light.svg"
+		},
+		"lang-markdown": {
+			"iconPath": "./lang-markdown.svg"
+		},
+		"lang-markdown_light": {
+			"iconPath": "./lang-markdown-light.svg"
+		},
+		"lang-swift": {
+			"iconPath": "./lang-swift.svg"
+		},
+		"lang-swift_light": {
+			"iconPath": "./lang-swift-light.svg"
+		},
+		"lang-rust": {
+			"iconPath": "./lang-rust.svg"
+		},
+		"lang-rust_light": {
+			"iconPath": "./lang-rust-light.svg"
+		},
+		"lang-go": {
+			"iconPath": "./lang-go.svg"
+		},
+		"lang-go_light": {
+			"iconPath": "./lang-go-light.svg"
+		},
+		"lang-c": {
+			"iconPath": "./lang-c.svg"
+		},
+		"lang-c_light": {
+			"iconPath": "./lang-c-light.svg"
+		},
+		"lang-cpp": {
+			"iconPath": "./lang-cpp.svg"
+		},
+		"lang-cpp_light": {
+			"iconPath": "./lang-cpp-light.svg"
+		},
+		"lang-csharp": {
+			"iconPath": "./lang-csharp.svg"
+		},
+		"lang-csharp_light": {
+			"iconPath": "./lang-csharp-light.svg"
+		},
+		"lang-objc": {
+			"iconPath": "./lang-objc.svg"
+		},
+		"lang-objc_light": {
+			"iconPath": "./lang-objc-light.svg"
+		},
+		"lang-python": {
+			"iconPath": "./lang-python.svg"
+		},
+		"lang-python_light": {
+			"iconPath": "./lang-python-light.svg"
+		},
+		"lang-ruby": {
+			"iconPath": "./lang-ruby.svg"
+		},
+		"lang-ruby_light": {
+			"iconPath": "./lang-ruby-light.svg"
+		},
+		"file-symlink-duo": {
+			"iconPath": "./file-symlink-duo.svg"
+		},
+		"file-symlink-duo_light": {
+			"iconPath": "./file-symlink-duo-light.svg"
+		},
+		"server-duo": {
+			"iconPath": "./server-duo.svg"
+		},
+		"server-duo_light": {
+			"iconPath": "./server-duo-light.svg"
+		},
+		"file-table-duo": {
+			"iconPath": "./file-table-duo.svg"
+		},
+		"file-table-duo_light": {
+			"iconPath": "./file-table-duo-light.svg"
+		},
+		"file-zip-duo": {
+			"iconPath": "./file-zip-duo.svg"
+		},
+		"file-zip-duo_light": {
+			"iconPath": "./file-zip-duo-light.svg"
+		},
+		"font": {
+			"iconPath": "./font.svg"
+		},
+		"font_light": {
+			"iconPath": "./font-light.svg"
+		},
+		"bash-duo": {
+			"iconPath": "./bash-duo.svg"
+		},
+		"bash-duo_light": {
+			"iconPath": "./bash-duo-light.svg"
+		},
+		"svg-2": {
+			"iconPath": "./svg-2.svg"
+		},
+		"svg-2_light": {
+			"iconPath": "./svg-2-light.svg"
+		},
+		"braces": {
+			"iconPath": "./braces.svg"
+		},
+		"braces_light": {
+			"iconPath": "./braces-light.svg"
+		},
+		"git": {
+			"iconPath": "./git.svg"
+		},
+		"git_light": {
+			"iconPath": "./git-light.svg"
+		}
+	},
+	"file": "file-duo",
+	"folder": "folder-duo",
+	"folderExpanded": "folder-open-duo",
+	"fileSymlink": "file-symlink-duo",
+	"fileExtensions": {
+		"txt": "file-text-duo",
+		"md": "lang-markdown",
+		"mdx": "lang-markdown",
+		"markdown": "lang-markdown",
+		"rst": "file-text-duo",
+		"rtf": "file-text-duo",
+		"log": "file-text-duo",
+		"csv": "file-table-duo",
+		"tsv": "file-table-duo",
+		"ini": "file-text-duo",
+		"cfg": "file-text-duo",
+		"conf": "file-text-duo",
+		"env": "file-text-duo",
+		"env.local": "file-text-duo",
+		"env.development": "file-text-duo",
+		"env.production": "file-text-duo",
+		"editorconfig": "file-text-duo",
+		"LICENSE": "file-text-duo",
+		"AUTHORS": "file-text-duo",
+		"CONTRIBUTORS": "file-text-duo",
+		"CHANGELOG": "file-text-duo",
+		"png": "image-duo",
+		"jpg": "image-duo",
+		"jpeg": "image-duo",
+		"gif": "image-duo",
+		"svg": "svg-2",
+		"webp": "image-duo",
+		"avif": "image-duo",
+		"ico": "image-duo",
+		"icns": "image-duo",
+		"bmp": "image-duo",
+		"tiff": "image-duo",
+		"tif": "image-duo",
+		"js": "lang-javascript-duo",
+		"cjs": "lang-javascript-duo",
+		"mjs": "lang-javascript-duo",
+		"jsx": "lang-javascript-duo",
+		"ts": "lang-typescript-duo",
+		"cts": "lang-typescript-duo",
+		"mts": "lang-typescript-duo",
+		"tsx": "lang-typescript-duo",
+		"css": "lang-css-duo",
+		"scss": "lang-css-duo",
+		"sass": "lang-css-duo",
+		"less": "lang-css-duo",
+		"postcss": "lang-css-duo",
+		"styl": "lang-css-duo",
+		"html": "lang-html-duo",
+		"htm": "lang-html-duo",
+		"xhtml": "lang-html-duo",
+		"swift": "lang-swift",
+		"rs": "lang-rust",
+		"go": "lang-go",
+		"c": "lang-c",
+		"h": "lang-c",
+		"cpp": "lang-cpp",
+		"cc": "lang-cpp",
+		"cxx": "lang-cpp",
+		"hpp": "lang-cpp",
+		"hh": "lang-cpp",
+		"hxx": "lang-cpp",
+		"inl": "lang-cpp",
+		"cs": "lang-csharp",
+		"m": "lang-objc",
+		"mm": "lang-objc",
+		"py": "lang-python",
+		"pyw": "lang-python",
+		"pyi": "lang-python",
+		"pyx": "lang-python",
+		"rb": "lang-ruby",
+		"erb": "lang-ruby",
+		"gemspec": "lang-ruby",
+		"rake": "lang-ruby",
+		"db": "server-duo",
+		"sql": "server-duo",
+		"sqlite": "server-duo",
+		"sqlite3": "server-duo",
+		"xls": "file-table-duo",
+		"xlsx": "file-table-duo",
+		"ods": "file-table-duo",
+		"zip": "file-zip-duo",
+		"tar": "file-zip-duo",
+		"gz": "file-zip-duo",
+		"tgz": "file-zip-duo",
+		"bz2": "file-zip-duo",
+		"xz": "file-zip-duo",
+		"7z": "file-zip-duo",
+		"rar": "file-zip-duo",
+		"jar": "file-zip-duo",
+		"war": "file-zip-duo",
+		"ttf": "font",
+		"otf": "font",
+		"woff": "font",
+		"woff2": "font",
+		"eot": "font",
+		"sh": "bash-duo",
+		"bash": "bash-duo",
+		"zsh": "bash-duo",
+		"fish": "bash-duo",
+		"ksh": "bash-duo",
+		"csh": "bash-duo",
+		"json": "braces",
+		"jsonc": "braces",
+		"json5": "braces",
+		"jsonl": "braces"
+	},
+	"light": {
+		"file": "file-duo_light",
+		"folder": "folder-duo_light",
+		"folderExpanded": "folder-open-duo_light",
+		"fileSymlink": "file-symlink-duo_light",
+		"fileExtensions": {
+			"txt": "file-text-duo_light",
+			"md": "lang-markdown_light",
+			"mdx": "lang-markdown_light",
+			"markdown": "lang-markdown_light",
+			"rst": "file-text-duo_light",
+			"rtf": "file-text-duo_light",
+			"log": "file-text-duo_light",
+			"csv": "file-table-duo_light",
+			"tsv": "file-table-duo_light",
+			"ini": "file-text-duo_light",
+			"cfg": "file-text-duo_light",
+			"conf": "file-text-duo_light",
+			"env": "file-text-duo_light",
+			"env.local": "file-text-duo_light",
+			"env.development": "file-text-duo_light",
+			"env.production": "file-text-duo_light",
+			"editorconfig": "file-text-duo_light",
+			"LICENSE": "file-text-duo_light",
+			"AUTHORS": "file-text-duo_light",
+			"CONTRIBUTORS": "file-text-duo_light",
+			"CHANGELOG": "file-text-duo_light",
+			"png": "image-duo_light",
+			"jpg": "image-duo_light",
+			"jpeg": "image-duo_light",
+			"gif": "image-duo_light",
+			"svg": "svg-2_light",
+			"webp": "image-duo_light",
+			"avif": "image-duo_light",
+			"ico": "image-duo_light",
+			"icns": "image-duo_light",
+			"bmp": "image-duo_light",
+			"tiff": "image-duo_light",
+			"tif": "image-duo_light",
+			"js": "lang-javascript-duo_light",
+			"cjs": "lang-javascript-duo_light",
+			"mjs": "lang-javascript-duo_light",
+			"jsx": "lang-javascript-duo_light",
+			"ts": "lang-typescript-duo_light",
+			"cts": "lang-typescript-duo_light",
+			"mts": "lang-typescript-duo_light",
+			"tsx": "lang-typescript-duo_light",
+			"css": "lang-css-duo_light",
+			"scss": "lang-css-duo_light",
+			"sass": "lang-css-duo_light",
+			"less": "lang-css-duo_light",
+			"postcss": "lang-css-duo_light",
+			"styl": "lang-css-duo_light",
+			"html": "lang-html-duo_light",
+			"htm": "lang-html-duo_light",
+			"xhtml": "lang-html-duo_light",
+			"swift": "lang-swift_light",
+			"rs": "lang-rust_light",
+			"go": "lang-go_light",
+			"c": "lang-c_light",
+			"h": "lang-c_light",
+			"cpp": "lang-cpp_light",
+			"cc": "lang-cpp_light",
+			"cxx": "lang-cpp_light",
+			"hpp": "lang-cpp_light",
+			"hh": "lang-cpp_light",
+			"hxx": "lang-cpp_light",
+			"inl": "lang-cpp_light",
+			"cs": "lang-csharp_light",
+			"m": "lang-objc_light",
+			"mm": "lang-objc_light",
+			"py": "lang-python_light",
+			"pyw": "lang-python_light",
+			"pyi": "lang-python_light",
+			"pyx": "lang-python_light",
+			"rb": "lang-ruby_light",
+			"erb": "lang-ruby_light",
+			"gemspec": "lang-ruby_light",
+			"rake": "lang-ruby_light",
+			"db": "server-duo_light",
+			"sql": "server-duo_light",
+			"sqlite": "server-duo_light",
+			"sqlite3": "server-duo_light",
+			"xls": "file-table-duo_light",
+			"xlsx": "file-table-duo_light",
+			"ods": "file-table-duo_light",
+			"zip": "file-zip-duo_light",
+			"tar": "file-zip-duo_light",
+			"gz": "file-zip-duo_light",
+			"tgz": "file-zip-duo_light",
+			"bz2": "file-zip-duo_light",
+			"xz": "file-zip-duo_light",
+			"7z": "file-zip-duo_light",
+			"rar": "file-zip-duo_light",
+			"jar": "file-zip-duo_light",
+			"war": "file-zip-duo_light",
+			"ttf": "font_light",
+			"otf": "font_light",
+			"woff": "font_light",
+			"woff2": "font_light",
+			"eot": "font_light",
+			"sh": "bash-duo_light",
+			"bash": "bash-duo_light",
+			"zsh": "bash-duo_light",
+			"fish": "bash-duo_light",
+			"ksh": "bash-duo_light",
+			"csh": "bash-duo_light",
+			"json": "braces_light",
+			"jsonc": "braces_light",
+			"json5": "braces_light",
+			"jsonl": "braces_light"
+		},
+		"fileNames": {
+			"Gemfile": "lang-ruby_light",
+			"Rakefile": "lang-ruby_light",
+			".bashrc": "bash-duo_light",
+			".bash_profile": "bash-duo_light",
+			".zshrc": "bash-duo_light",
+			".zshenv": "bash-duo_light",
+			".zprofile": "bash-duo_light",
+			".gitignore": "git_light",
+			".gitattributes": "git_light",
+			".gitmodules": "git_light",
+			".gitkeep": "git_light"
+		}
+	},
+	"fileNames": {
+		"Gemfile": "lang-ruby",
+		"Rakefile": "lang-ruby",
+		".bashrc": "bash-duo",
+		".bash_profile": "bash-duo",
+		".zshrc": "bash-duo",
+		".zshenv": "bash-duo",
+		".zprofile": "bash-duo",
+		".gitignore": "git",
+		".gitattributes": "git",
+		".gitmodules": "git",
+		".gitkeep": "git"
+	}
+}

@@ -1,0 +1,116 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 V3Code / Glass Devtools. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0.
+ *--------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/*
+ * The cancel banner sits above every workbench surface but must not swallow input: the root is
+ * pointer-events: none and only the card and its button opt back in, so the user keeps full use of
+ * their machine while the agent works.
+ */
+
+.v3code-computer-use-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 2600;
+	display: flex;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.v3code-computer-use-overlay__card {
+	pointer-events: auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-top: 8px;
+	padding: 6px 10px 6px 8px;
+	max-width: min(640px, 90vw);
+	border: 1px solid var(--vscode-editorWidget-border);
+	border-radius: var(--v3-radius-md, 8px);
+	background-color: var(--vscode-editorWidget-background);
+	box-shadow: 0 4px 16px var(--vscode-widget-shadow);
+	color: var(--vscode-foreground);
+	font-size: 12px;
+	line-height: 16px;
+}
+
+.v3code-computer-use-overlay__pulse {
+	flex: 0 0 auto;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: var(--vscode-notificationsWarningIcon-foreground);
+	animation: v3code-computer-use-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes v3code-computer-use-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.25;
+	}
+}
+
+.v3code-computer-use-overlay__text {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.v3code-computer-use-overlay__title {
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.v3code-computer-use-overlay__detail {
+	color: var(--vscode-descriptionForeground);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.v3code-computer-use-overlay__detail:empty {
+	display: none;
+}
+
+.v3code-computer-use-overlay__cancel {
+	pointer-events: auto;
+	flex: 0 0 auto;
+	border: none;
+	border-radius: var(--v3-radius-sm, 4px);
+	padding: 3px 10px;
+	background-color: var(--vscode-button-background);
+	color: var(--vscode-button-foreground);
+	font-family: inherit;
+	font-size: inherit;
+	cursor: pointer;
+}
+
+.v3code-computer-use-overlay__cancel:hover {
+	background-color: var(--vscode-button-hoverBackground);
+}
+
+.v3code-computer-use-overlay__hint {
+	flex: 0 0 auto;
+	border: 1px solid var(--vscode-keybindingLabel-border);
+	border-radius: var(--v3-radius-sm, 4px);
+	padding: 1px 6px;
+	background-color: var(--vscode-keybindingLabel-background);
+	color: var(--vscode-keybindingLabel-foreground);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.v3code-computer-use-overlay__pulse {
+		animation: none;
+	}
+}

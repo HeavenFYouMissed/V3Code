@@ -1,0 +1,270 @@
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+/*--------------------------------------------------------------------------------------
+ *  V3Code Design Tokens — Professional grey/black palette
+ *  Single source of truth for every color in the app.
+ *--------------------------------------------------------------------------------------*/
+
+/*
+ * Scoped to the React root, NOT :root. VS Code emits its --vscode-* theme variables scoped to the
+ * workbench element, so they do not exist on <html>: reading --vscode-sideBar-background off
+ * document.documentElement returns an empty string. Declaring these tokens on :root therefore meant
+ * every var() below silently took its hardcoded fallback and the UI could never follow the theme,
+ * no matter how correct the mapping was. styles.css already uses this idiom for --void-*, which is
+ * why those tokens resolved while these did not.
+ *
+ * Written as `.void-scope` literally: unlike styles.css, this file carries no @tailwind
+ * directives, so scope-tailwind copies it VERBATIM and never rewrites `&` for us. `.void-scope`
+ * is the class scope-tailwind puts on the React roots (build.js passes -s void-scope).
+ */
+.void-scope {
+	/*
+	 * Each token below resolves to the ACTIVE THEME's colour, with the original hand-picked dark
+	 * value as the fallback. That is what makes the UI follow the user's theme instead of being
+	 * pinned to one palette — previously every value here was a hardcoded dark hex, so a light
+	 * theme produced dark panels with light-theme text around them.
+	 *
+	 * The mapping is by ROLE, not by appearance. Each token already documented what it was FOR, and
+	 * VS Code registers a semantic colour for each of those roles, so the comments below are the
+	 * derivation. Matching on colour distance instead would be nonsense — the nearest colour to
+	 * --fg-muted by RGB distance is terminal.ansiBrightMagenta.
+	 *
+	 * Several of these theme colours are deliberately TRANSLUCENT (list.hoverBackground is 7% white
+	 * on dark themes and 7% black on light ones). That is a feature, not a hazard: a translucent
+	 * overlay composites lighter on a dark theme and darker on a light one, which is exactly the
+	 * "each step is one notch of depth" intent below, in both directions, for free. It does mean a
+	 * surface token must sit on an opaque ancestor to read correctly.
+	 *
+	 * A colour missing from a theme's JSON still resolves: these are all registerColor'd in
+	 * platform/theme/common/colors/ with per-theme-type defaults, so the var is always defined.
+	 * The hex fallbacks only apply outside the workbench (e.g. a component rendered in isolation).
+	 *
+	 * Fallbacks are not decoration — keep them. If a var were ever undefined the property would be
+	 * dropped entirely, and an element with no background at all is far worse than a dark one.
+	 */
+
+	/* backgrounds — each step one notch of depth */
+	--bg:        var(--vscode-sideBar-background,      #0B0B0D);  /* app background, deepest */
+	--surface:   var(--vscode-editorWidget-background, #131316);  /* panels, sidebar, headers */
+	--surface-2: var(--vscode-input-background,        #1A1A1E);  /* inputs, raised cards, tiles */
+	--surface-3: var(--vscode-list-hoverBackground,    #222227);  /* hover, active row, overlays */
+
+	/* borders */
+	--border:    var(--vscode-panel-border, #2A2A30);   /* normal borders/dividers */
+	--border-2:  var(--vscode-focusBorder,  #3A3A42);   /* focus / stronger divider */
+
+	/* text */
+	--fg:        var(--vscode-foreground,            #ECECEE);   /* primary text */
+	--fg-muted:  var(--vscode-descriptionForeground, #A0A0A8);   /* secondary text, descriptions */
+	--fg-dim:    var(--vscode-disabledForeground,    #6B6B73);   /* labels, placeholders, disabled */
+
+	/*
+	 * The ONE accent (active tab line, running dot, selected) stays fixed on purpose: it is brand,
+	 * not chrome, and following the theme's accent would make V3Code look like whatever theme is
+	 * loaded. --accent-fg is near-black text ON the green, so it stays correct on light themes too.
+	 */
+	--accent:    #8FD96A;   /* desaturated V-green, UI only */
+	--accent-fg: #0B0B0D;   /* text on accent */
+
+	/* errors only */
+	--error-fg:  var(--vscode-errorForeground, #FF6B6B);
+
+	/* sprite ONLY — never used in UI chrome */
+	--v-sprite:  #5FB0DE;
+
+	/* radius */
+	--r-sm: 4px; --r: 6px; --r-lg: 8px;
+
+	/* shadows */
+	--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+	--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+	/* transitions */
+	--t-fast: 0.15s ease;
+	--t-normal: 0.2s ease;
+
+	/* scrollbar */
+	--scrollbar-bg: transparent;
+	--scrollbar-thumb:       var(--vscode-scrollbarSlider-background,      #2A2A30);
+	--scrollbar-thumb-hover: var(--vscode-scrollbarSlider-hoverBackground, #3A3A42);
+
+	/*
+	 * ---------------------------------------------------------------------------------------------
+	 * --v3code-* — the Vibe panel's token set.
+	 * ---------------------------------------------------------------------------------------------
+	 * VibeAgentPanel, VibeTodoPlan and VibeComponents reference 43 of these in 81 places, and until
+	 * now NONE of them were defined anywhere in the repo. That was not merely an unthemed panel:
+	 * most of those references carry no fallback, and `var()` with an undefined variable and no
+	 * fallback makes the whole declaration invalid, so the property was dropped outright. Twelve
+	 * text colours resolved to inherited text, the radii and font sizes did nothing, and
+	 * --v3code-agent-status-dot-size had no value, which leaves the agent status dot with no width
+	 * to render at.
+	 *
+	 * Defined here, at the one place that calls itself the source of truth, rather than by editing
+	 * 81 call sites — the call sites are written correctly, they were just pointing at nothing. The
+	 * handful that DO carry a hardcoded fallback (#0f0f1a, #13132b, #2a2a3a) keep that value as the
+	 * fallback here, so the intended look is preserved when the workbench vars are absent.
+	 */
+
+	/* structure */
+	--v3code-bg:           var(--vscode-sideBar-background,              #0f0f1a);
+	--v3code-bg-secondary: var(--vscode-editorWidget-background,         #13132b);
+	--v3code-bg-tertiary:  var(--vscode-editorHoverWidget-background,    #1a1a2e);
+	--v3code-bg-hover:     var(--vscode-list-hoverBackground,            #22223a);
+	--v3code-bg-active:    var(--vscode-list-activeSelectionBackground,  #2a2a45);
+	--v3code-border:       var(--vscode-panel-border,                    #2a2a3a);
+	--v3code-border-focus: var(--vscode-focusBorder,                     #3a3a52);
+
+	/* text */
+	--v3code-fg:           var(--vscode-foreground,             #e0e0e0);
+	--v3code-fg-secondary: var(--vscode-descriptionForeground,  #a0a0a8);
+	--v3code-fg-tertiary:  var(--vscode-disabledForeground,     #6b6b73);
+	--v3code-fg-disabled:  var(--vscode-disabledForeground,     #6b6b73);
+
+	/* brand accent — matches --accent above, fixed on purpose */
+	--v3code-accent: var(--accent, #8FD96A);
+
+	/* status */
+	--v3code-error:   var(--vscode-errorForeground,          #FF6B6B);
+	--v3code-warning: var(--vscode-editorWarning-foreground,  #E8A33D);
+	--v3code-success: var(--vscode-charts-green,              #6AA3CC);
+
+	/* named hues — charts.* is the palette VS Code intends for categorical colour */
+	--v3code-blue:    var(--vscode-charts-blue,    #4FA6E8);
+	--v3code-cyan:    var(--vscode-charts-blue,    #45C8D8);
+	--v3code-green:   var(--vscode-charts-green,   #6AA3CC);
+	--v3code-magenta: var(--vscode-charts-purple,  #D96AC8);
+	--v3code-orange:  var(--vscode-charts-orange,  #E8913D);
+	--v3code-purple:  var(--vscode-charts-purple,  #8B5CF6);
+	--v3code-red:     var(--vscode-charts-red,     #E8564F);
+	--v3code-yellow:  var(--vscode-charts-yellow,  #E8CF3D);
+
+	/*
+	 * Tinted badge backgrounds and their text. color-mix keeps these in step with the hue above
+	 * instead of restating it at a second opacity, so a theme change moves both together. There is
+	 * existing precedent for color-mix in the workbench CSS.
+	 */
+	--v3code-bg-blue-primary:    color-mix(in srgb, var(--v3code-blue)    18%, transparent);
+	--v3code-bg-cyan-primary:    color-mix(in srgb, var(--v3code-cyan)    18%, transparent);
+	--v3code-bg-green-primary:   color-mix(in srgb, var(--v3code-green)   18%, transparent);
+	--v3code-bg-magenta-primary: color-mix(in srgb, var(--v3code-magenta) 18%, transparent);
+	--v3code-bg-orange-primary:  color-mix(in srgb, var(--v3code-orange)  18%, transparent);
+	--v3code-bg-purple-primary:  color-mix(in srgb, var(--v3code-purple)  18%, transparent);
+	--v3code-bg-red-primary:     color-mix(in srgb, var(--v3code-red)     18%, transparent);
+	--v3code-bg-yellow-primary:  color-mix(in srgb, var(--v3code-yellow)  18%, transparent);
+	--v3code-text-blue-primary:    var(--v3code-blue);
+	--v3code-text-magenta-primary: var(--v3code-magenta);
+
+	/*
+	 * Non-colour tokens. These are the ones whose absence was visible as layout rather than as the
+	 * wrong shade: a missing font-size or radius silently drops the declaration.
+	 */
+	--v3code-font-family: var(--vscode-font-family, inherit);
+	--v3code-font-size-xs:   11px;
+	--v3code-font-size-sm:   12px;
+	--v3code-font-size-base: 13px;
+	--v3code-font-size-md:   14px;
+	--v3code-radius-sm:   var(--r-sm, 4px);
+	--v3code-radius-md:   var(--r, 6px);
+	--v3code-radius-lg:   var(--r-lg, 8px);
+	--v3code-radius-full: 9999px;
+	--v3code-agent-status-dot-size: 8px;
+}
+
+/* ===== Base scrollbar ===== */
+.@@void-scope {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);
+}
+.@@void-scope ::-webkit-scrollbar { width: 6px; height: 6px; }
+.@@void-scope ::-webkit-scrollbar-track { background: var(--scrollbar-bg); }
+.@@void-scope ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+.@@void-scope ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+/* ===== Animations ===== */
+@keyframes v3code-fade-in {
+	from { opacity: 0; transform: translateY(4px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+@keyframes v3code-thinking-dot {
+	0%, 80%, 100% { transform: scale(0); }
+	40% { transform: scale(1); }
+}
+@keyframes v3code-pulse {
+	0%, 100% { opacity: 0.4; }
+	50% { opacity: 1; }
+}
+@keyframes v3code-panel-mount {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+/* ===== Main panel mount transition ===== */
+.v3code-panel-enter {
+	animation: v3code-panel-mount 400ms ease-out forwards;
+	background: radial-gradient(ellipse at center, var(--surface) 0%, var(--bg) 100%);
+}
+
+/* ===== Button system ===== */
+.v3code-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 8px 16px;
+	border-radius: var(--r);
+	border: 1px solid transparent;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all var(--t-fast);
+	outline: none;
+}
+.v3code-btn:focus-visible { box-shadow: 0 0 0 2px var(--border-2); }
+.v3code-btn--primary { background: var(--accent); color: var(--accent-fg); }
+.v3code-btn--primary:hover { filter: brightness(1.1); }
+.v3code-btn--secondary { background: var(--surface-2); color: var(--fg); border-color: var(--border); }
+.v3code-btn--secondary:hover { background: var(--surface-3); }
+.v3code-btn--ghost { background: transparent; color: var(--fg-muted); }
+.v3code-btn--ghost:hover { background: var(--surface-2); }
+.v3code-btn--sm { padding: 4px 10px; font-size: 12px; }
+
+/* ===== Input system ===== */
+.v3code-input {
+	padding: 8px 12px;
+	border-radius: var(--r);
+	border: 1px solid var(--border);
+	background: var(--surface-2);
+	color: var(--fg);
+	font-size: 13px;
+	outline: none;
+	transition: border-color var(--t-fast);
+}
+.v3code-input:focus { border-color: var(--border-2); }
+.v3code-input::placeholder { color: var(--fg-dim); }
+
+/* ===== Tool card ===== */
+.v3code-tool-card {
+	padding: 10px 14px;
+	border-radius: var(--r);
+	border: 1px solid var(--border);
+	background: var(--surface-2);
+	margin: 4px 0;
+	animation: none;
+}
+.v3code-tool-card--running { border-color: var(--accent); }
+.v3code-tool-card--error { border-color: var(--error-fg); }
+
+/* ===== Thinking dots ===== */
+.v3code-thinking-dots {
+	display: inline-flex; gap: 4px; align-items: center; padding: 2px 0;
+}
+.v3code-thinking-dots span {
+	width: 6px; height: 6px; border-radius: 50%;
+	background: var(--fg-dim);
+	animation: v3code-thinking-dot 1.4s infinite ease-in-out both;
+}
+.v3code-thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+.v3code-thinking-dots span:nth-child(2) { animation-delay: -0.16s; }

@@ -1,0 +1,22 @@
+# Brand / vendor fingerprints that should not ship in V3 product paths.
+# One regex per line (ripgrep syntax). Blank lines and # comments ignored.
+#
+# These are NOT a full license audit — they catch legacy competitor/vendor residue and
+# similar "this clearly isn't ours" strings before an update build ships.
+
+icube
+ICube
+iCube
+bytedance
+ByteDance
+@byted-
+byted-icube
+t[r]ae\.ai
+t[r]ae\.cn
+[Tt][r]ae\.app
+/Applications/[Tt][r]ae
+vscode-icube
+trusted-types.*icube
+icubeMFRuntime
+icubeWebview
+icubeDesktopModules

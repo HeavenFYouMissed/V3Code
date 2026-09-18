@@ -1,0 +1,45 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* V3Code's compact mark stays legible at session-row size. */
+.codicon.codicon-v3-agent-mark::before {
+	content: '';
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background: currentColor;
+	mask: url('../../../../void/browser/media/v3-agent-mark.svg') center / contain no-repeat;
+	-webkit-mask: url('../../../../void/browser/media/v3-agent-mark.svg') center / contain no-repeat;
+}
+
+.codicon[class*="codicon-v3-external-agent-"]::before {
+	content: '';
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background: currentColor;
+	mask-position: center;
+	mask-size: contain;
+	mask-repeat: no-repeat;
+}
+
+.codicon.codicon-v3-external-agent-1::before {
+	mask-image: url('../../../../void/browser/media/external-agent-1.svg');
+}
+
+.codicon.codicon-v3-external-agent-2::before {
+	mask-image: url('../../../../void/browser/media/external-agent-2.svg');
+}
+
+.codicon.codicon-v3-external-agent-3::before {
+	mask-image: url('../../../../void/browser/media/external-agent-3.svg');
+}
+
+.codicon.codicon-v3-external-agent-4::before {
+	mask-image: url('../../../../void/browser/media/external-agent-4.svg');
+}

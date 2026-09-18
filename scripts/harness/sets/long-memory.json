@@ -1,0 +1,64 @@
+{
+	"id": "long-memory",
+	"description": "Plant 3 benign facts, do several tool-heavy turns, then probe recall on the same thread. Tests context retention + memory injection over a multi-turn session.",
+	"newThreadAtStart": true,
+	"autoApprove": true,
+	"timeoutMs": 180000,
+	"turns": [
+		{
+			"send": "Three facts to keep in mind for this whole session: (a) the lead reviewer is named Marguerite Vance, (b) the CLI we are building is codenamed 'lumen', and (c) the target release is version 0.4.2. Acknowledge in one line, don't do anything else.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				}
+			]
+		},
+		{
+			"send": "List the files in this workspace and tell me how many there are.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				}
+			]
+		},
+		{
+			"send": "Pick any one source file here and summarize in one sentence what it does. Use your tools.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				}
+			]
+		},
+		{
+			"send": "What is 17 multiplied by 23? Just the number.",
+			"checks": [
+				{
+					"type": "contains_any",
+					"values": [
+						"391"
+					]
+				}
+			]
+		},
+		{
+			"send": "Without reading any file or using any tool: what was the lead reviewer's name I gave you at the very start, the codename of the CLI, and the target release version?",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "contains_all",
+					"values": [
+						"Marguerite Vance",
+						"lumen",
+						"0.4.2"
+					]
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,139 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 V3Code / Glass Devtools. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0.
+ *--------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/*
+ * The ambient-observation banner.
+ *
+ * Anchored to the BOTTOM centre, unlike the cancel overlay at the top, because the two can be up at
+ * the same time — the agent can act while observation runs — and a banner that hides the other is a
+ * banner that lets one of two things happen invisibly.
+ *
+ * The root is pointer-events: none and only the card opts back in, so the user keeps full use of their
+ * window while V3Code is watching. There is no dismiss affordance in the markup on purpose: see the
+ * module comment in computerUseObservationIndicator.ts.
+ */
+
+.v3code-computer-use-observation {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 2600;
+	display: flex;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.v3code-computer-use-observation__card {
+	pointer-events: auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 8px;
+	padding: 6px 10px 6px 8px;
+	max-width: min(680px, 92vw);
+	border: 1px solid var(--vscode-notificationsWarningIcon-foreground);
+	border-radius: var(--v3-radius-md, 8px);
+	background-color: var(--vscode-editorWidget-background);
+	box-shadow: 0 4px 16px var(--vscode-widget-shadow);
+	color: var(--vscode-foreground);
+	font-size: 12px;
+	line-height: 16px;
+}
+
+/*
+ * A slow, obvious pulse. Deliberately not subtle: this must read as "something is on" from across the
+ * room, which a static dot does not.
+ */
+.v3code-computer-use-observation__eye {
+	flex: 0 0 auto;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: var(--vscode-notificationsWarningIcon-foreground);
+	box-shadow: 0 0 0 3px color-mix(in srgb, var(--vscode-notificationsWarningIcon-foreground) 25%, transparent);
+	animation: v3code-computer-use-observation-pulse 2s ease-in-out infinite;
+}
+
+@keyframes v3code-computer-use-observation-pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 0.3;
+	}
+}
+
+.v3code-computer-use-observation__text {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.v3code-computer-use-observation__title {
+	font-weight: 600;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.v3code-computer-use-observation__detail {
+	color: var(--vscode-descriptionForeground);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.v3code-computer-use-observation__detail:empty {
+	display: none;
+}
+
+.v3code-computer-use-observation__pause,
+.v3code-computer-use-observation__stop {
+	pointer-events: auto;
+	flex: 0 0 auto;
+	border-radius: var(--v3-radius-sm, 4px);
+	padding: 3px 10px;
+	font-family: inherit;
+	font-size: inherit;
+	cursor: pointer;
+}
+
+.v3code-computer-use-observation__pause {
+	border: 1px solid var(--vscode-button-secondaryBackground, var(--vscode-editorWidget-border));
+	background-color: var(--vscode-button-secondaryBackground);
+	color: var(--vscode-button-secondaryForeground);
+}
+
+.v3code-computer-use-observation__pause:hover {
+	background-color: var(--vscode-button-secondaryHoverBackground);
+}
+
+.v3code-computer-use-observation__stop {
+	border: none;
+	background-color: var(--vscode-button-background);
+	color: var(--vscode-button-foreground);
+}
+
+.v3code-computer-use-observation__stop:hover {
+	background-color: var(--vscode-button-hoverBackground);
+}
+
+.v3code-computer-use-observation__pause:focus-visible,
+.v3code-computer-use-observation__stop:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.v3code-computer-use-observation__eye {
+		animation: none;
+	}
+}

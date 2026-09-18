@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="260" height="260">
+  <defs>
+    <linearGradient id="silver" x1="0" y1="0" x2="0.55" y2="1">
+      <stop offset="0" stop-color="#fdfefe"/><stop offset="0.45" stop-color="#cfd6db"/><stop offset="1" stop-color="#9aa3ab"/>
+    </linearGradient>
+    <linearGradient id="charcoal" x1="0.1" y1="0" x2="0.7" y2="1">
+      <stop offset="0" stop-color="#3b4046"/><stop offset="1" stop-color="#202327"/>
+    </linearGradient>
+  </defs>
+  <polygon points="272,322 148,408 434,821 558,735" fill="url(#charcoal)"/>
+  <g transform="translate(0.000000,960.000000) scale(0.100000,-0.100000)" fill="url(#silver)"><path d="M6055 7506 l-30 -14 -70 -73 -70 -74 -48 -51 -48 -51 14 -11 14 -12
+67 61 67 62 16 -15 15 -16 5 -2018 5 -2019 13 -13 12 -13 30 38 30 38 128 190
+129 190 61 90 62 90 109 160 110 160 124 180 124 180 57 77 57 77 12 37 12 36
+2 1312 1 1311 -18 33 -18 33 -32 19 -32 20 -440 0 -440 -1 -30 -13z"/><path d="M4550 6263 l-15 -5 -92 -91 -92 -91 10 -13 11 -13 46 40 46 39 12
+-10 12 -10 -1 -852 -2 -852 -14 -21 -14 -21 78 -144 77 -144 161 -295 160
+-295 85 -155 84 -155 155 -290 156 -290 14 -24 15 -23 13 13 14 14 3 1800 3
+1801 -18 27 -18 28 -32 19 -32 20 -405 -1 -405 -1 -15 -5z"/></g>
+</svg>

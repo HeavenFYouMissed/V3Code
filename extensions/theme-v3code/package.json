@@ -1,0 +1,35 @@
+{
+  "name": "theme-v3code",
+  "displayName": "V3Code File Icons",
+  "description": "Complete colored file icons with bundled MIT-licensed assets. Includes optional classic and graphite themes; see fileicons for third-party notices.",
+  "version": "1.0.0",
+  "publisher": "v3code",
+  "license": "MIT",
+  "engines": {
+    "vscode": "*"
+  },
+  "categories": ["Themes"],
+  "contributes": {
+    "iconThemes": [
+      {
+        "id": "v3code-minimal",
+        "label": "V3Code Complete (File Icons)",
+        "path": "./fileicons/complete/theme-complete.json"
+      },
+      {
+        "id": "v3code-graphite",
+        "label": "V3Code Graphite (Optional)",
+        "path": "./fileicons/vs_graphite-icon-theme.json"
+      },
+      {
+        "id": "v3code-classic",
+        "label": "V3Code Classic (File Icons)",
+        "path": "./fileicons/vs_minimal-icon-theme.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HeavenFYouMissed/VSElite.git"
+  }
+}

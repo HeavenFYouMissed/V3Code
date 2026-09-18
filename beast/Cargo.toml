@@ -1,0 +1,35 @@
+[package]
+name = "beast-index"
+version = "0.1.0"
+edition = "2021"
+description = "Engine C — the hardened Rust MiniIndex core. Files are the only truth; every hit resolves to file:line, so a wrong index costs a re-read, never a wrong answer."
+license = "Apache-2.0"
+
+[dependencies]
+anyhow = "1"
+blake3 = "1"
+clap = { version = "4", features = ["derive"] }
+ignore = "0.4"
+once_cell = "1"
+regex = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# M3b — cross-file resolution (MIT/Apache; storage feature OFF: no rusqlite, WASM-safe).
+stack-graphs = "0.14"
+tantivy = "0.22"
+# M3 — tag extraction. Pins follow tabby (tags 0.22.6 <-> ~0.21.x grammars).
+tree-sitter = "0.22"
+tree-sitter-tags = "0.22.6"
+tree-sitter-rust = "0.21.2"
+tree-sitter-go = "0.21.0"
+tree-sitter-python = "0.21.0"
+tree-sitter-java = "0.21.0"
+tree-sitter-typescript = "0.21.1"
+
+[[bin]]
+name = "beast"
+path = "src/main.rs"
+
+[lib]
+name = "beast_index"
+path = "src/lib.rs"

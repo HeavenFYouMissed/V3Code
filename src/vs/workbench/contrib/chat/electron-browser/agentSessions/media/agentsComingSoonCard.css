@@ -1,0 +1,85 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* Glass "coming soon" card shown before the Agents workspace opens. */
+.agents-coming-soon-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 2600;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.42);
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+}
+
+.agents-coming-soon-card {
+	position: relative;
+	width: 380px;
+	max-width: 86vw;
+	padding: 22px 22px 18px;
+	border-radius: 16px;
+	color: var(--vscode-foreground);
+	background: linear-gradient(180deg, rgba(40, 34, 58, 0.82) 0%, rgba(22, 20, 30, 0.86) 100%);
+	border: 1px solid rgba(139, 92, 246, 0.35);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 20px 60px rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(24px) saturate(1.3);
+	-webkit-backdrop-filter: blur(24px) saturate(1.3);
+	text-align: left;
+}
+
+.agents-coming-soon-badge {
+	display: inline-block;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	padding: 3px 8px;
+	border-radius: 999px;
+	color: #cbb8ff;
+	background: rgba(139, 92, 246, 0.18);
+	border: 1px solid rgba(139, 92, 246, 0.4);
+	margin-bottom: 12px;
+}
+
+.agents-coming-soon-title {
+	font-size: 17px;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+.agents-coming-soon-body {
+	font-size: 13px;
+	line-height: 1.5;
+	opacity: 0.82;
+	margin-bottom: 18px;
+}
+
+.agents-coming-soon-ok {
+	display: block;
+	margin-left: auto;
+	padding: 6px 18px;
+	border-radius: 8px;
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	color: #ffffff;
+	background: linear-gradient(180deg, rgba(139, 92, 246, 0.95) 0%, rgba(124, 58, 237, 0.95) 100%);
+	border: 1px solid rgba(160, 120, 255, 0.6);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 2px 8px rgba(76, 29, 149, 0.4);
+}
+
+.agents-coming-soon-ok:hover {
+	filter: brightness(1.08);
+}
+
+.agents-coming-soon-ok:focus-visible {
+	outline: 2px solid var(--vscode-focusBorder);
+	outline-offset: 2px;
+}

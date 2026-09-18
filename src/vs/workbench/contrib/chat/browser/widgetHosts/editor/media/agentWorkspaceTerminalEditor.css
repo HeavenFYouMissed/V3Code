@@ -1,0 +1,148 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.agent-workspace-terminal-editor {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 210px;
+	width: 100%;
+	height: 100%;
+	min-width: 0;
+	min-height: 0;
+	background: var(--vscode-terminal-background, var(--vscode-editor-background));
+}
+
+.agent-workspace-terminal-host {
+	position: relative;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+.agent-workspace-terminal-host .terminal-wrapper,
+.agent-workspace-terminal-host .terminal-overflow-guard {
+	width: 100%;
+	height: 100%;
+}
+
+.agent-workspace-terminal-rail {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	border-left: 1px solid color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	background: color-mix(in srgb, var(--vscode-sideBar-background, #161719) 92%, transparent);
+}
+
+.agent-workspace-terminal-rail-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 42px;
+	padding: 0 10px 0 13px;
+	box-sizing: border-box;
+	color: var(--vscode-descriptionForeground);
+}
+
+.agent-workspace-terminal-count {
+	overflow: hidden;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-terminal-add,
+.agent-workspace-terminal-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	border-radius: 5px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	cursor: pointer;
+}
+
+.agent-workspace-terminal-add {
+	width: 24px;
+	height: 24px;
+}
+
+.agent-workspace-terminal-list {
+	min-height: 0;
+	overflow: auto;
+	padding: 0 7px 8px;
+}
+
+.agent-workspace-terminal-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: 34px;
+	padding: 0 7px 0 9px;
+	border-radius: 7px;
+	box-sizing: border-box;
+	color: var(--vscode-descriptionForeground);
+	cursor: pointer;
+}
+
+.agent-workspace-terminal-row:hover,
+.agent-workspace-terminal-row.active {
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-terminal-row-icon {
+	flex: 0 0 auto;
+	font-size: 14px;
+}
+
+.agent-workspace-terminal-row-title {
+	min-width: 0;
+	flex: 1;
+	overflow: hidden;
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-terminal-close {
+	width: 22px;
+	height: 22px;
+	opacity: 0;
+}
+
+.agent-workspace-terminal-row:hover .agent-workspace-terminal-close,
+.agent-workspace-terminal-row:focus-within .agent-workspace-terminal-close {
+	opacity: 1;
+}
+
+.agent-workspace-terminal-add:hover,
+.agent-workspace-terminal-close:hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	color: var(--vscode-foreground);
+}
+
+@media (max-width: 760px) {
+	.agent-workspace-terminal-editor {
+		grid-template-columns: minmax(0, 1fr) 54px;
+	}
+
+	.agent-workspace-terminal-count,
+	.agent-workspace-terminal-row-title,
+	.agent-workspace-terminal-close {
+		display: none;
+	}
+
+	.agent-workspace-terminal-rail-header,
+	.agent-workspace-terminal-row {
+		justify-content: center;
+		padding-right: 0;
+		padding-left: 0;
+	}
+}

@@ -1,0 +1,501 @@
+{
+	"at": "2026-07-06T07:25:00.396Z",
+	"repoRoot": "/Users/daniel/dev/VSElite",
+	"goldset": "docs/v3index-beast-packet/eval/golden-vselite.jsonl",
+	"mode": "shared-suffix-rule",
+	"embedder": "minishlab/potion-code-16M+hdr2",
+	"chunker": "tree-sitter structural parent/child chunking",
+	"corpus": {
+		"files": 10874,
+		"chunks": 299216,
+		"embeddable": 221032,
+		"structuralFiles": 10120
+	},
+	"topK": 10,
+	"results": [
+		{
+			"config": "baseline",
+			"queries": 11,
+			"skipped": 0,
+			"recallAt5": 0.2727272727272727,
+			"recallAt10": 0.2727272727272727,
+			"mrr": 0.15454545454545454,
+			"avgRetrieveMs": 240.27272727272728,
+			"perQuery": [
+				{
+					"query": "persist memory across sessions",
+					"targets": [
+						"void/electron-main/memory/memoryDatabase.ts",
+						"void/browser/memoryService.ts",
+						"void/common/memory/memoryTypes.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"extensions/copilot/src/extension/chronicle/vscode-node/sessionStoreTracker.ts",
+						"src/vs/editor/common/viewModel/glyphLanesModel.ts",
+						"src/vs/workbench/api/browser/mainThreadQuickOpen.ts",
+						"src/vs/workbench/contrib/chat/common/chatService/chatServiceImpl.ts",
+						"src/vs/sessions/services/sessions/browser/sessionsManagementService.ts",
+						"src/vs/sessions/contrib/sessions/browser/views/sessionsViewActions.ts",
+						"extensions/copilot/.vscode/extensions/test-extension/main.ts",
+						"src/vs/workbench/contrib/debug/browser/debugMemory.ts",
+						"src/vs/platform/browserView/common/cdp/proxy.ts",
+						"extensions/github-authentication/src/github.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "color theme tokens in design system",
+					"targets": [
+						"void/browser/v3codeGreyChromeContribution.ts",
+						"void/browser/v3codeDefaultSettings.ts",
+						"void/common/helpers/colors.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/workbench/contrib/themes/browser/themes.test.contribution.ts",
+						"src/vs/platform/theme/common/themeService.ts",
+						"src/vs/workbench/contrib/terminal/browser/terminalIcon.ts",
+						"src/vs/workbench/services/textMate/common/TMHelper.ts",
+						"src/vs/workbench/services/themes/common/themeConfiguration.ts",
+						"src/vs/workbench/services/themes/common/workbenchThemeService.ts",
+						"src/vs/workbench/contrib/notebook/browser/view/cellParts/cellStatusPart.ts",
+						"extensions/git/src/repository.ts",
+						"src/vs/platform/theme/common/tokenClassificationRegistry.ts",
+						"src/vs/editor/common/editorCommon.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "how does AI decide which function to call",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts",
+						"void/browser/toolsService.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						".eslint-plugin-local/code-no-accessor-after-await.ts",
+						"src/vs/editor/contrib/codeAction/browser/codeActionModel.ts",
+						"extensions/copilot/src/extension/prompts/node/agent/openai/gpt54Prompt.tsx",
+						"src/vs/workbench/contrib/search/browser/searchTreeModel/searchResult.ts",
+						"src/vs/editor/contrib/codeAction/browser/codeAction.ts",
+						"src/vs/platform/agentHost/node/copilot/copilotShellTools.ts",
+						"extensions/typescript-language-features/src/languageFeatures/quickFix.ts",
+						".eslint-plugin-local/code-must-use-super-dispose.ts",
+						"extensions/copilot/src/platform/networking/common/fetch.ts",
+						".eslint-plugin-local/code-no-observable-get-in-reactive-context.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "auto complete code while typing",
+					"targets": [
+						"void/browser/autocompleteService.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/autocompleteService.ts",
+						"src/vs/workbench/contrib/chat/browser/widget/input/chatModelPicker.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/copilotcliSession.ts",
+						"src/vs/workbench/api/common/extHostTextEditor.ts",
+						"src/vs/editor/contrib/suggest/browser/suggestModel.ts",
+						"src/vs/workbench/contrib/notebook/common/notebookEditorInput.ts",
+						"src/vs/workbench/contrib/chat/common/constants.ts",
+						"src/vs/workbench/contrib/void/common/autocomplete/autocompleteTypes.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/claudeSessionOptionBuilder.ts",
+						"src/vs/workbench/contrib/preferences/browser/keyboardLayoutPicker.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "sync local semantic index to cloud storage",
+					"targets": [
+						"void/browser/cloudIndexSyncService.ts",
+						"void/browser/cloudIndexSyncContribution.ts",
+						"void/browser/cloudIndexProxy.ts"
+					],
+					"firstRank": 2,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/cloudIndexStatusBar.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexSyncContribution.ts",
+						"src/vs/platform/userDataSync/common/userDataSyncStoreService.ts",
+						"src/vs/platform/userDataSync/common/abstractSynchronizer.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexActions.ts",
+						"cli/src/auth.rs",
+						"src/vs/platform/userDataSync/common/globalStateSync.ts",
+						"src/vs/workbench/contrib/chat/common/model/chatSessionStore.ts",
+						"src/vs/platform/userDataSync/common/userDataAutoSyncService.ts",
+						"extensions/copilot/src/extension/tools/node/sessionStoreSqlTool.ts"
+					],
+					"mrr": 0.5
+				},
+				{
+					"query": "expose local tools as MCP servers",
+					"targets": [
+						"void/browser/mcpExposeContribution.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/react/src/void-settings-tsx/Settings.tsx",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/mcpHandler.ts",
+						"src/vs/workbench/contrib/mcp/browser/mcpServerActions.ts",
+						"src/vs/workbench/contrib/chat/browser/actions/chatToolPicker.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/vscode-node/mcpServers/index.ts",
+						"src/vs/platform/agentHost/node/copilot/copilotPluginConverters.ts",
+						"src/vs/workbench/contrib/mcp/common/mcpTypes.ts",
+						"src/vs/workbench/contrib/mcp/browser/mcpWorkbenchService.ts",
+						"src/vs/platform/mcp/common/mcpGalleryService.ts",
+						"src/vs/workbench/services/authentication/browser/authenticationQueryService.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "hybrid retrieval fuse lexical vector graph",
+					"targets": [
+						"void/browser/semanticIndex/hybridRetriever.ts"
+					],
+					"firstRank": 5,
+					"topFiles": [
+						".github/skills/heap-snapshot-analysis/helpers/findRetainers.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/semanticIndexConfiguration.ts",
+						"extensions/copilot/src/platform/github/common/githubAPI.ts",
+						"extensions/copilot/src/platform/embeddings/common/embeddingsGrouper.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"src/vs/workbench/contrib/void/electron-main/memory/memoryDatabase.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/languages/typeScriptReact.tmLanguage.ts",
+						"extensions/git/src/terminal.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/llamaEmbedder.ts",
+						"extensions/typescript-language-features/src/tsServer/spawner.ts"
+					],
+					"mrr": 0.2
+				},
+				{
+					"query": "escalate to a stronger model when the task is hard",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/sessions/contrib/chat/browser/runScriptAction.ts",
+						"src/vs/workbench/contrib/bulkEdit/browser/bulkTextEdits.ts",
+						"src/vs/workbench/contrib/tasks/browser/terminalTaskSystem.ts",
+						"extensions/copilot/src/extension/common/modelContextProtocol.ts",
+						"src/vs/platform/mcp/common/modelContextProtocol.ts",
+						"src/vs/workbench/contrib/tasks/common/taskSystem.ts",
+						"src/vs/workbench/services/configuration/common/configurationModels.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/copilotCloudSessionContentBuilder.ts",
+						"src/vs/workbench/contrib/tasks/browser/taskQuickPick.ts",
+						"src/vs/sessions/contrib/chat/browser/sessionsTasksService.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "quick inline edit without opening a diff",
+					"targets": [
+						"void/browser/quickEditActions.ts",
+						"void/browser/editCodeService.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/workbench/contrib/codeEditor/browser/toggleWordWrap.ts",
+						"src/vs/workbench/contrib/mergeEditor/browser/model/textModelDiffs.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/recentEdits/recentEditsReducer.ts",
+						"src/vs/editor/contrib/inlineCompletions/browser/view/inlineEdits/inlineEditsView.ts",
+						"src/vs/editor/browser/widget/diffEditor/diffEditorWidget.ts",
+						"src/vs/workbench/contrib/notebook/common/model/cellEdit.ts",
+						"src/vs/workbench/contrib/notebook/browser/viewModel/notebookViewModelImpl.ts",
+						"src/vs/workbench/contrib/mergeEditor/browser/model/modifiedBaseRange.ts",
+						"src/vs/workbench/contrib/mergeEditor/browser/model/mergeEditorModel.ts",
+						"src/vs/workbench/contrib/bulkEdit/browser/bulkTextEdits.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "dependency graph neighbor expansion",
+					"targets": [
+						"void/browser/semanticIndex/dependencyGraph.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						".github/skills/heap-snapshot-analysis/helpers/findRetainers.ts",
+						"extensions/copilot/src/util/vs/platform/instantiation/common/instantiationService.ts",
+						"src/vs/editor/contrib/inlineCompletions/browser/model/graph.ts",
+						"src/vs/platform/instantiation/common/instantiationService.ts",
+						"extensions/copilot/src/util/vs/base/common/observableInternal/observables/baseObservable.ts",
+						"src/vs/base/common/observableInternal/observables/baseObservable.ts",
+						"src/vs/workbench/services/extensionManagement/browser/extensionEnablementService.ts",
+						"src/vs/workbench/contrib/chat/browser/chatDebug/chatDebugFlowLayout.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"src/vs/workbench/contrib/extensions/browser/extensionEditor.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "rerank search results with local model",
+					"targets": [
+						"void/common/semanticIndex/llamaReranker.ts",
+						"void/common/semanticIndex/llamaRerankerPure.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"extensions/copilot/src/extension/tools/node/findTextInFilesTool.tsx",
+						"extensions/copilot/src/platform/workspaceChunkSearch/node/codeSearch/codeSearchChunkSearch.ts",
+						"extensions/copilot/src/platform/workspaceChunkSearch/node/workspaceChunkSearchService.ts",
+						"src/vs/workbench/contrib/search/browser/searchAccessibilityHelp.ts",
+						"extensions/copilot/src/platform/ignore/node/ignoreFile.ts",
+						"src/vs/workbench/contrib/search/browser/notebookSearch/notebookSearchService.ts",
+						"extensions/copilot/src/extension/workspaceSemanticSearch/node/semanticSearchTextSearchProvider.ts",
+						"src/vs/workbench/contrib/search/browser/AISearch/aiSearchModel.ts",
+						"src/vs/workbench/contrib/search/browser/searchTreeModel/folderMatch.ts",
+						"src/vs/workbench/api/browser/mainThreadSearch.ts"
+					],
+					"mrr": 0
+				}
+			]
+		},
+		{
+			"config": "+headers",
+			"queries": 11,
+			"skipped": 0,
+			"recallAt5": 0.36363636363636365,
+			"recallAt10": 0.5454545454545454,
+			"mrr": 0.20324675324675326,
+			"avgRetrieveMs": 226.1818181818182,
+			"perQuery": [
+				{
+					"query": "persist memory across sessions",
+					"targets": [
+						"void/electron-main/memory/memoryDatabase.ts",
+						"void/browser/memoryService.ts",
+						"void/common/memory/memoryTypes.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"extensions/copilot/src/extension/chronicle/node/cloudSessionIdStore.ts",
+						"src/vs/workbench/contrib/terminalContrib/chat/browser/terminalChatService.ts",
+						"src/vs/workbench/contrib/testing/common/testResultStorage.ts",
+						"src/vs/sessions/services/sessions/browser/sessionsManagementService.ts",
+						"src/vs/sessions/contrib/providers/remoteAgentHost/browser/remoteAgentHostSessionsProvider.ts",
+						"extensions/copilot/src/extension/chronicle/vscode-node/sessionStoreTracker.ts",
+						"extensions/copilot/src/extension/tools/node/memoryContextPrompt.tsx",
+						"extensions/github-authentication/src/github.ts",
+						"src/vs/workbench/contrib/chat/common/chatService/chatServiceImpl.ts",
+						"src/vs/sessions/contrib/providers/copilotChatSessions/browser/copilotChatSessionsActions.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "color theme tokens in design system",
+					"targets": [
+						"void/browser/v3codeGreyChromeContribution.ts",
+						"void/browser/v3codeDefaultSettings.ts",
+						"void/common/helpers/colors.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/workbench/contrib/themes/browser/themes.test.contribution.ts",
+						"src/vs/platform/theme/common/themeService.ts",
+						"src/vs/platform/theme/electron-main/themeMainServiceImpl.ts",
+						"src/vs/workbench/contrib/terminal/browser/terminalIcon.ts",
+						"src/vs/editor/standalone/browser/standaloneThemeService.ts",
+						"src/vs/workbench/services/themes/common/colorThemeData.ts",
+						"src/vs/workbench/services/themes/common/themeConfiguration.ts",
+						"extensions/copilot/src/util/vs/base/common/themables.ts",
+						"src/vs/base/common/themables.ts",
+						"extensions/git/src/repository.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "how does AI decide which function to call",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts",
+						"void/browser/toolsService.ts"
+					],
+					"firstRank": 5,
+					"topFiles": [
+						".eslint-plugin-local/code-no-accessor-after-await.ts",
+						"src/vs/editor/contrib/codeAction/browser/codeActionModel.ts",
+						"extensions/copilot/src/extension/prompts/node/agent/openai/gpt54Prompt.tsx",
+						"src/vs/editor/contrib/codeAction/browser/codeAction.ts",
+						"src/vs/workbench/contrib/void/common/router/routeDecision.ts",
+						"extensions/copilot/src/platform/networking/common/fetch.ts",
+						".eslint-plugin-local/code-must-use-super-dispose.ts",
+						"src/vs/platform/agentHost/node/copilot/copilotShellTools.ts",
+						"extensions/copilot/src/extension/prompts/node/agent/openai/gpt55BasePrompt.tsx",
+						".eslint-plugin-local/code-no-icons-in-localized-strings.ts"
+					],
+					"mrr": 0.2
+				},
+				{
+					"query": "auto complete code while typing",
+					"targets": [
+						"void/browser/autocompleteService.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/autocompleteService.ts",
+						"src/vs/workbench/contrib/void/common/autocomplete/autocompleteTypes.ts",
+						"src/vs/workbench/contrib/chat/browser/widget/input/chatModelPicker.ts",
+						"src/vs/base/common/keyCodes.ts",
+						"src/vs/workbench/contrib/chat/common/constants.ts",
+						"src/vs/workbench/contrib/preferences/browser/keyboardLayoutPicker.ts",
+						"src/vs/sessions/contrib/agentFeedback/browser/agentFeedbackEditorInputContribution.ts",
+						"extensions/typescript-language-features/src/languageFeatures/completions.ts",
+						"extensions/copilot/src/extension/prompts/node/agent/openai/gpt53CodexPrompt.tsx",
+						"src/vs/workbench/contrib/void/common/autocomplete/autocompleteTemplating.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "sync local semantic index to cloud storage",
+					"targets": [
+						"void/browser/cloudIndexSyncService.ts",
+						"void/browser/cloudIndexSyncContribution.ts",
+						"void/browser/cloudIndexProxy.ts"
+					],
+					"firstRank": 2,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/cloudIndexStatusBar.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexSyncContribution.ts",
+						"src/vs/platform/userDataSync/common/userDataAutoSyncService.ts",
+						"src/vs/platform/userDataSync/common/abstractSynchronizer.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexActions.ts",
+						"src/vs/platform/userDataSync/common/userDataSyncStoreService.ts",
+						"cli/src/auth.rs",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/cloudIndexSyncer.ts",
+						"src/vs/workbench/contrib/chat/browser/agentSessions/agentHost/agentHostLocalCustomizations.ts",
+						"src/vs/workbench/contrib/chat/common/model/chatSessionStore.ts"
+					],
+					"mrr": 0.5
+				},
+				{
+					"query": "expose local tools as MCP servers",
+					"targets": [
+						"void/browser/mcpExposeContribution.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/react/src/void-settings-tsx/Settings.tsx",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/mcpHandler.ts",
+						"src/vs/workbench/contrib/mcp/browser/mcpServerActions.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/vscode-node/mcpServers/index.ts",
+						"src/vs/platform/agentHost/node/copilot/copilotPluginConverters.ts",
+						"src/vs/workbench/contrib/mcp/common/mcpTypes.ts",
+						"extensions/copilot/src/platform/mcp/vscode/mcpServiceImpl.ts",
+						"src/vs/platform/mcp/common/mcpManagementService.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/test/mcpHandler.spec.ts",
+						"src/vs/workbench/contrib/mcp/browser/mcpWorkbenchService.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "hybrid retrieval fuse lexical vector graph",
+					"targets": [
+						"void/browser/semanticIndex/hybridRetriever.ts"
+					],
+					"firstRank": 4,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/common/semanticIndex/semanticIndexConfiguration.ts",
+						"cli/src/tunnels/singleton_server.rs",
+						"extensions/copilot/src/platform/github/common/githubAPI.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"src/vs/workbench/contrib/void/electron-main/memory/memoryDatabase.ts",
+						"cli/src/tunnels/server_multiplexer.rs",
+						"extensions/emmet/src/mergeLines.ts",
+						"extensions/copilot/src/util/vs/platform/instantiation/common/graph.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/llamaEmbedder.ts",
+						"src/vs/platform/instantiation/common/graph.ts"
+					],
+					"mrr": 0.25
+				},
+				{
+					"query": "escalate to a stronger model when the task is hard",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"extensions/copilot/src/extension/common/modelContextProtocol.ts",
+						"src/vs/platform/mcp/common/modelContextProtocol.ts",
+						"extensions/copilot/src/platform/tasks/vscode/tasksService.ts",
+						"src/vs/sessions/contrib/chat/browser/sessionsTasksService.ts",
+						"src/vs/workbench/api/node/extHostTask.ts",
+						"src/vs/workbench/contrib/tasks/common/taskSystem.ts",
+						"src/vs/workbench/api/common/extHostTask.ts",
+						"src/vs/workbench/api/browser/mainThreadTask.ts",
+						"extensions/npm/src/tasks.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/copilotCloudSessionContentBuilder.ts"
+					],
+					"mrr": 0
+				},
+				{
+					"query": "quick inline edit without opening a diff",
+					"targets": [
+						"void/browser/quickEditActions.ts",
+						"void/browser/editCodeService.ts"
+					],
+					"firstRank": 7,
+					"topFiles": [
+						"src/vs/editor/browser/widget/diffEditor/diffEditorWidget.ts",
+						"src/vs/workbench/contrib/mergeEditor/browser/model/textModelDiffs.ts",
+						"src/vs/workbench/browser/parts/editor/diffEditorCommands.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/recentEdits/recentEditsReducer.ts",
+						"src/vs/editor/contrib/inlineCompletions/browser/view/inlineEdits/inlineEditsView.ts",
+						"src/vs/workbench/contrib/notebook/common/model/cellEdit.ts",
+						"src/vs/workbench/contrib/void/browser/editCodeService.ts",
+						"src/vs/workbench/contrib/codeEditor/browser/toggleWordWrap.ts",
+						"extensions/copilot/src/extension/inlineEdits/node/diffNextEdits.ts",
+						"src/vs/workbench/contrib/scm/browser/quickDiffWidget.ts"
+					],
+					"mrr": 0.14285714285714285
+				},
+				{
+					"query": "dependency graph neighbor expansion",
+					"targets": [
+						"void/browser/semanticIndex/dependencyGraph.ts"
+					],
+					"firstRank": 7,
+					"topFiles": [
+						"src/vs/editor/contrib/inlineCompletions/browser/model/graph.ts",
+						"extensions/copilot/src/util/vs/platform/instantiation/common/instantiationService.ts",
+						"extensions/copilot/src/util/vs/base/common/observableInternal/observables/baseObservable.ts",
+						"src/vs/platform/instantiation/common/instantiationService.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"src/vs/base/common/observableInternal/observables/baseObservable.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/dependencyGraph.ts",
+						".github/skills/heap-snapshot-analysis/helpers/findRetainers.ts",
+						".github/skills/heap-snapshot-analysis/helpers/parseSnapshot.ts",
+						"src/vs/workbench/contrib/extensions/browser/extensionsWorkbenchService.ts"
+					],
+					"mrr": 0.14285714285714285
+				},
+				{
+					"query": "rerank search results with local model",
+					"targets": [
+						"void/common/semanticIndex/llamaReranker.ts",
+						"void/common/semanticIndex/llamaRerankerPure.ts"
+					],
+					"firstRank": null,
+					"topFiles": [
+						"extensions/copilot/src/platform/workspaceChunkSearch/common/rerankerService.ts",
+						"extensions/copilot/src/extension/tools/node/findTextInFilesTool.tsx",
+						"extensions/copilot/src/platform/workspaceChunkSearch/node/codeSearch/codeSearchChunkSearch.ts",
+						"extensions/copilot/src/extension/workspaceSemanticSearch/node/semanticSearchTextSearchProvider.ts",
+						"extensions/copilot/src/platform/workspaceChunkSearch/node/workspaceChunkSearchService.ts",
+						"extensions/copilot/src/platform/ignore/node/ignoreFile.ts",
+						"src/vs/workbench/contrib/search/browser/notebookSearch/notebookSearchService.ts",
+						"src/vs/workbench/contrib/search/browser/searchTreeModel/searchModel.ts",
+						"src/vs/workbench/api/browser/mainThreadSearch.ts",
+						"src/vs/workbench/contrib/search/browser/searchView.ts"
+					],
+					"mrr": 0
+				}
+			]
+		}
+	]
+}

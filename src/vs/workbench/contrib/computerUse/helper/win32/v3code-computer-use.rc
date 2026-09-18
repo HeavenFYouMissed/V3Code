@@ -1,0 +1,63 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 V3Code / Glass Devtools. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0.
+ *--------------------------------------------------------------------------------------*/
+//
+// Resources for v3code-computer-use.exe: the application manifest and the version block.
+//
+// The manifest MUST be embedded as resource id 1 of type RT_MANIFEST (24) — that is
+// CREATEPROCESS_MANIFEST_RESOURCE_ID, the id the loader looks for. Any other id is ignored and the
+// PerMonitorV2 declaration silently does nothing.
+//
+// The version block is here so the shipped binary is identifiable in Task Manager and in crash
+// reports without a post-build step. The existing pipeline may still run rcedit over the binary; if
+// it does, rcedit MUST run BEFORE signing, because writing resources invalidates an Authenticode
+// signature.
+//
+// NEEDS VERIFICATION ON WINDOWS:
+//   - That rc.exe accepts this file and that the manifest ends up embedded (dumpbin /manifest).
+//   - That the version strings match whatever the release pipeline expects.
+//
+#include <windows.h>
+
+1 RT_MANIFEST "v3code-computer-use.manifest"
+
+// Keep in sync with kHelperVersion in Common.h.
+#define V3CU_VERSION_MAJOR 0
+#define V3CU_VERSION_MINOR 3
+#define V3CU_VERSION_PATCH 0
+#define V3CU_VERSION_BUILD 0
+#define V3CU_VERSION_STRING "0.3.0.0"
+
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION V3CU_VERSION_MAJOR, V3CU_VERSION_MINOR, V3CU_VERSION_PATCH, V3CU_VERSION_BUILD
+	PRODUCTVERSION V3CU_VERSION_MAJOR, V3CU_VERSION_MINOR, V3CU_VERSION_PATCH, V3CU_VERSION_BUILD
+	FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
+	FILEFLAGS VS_FF_DEBUG
+#else
+	FILEFLAGS 0x0L
+#endif
+	FILEOS VOS_NT_WINDOWS32
+	FILETYPE VFT_APP
+	FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904b0" // US English, Unicode
+		BEGIN
+			VALUE "CompanyName", "Glass Devtools"
+			VALUE "FileDescription", "V3Code Computer Use Helper"
+			VALUE "FileVersion", V3CU_VERSION_STRING
+			VALUE "InternalName", "v3code-computer-use"
+			VALUE "LegalCopyright", "Copyright 2025 V3Code / Glass Devtools"
+			VALUE "OriginalFilename", "v3code-computer-use.exe"
+			VALUE "ProductName", "V3Code"
+			VALUE "ProductVersion", V3CU_VERSION_STRING
+		END
+	END
+	BLOCK "VarFileInfo"
+	BEGIN
+		VALUE "Translation", 0x409, 1200
+	END
+END

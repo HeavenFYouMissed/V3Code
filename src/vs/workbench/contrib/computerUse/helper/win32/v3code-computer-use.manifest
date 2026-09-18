@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  Application manifest for v3code-computer-use.exe.
+
+  PerMonitorV2 is declared here rather than only at runtime because a manifest declaration takes
+  effect before any code runs, including anything a loaded DLL does in its entry point. Getting this
+  wrong is the single most likely cause of "clicks land 40 pixels off" on a mixed-DPI desktop: a
+  process that is not per-monitor aware sees virtualized, rounded coordinates instead of physical
+  pixels. See Dpi.h for the full reasoning.
+
+  Both dpiAware (Windows 8.1 vintage) and dpiAwareness (Windows 10 1703+) are present. Newer Windows
+  reads dpiAwareness and ignores dpiAware; older Windows does the reverse. "true/pm" is the closest
+  older equivalent of PerMonitorV2.
+
+  requestedExecutionLevel is asInvoker with uiAccess="false" — the helper is deliberately NOT able to
+  drive elevated windows. uiAccess="true" would require the binary to be signed AND installed under
+  Program Files, and it would let an agent click through UAC-protected UI, which is not a capability
+  this feature should have.
+
+  NEEDS VERIFICATION ON WINDOWS:
+    - That this manifest is actually embedded (dumpbin /manifest, or check the awareness the helper
+      logs at startup, which must say per-monitor-aware).
+    - The supportedOS GUID below is the Windows 10/11 compatibility GUID.
+-->
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+	<assemblyIdentity
+		type="win32"
+		name="dev.v3code.ComputerUseHelper"
+		version="1.0.0.0"
+		processorArchitecture="*" />
+
+	<trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
+		<security>
+			<requestedPrivileges>
+				<requestedExecutionLevel level="asInvoker" uiAccess="false" />
+			</requestedPrivileges>
+		</security>
+	</trustInfo>
+
+	<application xmlns="urn:schemas-microsoft-com:asm.v3">
+		<windowsSettings>
+			<dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true/pm</dpiAware>
+			<dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2</dpiAwareness>
+			<longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware>
+		</windowsSettings>
+	</application>
+
+	<compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
+		<application>
+			<!-- Windows 10 and 11 -->
+			<supportedOS Id="{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}" />
+		</application>
+	</compatibility>
+</assembly>

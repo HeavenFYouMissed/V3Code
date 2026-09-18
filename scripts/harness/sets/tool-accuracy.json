@@ -1,0 +1,51 @@
+{
+	"id": "tool-accuracy",
+	"description": "Does the agent pick the right tool first try? Directly measures the search_for_files vs search_pathnames_only vs find_text disambiguation.",
+	"newThreadAtStart": true,
+	"autoApprove": true,
+	"timeoutMs": 120000,
+	"turns": [
+		{
+			"newThread": true,
+			"send": "Find every file in this workspace whose FILE NAME contains the text 'store'. I only care about filenames, not file contents. Use exactly one search tool, then list the matches.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "tool_used",
+					"tool": "search_pathnames_only"
+				}
+			]
+		},
+		{
+			"newThread": true,
+			"send": "Find which files in this workspace CONTAIN the exact literal string 'ALL PASS'. I know the exact string. Use one search tool, then report the file(s) and line(s).",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "tool_used",
+					"tool": "find_text"
+				}
+			]
+		},
+		{
+			"newThread": true,
+			"send": "Conceptually, where in this workspace is logic that adds or removes a user from a collection? I don't know the file or exact names. Use one discovery tool.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "tool_used",
+					"tool": "semantic_search"
+				}
+			]
+		}
+	]
+}

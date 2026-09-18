@@ -1,0 +1,697 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.agent-sessions-viewer {
+
+	flex: 1 1 auto;
+	height: 100%;
+	min-height: 0;
+
+	.pane-body & .monaco-scrollable-element {
+		padding: 0 6px;
+	}
+
+	/* ---------------------------------------------------------------------
+		Vertical scroll fade.
+
+		Rows that meet the top and bottom edges of the viewport cut off on a
+		hard line, which makes a scrolling list read as "clipped" rather than
+		"continuing". Softening both edges is the same trick as the horizontal
+		title fade: the content appears to travel out of the panel instead of
+		hitting a wall.
+
+		Deliberately ASYMMETRIC and deliberately small at the top. The fade is
+		unconditional (there is no scroll-position state in CSS), and the tree's
+		sticky section header renders INSIDE this same scrollable element
+		(abstractTree styles it as `.monaco-scrollable-element
+		.monaco-tree-sticky-container`), so a Cursor-sized top fade would
+		permanently dim whichever section is currently pinned. 8px lands inside
+		the sticky row's own padding, so its text is untouched while rows still
+		soften as they travel under it.
+
+		The bottom can be far more generous - nothing is pinned there, and the
+		last row is where a list most obviously looks truncated.
+	--------------------------------------------------------------------- */
+	.monaco-list > .monaco-scrollable-element {
+		-webkit-mask-image: linear-gradient(to bottom,
+			rgba(0, 0, 0, 0.35) 0,
+			#000 8px,
+			#000 calc(100% - 30px),
+			rgba(0, 0, 0, 0.55) calc(100% - 16px),
+			rgba(0, 0, 0, 0.12) calc(100% - 5px),
+			transparent 100%);
+		mask-image: linear-gradient(to bottom,
+			rgba(0, 0, 0, 0.35) 0,
+			#000 8px,
+			#000 calc(100% - 30px),
+			rgba(0, 0, 0, 0.55) calc(100% - 16px),
+			rgba(0, 0, 0, 0.12) calc(100% - 5px),
+			transparent 100%);
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-size: 100% 100%;
+		mask-size: 100% 100%;
+	}
+
+	.agent-sessions-workbench .pane-body & .monaco-scrollable-element {
+		padding: 0 12px;
+	}
+
+	.agent-sessions-workbench .pane-body & .monaco-tree-sticky-container {
+		left: 12px;
+		width: calc(100% - 24px);
+	}
+
+	.monaco-list-row {
+		border-radius: 6px;
+		transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1), box-shadow 150ms cubic-bezier(0.2, 0, 0, 1);
+	}
+
+	/* Cursor-like "which chat is open" — lit fill + muted grey edge (no venom toenail). */
+	.monaco-list-row.selected {
+		background-color: color-mix(in srgb, var(--vscode-foreground) 10%, var(--vscode-sideBar-background, #1a1a1d)) !important;
+		box-shadow: inset 2px 0 0 #3A3A42;
+	}
+
+	.monaco-list:focus .monaco-list-row.selected,
+	.monaco-list-row.selected.focused {
+		background-color: color-mix(in srgb, var(--vscode-foreground) 14%, var(--vscode-sideBar-background, #1a1a1d)) !important;
+		box-shadow: inset 2px 0 0 #4A4A54;
+	}
+
+	.monaco-list-row.selected .agent-session-title {
+		color: var(--vscode-foreground) !important;
+		font-weight: 500;
+	}
+
+	.monaco-list-row .force-no-twistie {
+		display: none !important;
+	}
+
+	.monaco-list-row.selected .agent-session-details-row {
+		color: unset;
+
+		.rendered-markdown {
+			a {
+				color: unset;
+			}
+		}
+	}
+
+	.monaco-list:focus .monaco-list-row.selected .agent-session-details-row {
+		.agent-session-diff-container {
+			.agent-session-diff-added,
+			.agent-session-diff-removed {
+				color: unset;
+			}
+		}
+	}
+
+	.monaco-list-row.selected .agent-session-item {
+		color: unset;
+	}
+
+	.monaco-list:not(:focus) .monaco-list-row.selected .agent-session-details-row {
+		color: var(--vscode-descriptionForeground);
+	}
+
+	.monaco-list-row .agent-session-pinned-indicator {
+		display: none;
+		height: 16px;
+		align-items: center;
+		color: var(--vscode-descriptionForeground);
+		font-size: 12px;
+		pointer-events: none;
+
+		&.visible {
+			display: flex;
+		}
+	}
+
+	/* Out of flow so revealing it on hover cannot reflow the title beside it.
+		In flow, `display: block` on hover stole width from a flex:1 title and
+		re-truncated the text under the cursor on every row. Overlaying it lets
+		the title keep one fixed box and simply fade beneath the buttons. */
+	.monaco-list-row .agent-session-title-toolbar {
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 1;
+		height: 16px;
+		display: none;
+
+		.monaco-toolbar {
+			/* this is required because the overal height (including the padding needed for hover feedback) would push down the title otherwise */
+			position: relative;
+			right: 0;
+			top: 0;
+		}
+	}
+
+	/* On hover or keyboard focus: show toolbar, hide pinned indicator */
+	.monaco-list-row:hover,
+	.monaco-list-row.focused:not(.selected) {
+
+		.agent-session-pinned-indicator {
+			display: none;
+		}
+
+		.agent-session-title-toolbar {
+			display: block;
+		}
+
+		/* Widen the fade instead of shrinking the title box.
+
+			margin-right here resized the title on EVERY hover, so the text
+			visibly re-truncated and jumped under the cursor on every row you
+			passed. Keeping the box fixed and deepening the fade lets the text
+			dissolve UNDER the row actions instead - nothing moves. */
+		.agent-session-title {
+			--agent-list-fade: 62px;
+		}
+	}
+
+	.agent-session-item {
+		display: flex;
+		flex-direction: row;
+		padding: 4px 6px;
+
+		&.archived {
+			color: var(--vscode-descriptionForeground);
+		}
+
+		.agent-session-main-col,
+		.agent-session-title-row,
+		.agent-session-details-row {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.agent-session-icon-col {
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			line-height: 15px;
+			width: 14px;
+			min-width: 14px;
+
+			.agent-session-icon {
+				flex-shrink: 0;
+				font-size: 11px;
+				height: 14px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				&.needs-input {
+					animation: agent-session-needs-input-pulse 2s ease-in-out infinite;
+				}
+
+				@media (prefers-reduced-motion: reduce) {
+					&.needs-input {
+						animation: none;
+					}
+				}
+			}
+
+			/* 6-dot working indicator shell — visibility rules are flattened below. */
+			.agent-session-working-dots {
+				display: none;
+				grid-template-columns: repeat(3, 3px);
+				grid-template-rows: repeat(2, 3px);
+				gap: 2px;
+				width: 13px;
+				height: 10px;
+				margin-top: 2px;
+				flex-shrink: 0;
+
+				span {
+					width: 3px;
+					height: 3px;
+					border-radius: 50%;
+					background: rgba(80, 168, 230, 0.35);
+				}
+			}
+		}
+
+		&.working .agent-session-icon {
+			display: none !important;
+		}
+
+		.agent-session-main-col {
+			padding-left: 5px;
+		}
+
+		.agent-session-title-row,
+		.agent-session-details-row {
+			display: flex;
+			align-items: center;
+		}
+
+		.agent-session-title-row {
+			line-height: 15px;
+			padding-bottom: 2px;
+		}
+
+		.agent-session-live-status {
+			display: none;
+			align-items: center;
+			gap: 4px;
+			flex: 0 0 auto;
+			margin-left: 6px;
+			font-size: 9px;
+			font-weight: 600;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			color: var(--vscode-descriptionForeground);
+
+			&.visible {
+				display: inline-flex;
+			}
+
+			&.hidden {
+				display: none;
+			}
+
+			.agent-session-live-dot {
+				width: 5px;
+				height: 5px;
+				border-radius: 50%;
+				background: currentColor;
+			}
+
+			/* "Running" is a LIVENESS signal, not a test result. It borrowed
+				testing.iconPassed and so stayed green after the venom->blue sweep,
+				leaving one green dot on an otherwise blue rail. Cool blue (hue 205)
+				at the same saturation/lightness as the old green. Warning and
+				failed stay amber/red - those carry real semantic colour. */
+			&.running {
+				color: #73a5c9;
+			}
+
+			&.needs-input {
+				color: var(--vscode-list-warningForeground, #cca700);
+			}
+
+			&.failed {
+				color: var(--vscode-errorForeground, #f14c4c);
+			}
+		}
+
+		.agent-session-details-row {
+			gap: 3px;
+			font-size: 11px;
+			line-height: 13px;
+			max-height: 13px;
+			color: var(--vscode-descriptionForeground);
+
+			.agent-session-details-icon {
+				display: none;
+				font-size: 11px;
+				line-height: 1;
+				flex-shrink: 0;
+
+				&.visible {
+					display: flex;
+					align-items: center;
+				}
+			}
+
+			.rendered-markdown {
+				p {
+					display: flex;
+					align-items: center;
+					margin: 0;
+
+					> span.codicon {
+						margin-right: 2px;
+					}
+				}
+
+				a {
+					color: var(--vscode-descriptionForeground);
+				}
+			}
+
+			.agent-session-diff-container {
+				font-variant-numeric: tabular-nums;
+				overflow: hidden;
+			}
+
+			.agent-session-diff-container {
+				display: flex;
+				gap: 4px;
+
+				&:not(.has-diff) {
+					display: none;
+				}
+
+				.agent-session-diff-added {
+					color: var(--vscode-chat-linesAddedForeground);
+				}
+
+				.agent-session-diff-removed {
+					color: var(--vscode-chat-linesRemovedForeground);
+				}
+			}
+
+			.agent-session-separator {
+				display: none;
+
+				&.has-separator {
+					display: inline;
+
+					&::before {
+						content: '\00B7';
+					}
+				}
+			}
+
+			.agent-session-badge {
+
+				p {
+					overflow: hidden;
+				}
+
+				&:not(.has-badge) {
+					display: none;
+				}
+			}
+		}
+
+		/* Truncation fades instead of ending in an ellipsis.
+
+			An ellipsis is a punctuation MARK: full-strength ink, landing at a
+			different x on every row. Down a long list those dots form a ragged
+			vertical column the eye reads as an edge - the single loudest thing
+			in a list whose whole job is to be quiet. A gradient mask fades the
+			glyphs themselves to zero alpha instead, so text appears to travel
+			back into the panel and the truncation stops being a visible event.
+
+			text-overflow: clip is REQUIRED, not cosmetic. Left at ellipsis the
+			browser paints the dots and then fades them - a smudge, worse than
+			either treatment alone.
+
+			Safe to apply unconditionally: the element is flex:1, so its BOX is
+			full width on every row while the TEXT is not. Short titles end well
+			before the fade zone and are never touched. */
+		.agent-session-title,
+		.agent-session-description {
+			/* push other items to the end */
+			flex: 1;
+			overflow: hidden;
+			white-space: nowrap;
+			/* Proportional, not fixed. A flat 18px is ~6% of a rail row - the mask
+				computed correctly but covered about one character, which is why the
+				effect was reported as invisible. The percentage keeps the fade
+				constant as the list is resized; max() holds a usable floor when it
+				is dragged narrow. */
+			--agent-list-fade: max(64px, 24%);
+			/* The glyphs must hit ZERO alpha BEFORE the row's edge so there is
+				clear space after the text. A ramp that only reaches transparent
+				at 100% leaves faint ink pressed against the border, which reads
+				as "ran into the wall" instead of "went away".
+
+				CONSTRAINT: must stay under --agent-list-fade * 0.22, else the
+				0.22 stop lands after the transparent stop; CSS clamps the
+				out-of-order stop and silently flattens the ramp back to the
+				washed-out linear fade. Ceiling at the 64px floor is 14.08px. */
+			--agent-list-fade-gap: 12px;
+			text-overflow: clip;
+			/* Three stops, not two: a linear ramp starts dropping ink immediately
+				and greys the whole tail. Holding high alpha through the first half
+				of the zone keeps the title solid for most of its length, then it
+				falls away quickly - dramatic rather than washed out. */
+			-webkit-mask-image: linear-gradient(90deg,
+				#000 calc(100% - var(--agent-list-fade)),
+				rgba(0, 0, 0, 0.72) calc(100% - var(--agent-list-fade) * 0.55),
+				rgba(0, 0, 0, 0.22) calc(100% - var(--agent-list-fade) * 0.22),
+				transparent calc(100% - var(--agent-list-fade-gap)));
+			mask-image: linear-gradient(90deg,
+				#000 calc(100% - var(--agent-list-fade)),
+				rgba(0, 0, 0, 0.72) calc(100% - var(--agent-list-fade) * 0.55),
+				rgba(0, 0, 0, 0.22) calc(100% - var(--agent-list-fade) * 0.22),
+				transparent calc(100% - var(--agent-list-fade-gap)));
+		}
+
+		/* Hover widens the fade so the title dissolves under the row actions. */
+		.monaco-list-row:hover .agent-session-title,
+		.monaco-list-row.focused .agent-session-title {
+			--agent-list-fade: max(108px, 36%);
+			/* Ceiling here is 108 * 0.22 = 23.76px. */
+			--agent-list-fade-gap: 20px;
+		}
+
+		/* IconLabel declares its own ellipsis on two INNER containers
+			(iconlabel.css), not on our element - clipping only the outer box
+			would leave those dots painting straight through the fade. */
+		.agent-session-title .monaco-icon-label,
+		.agent-session-title .monaco-icon-label-container,
+		.agent-session-title .monaco-icon-name-container,
+		.agent-session-title .label-name,
+		.agent-session-title .monaco-highlighted-label {
+			text-overflow: clip;
+		}
+
+		.agent-session-description:empty {
+			display: none;
+		}
+
+		.agent-session-description.has-separator::before {
+			content: '\00B7';
+			margin-right: 4px;
+		}
+
+		.agent-session-title {
+			font-size: 12px;
+		}
+
+		.agent-session-status {
+			display: flex;
+			align-items: center;
+			font-variant-numeric: tabular-nums;
+			white-space: nowrap;
+
+			&.has-separator::before {
+				content: '\00B7';
+				margin-right: 4px;
+			}
+
+			&.hidden {
+				display: none;
+			}
+
+		}
+		.agent-session-approval-row {
+			display: none;
+			align-items: flex-end;
+			gap: 8px;
+			margin-top: 4px;
+			padding: 4px 8px;
+			box-sizing: border-box;
+			border: 1px solid var(--vscode-contrastBorder, var(--vscode-widget-border, transparent));
+			border-radius: 4px;
+			background-color: var(--vscode-editor-background);
+			color: var(--vscode-editor-foreground);
+
+			&.visible {
+				display: flex;
+			}
+
+			.agent-session-approval-label {
+				flex: 1;
+				overflow: hidden;
+				min-width: 0;
+
+				& > .rendered-markdown,
+				& > .rendered-markdown > .code,
+				& > .rendered-markdown > .code > span {
+					display: block;
+					overflow: hidden;
+				}
+
+				.monaco-tokenized-source {
+					display: block;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					font-size: 12px;
+				}
+			}
+
+			.agent-session-approval-button {
+				flex-shrink: 0;
+
+				.monaco-button {
+					padding: 2px 10px;
+					font-size: 12px;
+					white-space: nowrap;
+				}
+			}
+		}
+	}
+
+	.agent-session-show-more {
+		display: flex;
+		align-items: center;
+		font-size: 12px;
+		color: var(--vscode-foreground);
+		/* align with session item text: 6px item padding + 14px icon + 5px main-col padding */
+		padding: 0 6px 0 25px;
+		cursor: pointer;
+		text-decoration: none !important;
+	}
+
+	.agent-session-section {
+		display: flex;
+		align-items: center;
+		font-size: 11px;
+		font-weight: 500;
+		color: var(--vscode-descriptionForeground);
+		text-transform: uppercase;
+		/* align with session item padding */
+		padding: 0 6px;
+		gap: 6px;
+
+		.agent-session-section-icon {
+			display: none;
+			flex: 0 0 auto;
+			font-size: 11px;
+			opacity: 0.8;
+
+			&.visible {
+				display: inline-flex;
+			}
+		}
+
+		.agent-session-section-label {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.agent-session-section-count {
+			opacity: 0.7;
+			margin-right: 4px;
+		}
+
+		.agent-session-section-toolbar {
+			/* for the absolute positioning of the toolbar below */
+			position: relative;
+
+			.monaco-toolbar {
+				/* this is required because the overal height (including the padding needed for hover feedback) would push down the label otherwise */
+				position: absolute;
+				right: 0;
+				top: 0;
+				display: none;
+			}
+		}
+	}
+
+	.monaco-list-row:hover .agent-session-section .agent-session-section-count {
+		display: none;
+	}
+
+	.monaco-list-row:hover .agent-session-section .agent-session-section-toolbar,
+	.monaco-list-row.focused:not(.selected) .agent-session-section .agent-session-section-toolbar {
+		width: 22px;
+
+		.monaco-toolbar {
+			display: block;
+		}
+	}
+
+	.monaco-list:focus .monaco-list-row.focused.selected .agent-session-section-label,
+	.monaco-list:focus .monaco-list-row.selected .agent-session-section-label {
+		color: var(--vscode-list-activeSelectionForeground);
+	}
+
+	.monaco-list:not(:focus) .monaco-list-row.selected .agent-session-section-label {
+		color: var(--vscode-list-inactiveSelectionForeground);
+	}
+
+	.agent-sessions-empty-filter-message {
+		padding: 8px 12px;
+		font-size: 12px;
+		color: var(--vscode-descriptionForeground);
+
+		.reset-filter-link {
+			color: var(--vscode-textLink-foreground);
+			cursor: pointer;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+
+			&:focus-visible {
+				text-decoration: underline;
+				outline: 1px solid var(--vscode-focusBorder);
+				outline-offset: 1px;
+			}
+		}
+	}
+}
+
+@keyframes agent-session-needs-input-pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
+}
+
+/* Flattened (no nesting) so the working state always paints in Electron. */
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots,
+.agent-sessions-viewer .agent-session-working-dots.visible {
+	display: grid !important;
+}
+
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span,
+.agent-sessions-viewer .agent-session-working-dots.visible span {
+	animation: agent-session-working-dot 1.05s ease-in-out infinite;
+}
+
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(1),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(1) { animation-delay: 0s; }
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(2),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(2) { animation-delay: 0.08s; }
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(3),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(3) { animation-delay: 0.16s; }
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(4),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(4) { animation-delay: 0.24s; }
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(5),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(5) { animation-delay: 0.32s; }
+.agent-sessions-viewer .agent-session-working-dots.visible span:nth-child(6),
+.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span:nth-child(6) { animation-delay: 0.40s; }
+
+@keyframes agent-session-working-dot {
+	0%, 100% {
+		background: rgba(80, 168, 230, 0.28);
+		transform: scale(0.8);
+	}
+	40% {
+		background: rgba(80, 168, 230, 1);
+		transform: scale(1.2);
+		box-shadow: 0 0 5px rgba(80, 168, 230, 0.65);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.agent-sessions-viewer .agent-session-item.working .agent-session-working-dots span,
+	.agent-sessions-viewer .agent-session-working-dots.visible span {
+		animation: none;
+		background: rgba(80, 168, 230, 0.95);
+		transform: none;
+		box-shadow: none;
+	}
+}

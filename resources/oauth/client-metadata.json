@@ -1,0 +1,18 @@
+{
+	"client_id": "https://v3code.dev/oauth/client-metadata.json",
+	"client_name": "V3Code",
+	"client_uri": "https://v3code.dev",
+	"redirect_uris": [
+		"http://127.0.0.1/",
+		"http://127.0.0.1:33418/"
+	],
+	"grant_types": [
+		"authorization_code",
+		"refresh_token"
+	],
+	"response_types": [
+		"code"
+	],
+	"token_endpoint_auth_method": "none",
+	"application_type": "native"
+}

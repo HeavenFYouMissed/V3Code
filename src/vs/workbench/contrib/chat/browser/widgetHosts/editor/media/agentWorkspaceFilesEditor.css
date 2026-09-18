@@ -1,0 +1,191 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.agent-workspace-files-editor {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	min-width: 0;
+	min-height: 0;
+	box-sizing: border-box;
+	background:
+		radial-gradient(circle at 75% 0%, color-mix(in srgb, var(--vscode-foreground) 3%, transparent), transparent 28%),
+		color-mix(in srgb, var(--vscode-editor-background) 88%, transparent);
+	backdrop-filter: blur(22px) saturate(118%);
+}
+
+.agent-workspace-files-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 0 0 auto;
+	height: 38px;
+	padding: 0 9px 0 12px;
+	border-bottom: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	box-sizing: border-box;
+}
+
+.agent-workspace-files-title,
+.agent-workspace-files-actions {
+	display: flex;
+	align-items: center;
+}
+
+.agent-workspace-files-title {
+	min-width: 0;
+	gap: 8px;
+	color: var(--vscode-foreground);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.agent-workspace-files-root {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-files-actions {
+	gap: 2px;
+}
+
+.agent-workspace-files-toolbar-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 27px;
+	height: 27px;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	cursor: pointer;
+}
+
+.agent-workspace-files-toolbar-button:hover,
+.agent-workspace-files-toolbar-button:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-files-filter {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+	height: 31px;
+	margin: 8px;
+	padding: 0 8px 0 29px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	border-radius: 7px;
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--vscode-input-background) 80%, transparent);
+}
+
+.agent-workspace-files-filter:focus-within {
+	border-color: var(--vscode-focusBorder);
+}
+
+.agent-workspace-files-filter > .codicon {
+	position: absolute;
+	left: 9px;
+	opacity: 0.62;
+}
+
+.agent-workspace-files-filter-input {
+	width: 100%;
+	min-width: 0;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--vscode-input-foreground);
+	font: inherit;
+	font-size: 12px;
+}
+
+.agent-workspace-files-filter-input::placeholder {
+	color: var(--vscode-input-placeholderForeground);
+}
+
+.agent-workspace-files-tree {
+	flex: 1 1 0;
+	min-height: 0;
+	overflow: auto;
+	padding: 2px 5px 12px;
+	box-sizing: border-box;
+}
+
+.agent-workspace-file-node.filtered-out {
+	display: none;
+}
+
+.agent-workspace-file-row {
+	display: flex;
+	align-items: center;
+	height: 25px;
+	padding: 0 7px 0 5px;
+	border-radius: 6px;
+	box-sizing: border-box;
+	color: var(--vscode-foreground);
+	font-size: 12px;
+	cursor: default;
+	user-select: none;
+}
+
+.agent-workspace-file-row:hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+}
+
+.agent-workspace-file-row.selected,
+.agent-workspace-file-row:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+}
+
+.agent-workspace-file-twistie,
+.agent-workspace-file-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 17px;
+	opacity: 0.72;
+}
+
+.agent-workspace-file-twistie.empty {
+	visibility: hidden;
+}
+
+.agent-workspace-file-icon {
+	margin-right: 3px;
+}
+
+.agent-workspace-file-name {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-file-node.unavailable > .agent-workspace-file-row {
+	opacity: 0.5;
+}
+
+.agent-workspace-files-message {
+	padding: 18px 12px;
+	color: var(--vscode-descriptionForeground);
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.agent-workspace-files-message.error {
+	color: var(--vscode-errorForeground);
+}

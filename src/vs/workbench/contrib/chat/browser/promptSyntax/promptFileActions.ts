@@ -1,0 +1,32 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+import { registerAttachPromptActions } from './attachInstructionsAction.js';
+import { registerAgentActions } from './chatModeActions.js';
+import { registerRunPromptActions } from './runPromptAction.js';
+import { registerNewPromptFileActions } from './newPromptFileActions.js';
+import { registerSkillActions } from './skillActions.js';
+import { registerHookActions } from './hookActions.js';
+import { registerAction2 } from '../../../../../platform/actions/common/actions.js';
+import { SaveAsAgentFileAction, SaveAsInstructionsFileAction, SaveAsPromptFileAction } from './saveAsPromptFileActions.js';
+
+
+/**
+ * Helper to register all actions related to reusable prompt files.
+ */
+export function registerPromptActions(): void {
+	registerRunPromptActions();
+	registerAttachPromptActions();
+	registerSkillActions();
+	registerHookActions();
+	registerAction2(SaveAsPromptFileAction);
+	registerAction2(SaveAsInstructionsFileAction);
+	registerAction2(SaveAsAgentFileAction);
+	registerAgentActions();
+	registerNewPromptFileActions();
+}

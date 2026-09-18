@@ -1,0 +1,80 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.chat-diff-preview {
+	width: 100%;
+	overflow-x: auto;
+	border: 1px solid var(--vscode-chat-requestBorder, var(--vscode-widget-border));
+	border-radius: 5px;
+	background: var(--vscode-editor-background);
+	color: var(--vscode-editor-foreground);
+	font-family: var(--monaco-monospace-font);
+	font-size: 12px;
+	line-height: 20px;
+	box-sizing: border-box;
+}
+
+.chat-diff-preview:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: -1px;
+}
+
+.chat-diff-preview-row {
+	display: grid;
+	grid-auto-flow: column;
+	grid-template-columns: max-content max-content minmax(max-content, 1fr);
+	min-width: max-content;
+	min-height: 20px;
+}
+
+.chat-diff-preview-row[data-kind='added'] {
+	background: var(--vscode-diffEditor-insertedLineBackground);
+}
+
+.chat-diff-preview-row[data-kind='removed'] {
+	background: var(--vscode-diffEditor-removedLineBackground);
+}
+
+.chat-diff-preview-line-number {
+	min-width: 3ch;
+	padding: 0 6px;
+	text-align: right;
+	color: var(--vscode-editorLineNumber-foreground);
+	user-select: none;
+	border-right: 1px solid var(--vscode-chat-requestBorder, var(--vscode-widget-border));
+}
+
+.chat-diff-preview-marker {
+	width: 2ch;
+	text-align: center;
+	font-weight: 600;
+	user-select: none;
+}
+
+.chat-diff-preview-row[data-kind='added'] .chat-diff-preview-marker {
+	color: var(--vscode-gitDecoration-addedResourceForeground);
+}
+
+.chat-diff-preview-row[data-kind='removed'] .chat-diff-preview-marker {
+	color: var(--vscode-gitDecoration-deletedResourceForeground);
+}
+
+.chat-diff-preview-code {
+	padding-right: 8px;
+	white-space: pre;
+}
+
+.chat-diff-preview-gap {
+	min-height: 20px;
+	padding: 0 8px;
+	color: var(--vscode-descriptionForeground);
+	font-size: 11px;
+	font-style: italic;
+	text-align: center;
+	box-sizing: border-box;
+}

@@ -1,0 +1,53 @@
+{
+	"evaluationSchema": 2,
+	"goldset": "docs/v3index-beast-packet/eval/golden-vselite-v2.jsonl",
+	"embedder": "Qwen/Qwen3-Embedding-0.6B-GGUF@Q8_0",
+	"corpus": {
+		"files": 799,
+		"fingerprint": "1105d34c2c49a7eb64ba113b315787f83e2d86b72656ad0e9a60f9bd966efcfe"
+	},
+	"topK": 10,
+	"results": [
+		{
+			"config": "+headers",
+			"emptyResultRate": 0,
+			"perQuery": [
+				{ "query": "persist memory across sessions", "firstRank": 3, "ndcg10": 0.23463936301137822 },
+				{ "query": "color theme tokens in design system", "firstRank": 2, "ndcg10": 0.5307212739772434 },
+				{ "query": "how does AI decide which function to call", "firstRank": 1, "ndcg10": 0.6508205185601091 },
+				{ "query": "auto complete code while typing", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "sync local semantic index to cloud storage", "firstRank": 1, "ndcg10": 0.7653606369886217 },
+				{ "query": "expose local tools as MCP servers", "firstRank": 2, "ndcg10": 0.6309297535714575 },
+				{ "query": "hybrid retrieval fuse lexical vector graph", "firstRank": 6, "ndcg10": 0.3562071871080222 },
+				{ "query": "escalate to a stronger model when the task is hard", "firstRank": 1, "ndcg10": 0.9197207891481876 },
+				{ "query": "quick inline edit without opening a diff", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "dependency graph neighbor expansion", "firstRank": 4, "ndcg10": 0.43067655807339306 },
+				{ "query": "rerank search results with local model", "firstRank": 1, "ndcg10": 0.6131471927654584 },
+				{ "query": "register a default chat agent that bridges native chat service to V3Code's LLM pipeline", "firstRank": 1, "ndcg10": 0.9197207891481876 },
+				{ "query": "call the language model and stream responses incrementally", "firstRank": 1, "ndcg10": 0.6131471927654584 },
+				{ "query": "apply auto-approve rules to tool invocations based on safety criteria", "firstRank": null, "ndcg10": 0 },
+				{ "query": "predict which code the user will edit next based on rename patterns", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "generate inline code completions using Fill In Middle format", "firstRank": 1, "ndcg10": 0.8065735963827293 },
+				{ "query": "convert chat messages to a format the language model understands", "firstRank": 2, "ndcg10": 0.38685280723454163 },
+				{ "query": "rank memory facts based on how recently they were useful and whether they're relevant now", "firstRank": 6, "ndcg10": 0.3562071871080222 },
+				{ "query": "resolve conflicts when two facts disagree about the same subject", "firstRank": 3, "ndcg10": 0.5 },
+				{ "query": "store and retrieve workspace-level facts using embeddings and vector search", "firstRank": 2, "ndcg10": 0.38685280723454163 },
+				{ "query": "execute shell commands in a persistent terminal with safety guards", "firstRank": 2, "ndcg10": 0.38685280723454163 },
+				{ "query": "parse source code into semantic chunks using a language-specific grammar tree", "firstRank": 1, "ndcg10": 0.9197207891481876 },
+				{ "query": "cache parsed and embedded chunks by content hash across branch switches", "firstRank": 9, "ndcg10": 0.3010299956639812 },
+				{ "query": "exclude files from indexing according to .gitignore patterns", "firstRank": 2, "ndcg10": 0.6309297535714575 },
+				{ "query": "build a unified snapshot of memory from global and workspace-level fact stores", "firstRank": 2, "ndcg10": 0.6934264036172708 },
+				{ "query": "initialize a connection to the beast sidecar for trigram-based code search", "firstRank": 1, "ndcg10": 0.9197207891481876 },
+				{ "query": "persist a checkpoint of file hashes to skip re-uploading unchanged chunks", "firstRank": 5, "ndcg10": 0.38685280723454163 },
+				{ "query": "launch a focused AI subagent to answer a specific question independently", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "capture user input via microphone and transcribe it to text for chat", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "toggle between IDE-focused and agent-focused layout modes", "firstRank": 1, "ndcg10": 1 },
+				{ "query": "display V3Code settings as a custom React-based pane in the editor", "firstRank": 2, "ndcg10": 0.6052602440527057 },
+				{ "query": "determine model capabilities like vision support and max output tokens", "firstRank": 3, "ndcg10": 0.3065735963827292 },
+				{ "query": "load and run local LLM models using llama.cpp", "firstRank": 3, "ndcg10": 0.3065735963827292 },
+				{ "query": "embed text and retrieve similar code using a local model for FIM", "firstRank": 4, "ndcg10": 0.5012658353418871 },
+				{ "query": "save checkpoint entries before and after each AI edit for undo capability", "firstRank": 1, "ndcg10": 0.6131471927654584 }
+			]
+		}
+	]
+}

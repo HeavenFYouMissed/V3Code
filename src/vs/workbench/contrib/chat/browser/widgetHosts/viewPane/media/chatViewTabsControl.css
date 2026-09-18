@@ -1,0 +1,174 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* V3Code: a quiet, aligned tab strip with distinct active and inactive surfaces. */
+
+.chat-view-tabs {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	height: 36px;
+	padding: 0 8px;
+	box-sizing: border-box;
+	flex: 0 0 auto;
+	border-bottom: 1px solid color-mix(in srgb, var(--vscode-foreground) 16%, transparent);
+	overflow: hidden;
+	/* Same surface as chat body — not editorGroupHeader-tabsBackground (frame grey). */
+	background: var(--vscode-sideBar-background);
+}
+
+/* Separate ActionBars stay in one row (block stacking spills under titlebar). */
+.chat-view-tabs-left,
+.chat-view-tabs-actions {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 2px;
+	flex: 0 0 auto;
+}
+
+.chat-view-tabs-history {
+	display: flex;
+	align-items: center;
+	flex: 0 0 auto;
+}
+
+.chat-view-tabs-list {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.chat-view-tabs-tab {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: 0 0 148px;
+	width: 148px;
+	height: 28px;
+	box-sizing: border-box;
+	padding: 0 6px 0 8px;
+	border-radius: 6px;
+	cursor: pointer;
+	color: var(--vscode-descriptionForeground);
+	background: color-mix(in srgb, var(--vscode-foreground) 4%, var(--vscode-sideBar-background));
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	position: relative;
+}
+
+.chat-view-tabs-tab:hover {
+	background: var(--vscode-toolbar-hoverBackground);
+	color: var(--vscode-foreground);
+}
+
+/* V3Code: the active tab stays readable without a bright accent stripe. */
+.chat-view-tabs-tab.active {
+	color: var(--vscode-foreground);
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, var(--vscode-sideBar-background));
+	border-color: color-mix(in srgb, var(--vscode-foreground) 22%, transparent);
+}
+
+.chat-view-tabs-tab-icon { flex: 0 0 14px; font-size: 14px; opacity: 0.85; }
+
+.chat-view-tabs-tab-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 12px;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.chat-view-tabs-tab-indicator {
+	width: 8px;
+	height: 8px;
+	flex: 0 0 auto;
+	display: none;
+}
+
+.chat-view-tabs-tab.unread .chat-view-tabs-tab-indicator,
+.chat-view-tabs-tab.needs-input .chat-view-tabs-tab-indicator,
+.chat-view-tabs-tab.in-progress .chat-view-tabs-tab-indicator {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.chat-view-tabs-tab.unread .chat-view-tabs-tab-indicator {
+	border-radius: 50%;
+	background: var(--vscode-badge-background, #3794ff);
+}
+
+.chat-view-tabs-tab.needs-input .chat-view-tabs-tab-indicator {
+	border-radius: 50%;
+	background: var(--vscode-charts-orange, #d18616);
+}
+
+/* Green spinny circle — lights up even on background / non-focused tabs. */
+.chat-view-tabs-tab.in-progress .chat-view-tabs-tab-indicator {
+	width: 12px;
+	height: 12px;
+	font-size: 12px;
+	line-height: 12px;
+	border-radius: 0;
+	background: transparent;
+	color: rgba(80, 168, 230, 0.95);
+}
+
+.chat-view-tabs-tab.in-progress:not(.active) {
+	color: color-mix(in srgb, rgba(80, 168, 230, 0.85) 55%, var(--vscode-descriptionForeground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chat-view-tabs-tab.in-progress .chat-view-tabs-tab-indicator.codicon-modifier-spin {
+		animation: none;
+		/* Static venom disc when motion is reduced */
+		border-radius: 50%;
+		background: rgba(80, 168, 230, 0.95);
+		color: transparent;
+		width: 8px;
+		height: 8px;
+		font-size: 0;
+	}
+}
+
+.chat-view-tabs-tab-close {
+	flex: 0 0 auto;
+	width: 16px;
+	height: 16px;
+	padding: 0;
+	border: none;
+	border-radius: 3px;
+	background: transparent;
+	color: inherit;
+	opacity: 0;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Always show a faint close on every tab so spam stacks aren't "dead" except the active one. */
+.chat-view-tabs-tab .chat-view-tabs-tab-close {
+	opacity: 0.45;
+}
+
+.chat-view-tabs-tab:hover .chat-view-tabs-tab-close,
+.chat-view-tabs-tab.active .chat-view-tabs-tab-close,
+.chat-view-tabs-tab:focus-within .chat-view-tabs-tab-close {
+	opacity: 0.85;
+}
+
+.chat-view-tabs-tab-close:hover {
+	opacity: 1;
+	background: var(--vscode-toolbar-hoverBackground, rgba(255, 255, 255, 0.12));
+}

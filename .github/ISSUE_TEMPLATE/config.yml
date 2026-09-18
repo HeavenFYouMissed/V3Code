@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: V3Code documentation
+    url: https://docs.v3code.dev
+    about: Setup, providers, agents, indexing, debugging, and troubleshooting.
+  - name: Security report
+    url: https://v3code.dev
+    about: Do not post vulnerabilities publicly. Use the private contact path listed in SECURITY.md.

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="V3">
+  <title>V3</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#0B1020"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="38%" r="55%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="front" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#A78BFA"/>
+      <stop offset="55%"  stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="back" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#312E81"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+
+    <symbol id="sq-V" viewBox="0 0 130 130" overflow="visible">
+      <path d="M 0 0 L 28 0 L 65 92 L 102 0 L 130 0 L 82 130 L 48 130 Z"/>
+    </symbol>
+    <symbol id="sq-3" viewBox="0 0 130 130" overflow="visible">
+      <path d="M 4 16 C 22 -8, 110 -8, 122 28 C 130 60, 92 70, 70 70 C 92 70, 130 78, 122 110 C 110 144, 22 144, 4 118 L 30 102 C 38 120, 92 124, 96 100 C 98 80, 60 80, 50 80 L 50 60 C 60 60, 98 60, 96 40 C 92 16, 38 20, 30 38 Z"/>
+    </symbol>
+
+    <g id="sq-mark">
+      <use href="#sq-V" x="0"   y="0" width="92" height="92"/>
+      <use href="#sq-3" x="108" y="0" width="92" height="92"/>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="256" height="256" rx="48" ry="48" fill="url(#bg)"/>
+  <rect x="0" y="0" width="256" height="256" rx="48" ry="48" fill="url(#glow)"/>
+
+  <g transform="translate(28 82)">
+    <use href="#sq-mark" fill="url(#back)"  transform="translate(8 8)" opacity="0.85"/>
+    <use href="#sq-mark" fill="url(#back)"  transform="translate(5 5)" opacity="0.9"/>
+    <use href="#sq-mark" fill="url(#back)"  transform="translate(3 3)" opacity="0.95"/>
+    <use href="#sq-mark" fill="url(#front)"/>
+    <use href="#sq-mark" fill="url(#shine)"/>
+  </g>
+</svg>

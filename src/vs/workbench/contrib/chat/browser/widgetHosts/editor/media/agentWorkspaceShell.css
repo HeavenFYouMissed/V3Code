@@ -1,0 +1,2299 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.monaco-workbench .part.editor .chat-editor-relative > .agent-workspace-rail,
+.monaco-workbench .part.editor .chat-editor-relative > .agent-workspace-chat-header,
+.monaco-workbench .part.editor .chat-editor-relative > .agent-workspace-landing,
+.monaco-workbench .part.editor .chat-editor-relative > .agent-workspace-utility-launcher {
+	display: none;
+}
+
+.agent-workspace-chat-header,
+.agent-workspace-pane-gutter {
+	display: none;
+}
+
+/* ── Glass pass-through (element-level) ─────────────────────────────
+	Specific small elements that need transparent backgrounds in the agent
+	panel regardless of whether the host is the separate window or the
+	in-window panel. The CONTAINER-level transparency (editor-container,
+	group header) is scoped to .agent-workspace-window only — see below. */
+
+/* Chat list viewport — paints --vscode-chat-list-background */
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-item-container .header .avatar .icon,
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-item-container.interactive-response .header .monaco-toolbar {
+	background-color: transparent !important;
+}
+
+/* Monaco editor background inside the chat input — paints --vscode-input-background */
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-input-part .chat-editor-container .monaco-editor,
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-input-part .chat-editor-container .monaco-editor .monaco-editor-background {
+	background-color: transparent !important;
+}
+
+/* User request bubble — the proper fill lives at line ~1791, using the surface-base
+   family. This block used to paint a grey tint that clashed with the dark canvas. */
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-item-container.interactive-request {
+	background: var(--agent-workspace-bubble-fill) !important;
+}
+
+/* Tool cards: same colour as background + thin border + muted text.
+   Screenshot 5 reference — the cards read as recessed wells, not raised blocks.
+   Diffs stay brighter (handled by the code-block rules, not this). */
+/* ── Chat cards ──────────────────────────────────────────────────────────
+	ONE treatment for every card in the transcript: transparent fill, one
+	subtle hairline, one radius, muted title ink.
+
+	Each of these used to declare its own border mix and radius, so a tool
+	card, a thinking card and a subagent card were three slightly different
+	objects stacked on top of each other - the patchwork of greys and edges
+	that made the column read as noise.
+
+	Transparent rather than filled is deliberate: a card is a REGION of the
+	conversation, not a raised block. The border alone carries the grouping,
+	and the prose between cards stays the brightest thing on screen. */
+.monaco-workbench .part.editor .agent-workspace-enabled .tool-output-part,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-tool-invocation-part,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-thinking-box,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-collapsible-input-output-container,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-subagent-content {
+	background: transparent !important;
+	border: 1px solid var(--ags-border-subtle) !important;
+	border-radius: var(--ags-radius-lg);
+}
+
+/* Card TITLES sit at tertiary, not secondary. These lines are labels for the
+	machinery ("Ran", "Read", "Grepped") - they must sit clearly below the
+	model's prose, which is the only thing in the transcript that earns
+	primary ink. */
+.monaco-workbench .part.editor .agent-workspace-enabled .tool-output-part .output-title,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-tool-invocation-part .chat-progress-task-title,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-tool-invocation-part .chat-progress-task-body,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-thinking-box .chat-thinking-header {
+	background: transparent !important;
+	color: var(--ags-ink-tertiary);
+	font-size: var(--ags-text-sm);
+}
+
+/* Nested surfaces step the radius DOWN. An 10px box containing another 10px
+	box reads as a mistake; 10 outer / 6 inner reads as intentional nesting. */
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-collapsible-input-output-container .monaco-editor,
+.monaco-workbench .part.editor .agent-workspace-enabled .chat-tool-invocation-part .monaco-editor {
+	border-radius: var(--ags-radius-sm);
+}
+
+/* The model's prose is THE content. Everything above is chrome around it, so
+	this is the one place that gets primary ink and comfortable leading. */
+.monaco-workbench .part.editor .agent-workspace-enabled .interactive-response .value > .rendered-markdown p {
+	color: var(--ags-ink-primary);
+	font-size: var(--ags-text-md);
+	line-height: 1.65;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled {
+	--agent-workspace-chat-content-width: 780px;
+
+	/* ── DESIGN SYSTEM ───────────────────────────────────────────────────
+		Every value below derives from one of these scales.
+
+		This block exists because the panel accumulated ~40 ad-hoc values
+		(10.5px, 12.5px, 0.52, 0.38, 7px, 9px...) that were individually
+		reasonable and collectively incoherent: four type sizes within 2px of
+		each other, nine opacity levels with no ranking, five radii. That is
+		what "looks amateur" actually IS at the pixel level - not one bad
+		colour, but the absence of a repeating rhythm the eye can lock onto.
+
+		Rule: nothing in this file may introduce a raw value. If a new one is
+		needed, add a step to the relevant scale here. */
+
+	/* Type scale - four steps only. Reference panels use 3-4; ours had seven,
+		which is why no size read as deliberate. 13px is the anchor. */
+	--ags-text-xs: 11px;
+	--ags-text-sm: 12px;
+	--ags-text-md: 13px;
+	--ags-text-lg: 15px;
+
+	--ags-weight-normal: 400;
+	--ags-weight-medium: 500;
+	--ags-weight-semibold: 600;
+
+	/* Optical tracking: negative on large text, positive on small caps. The
+		single most overlooked "premium type" signal. */
+	--ags-tracking-tight: -0.01em;
+	--ags-tracking-caps: 0.06em;
+
+	/* Space scale, 4px base. Every padding, gap and margin is a multiple -
+		mixed 3/5/7/9/10px values are why the rail never felt gridded. */
+	--ags-space-1: 4px;
+	--ags-space-2: 8px;
+	--ags-space-3: 12px;
+	--ags-space-4: 16px;
+	--ags-space-5: 20px;
+	--ags-space-6: 24px;
+
+	/* Radius scale. Nested surfaces must step DOWN (outer 10, inner 6) or the
+		corners read as mismatched. */
+	--ags-radius-sm: 6px;
+	--ags-radius-md: 8px;
+	--ags-radius-lg: 10px;
+
+	/* Ink scale - text emphasis in four clearly separated levels. Ours used
+		0.88/0.85/0.8/0.72/0.62/0.56/0.52/0.45/0.38 - nine levels inside one
+		range, so none of them read as hierarchy. */
+	--ags-ink-primary: var(--vscode-foreground);
+	--ags-ink-secondary: color-mix(in srgb, var(--vscode-foreground) 72%, transparent);
+	--ags-ink-tertiary: color-mix(in srgb, var(--vscode-foreground) 48%, transparent);
+	--ags-ink-quaternary: color-mix(in srgb, var(--vscode-foreground) 32%, transparent);
+
+	/* State scale - one ladder for every hover/active/selected surface, so a
+		hovered nav row and a hovered session row feel like the same product. */
+	--ags-state-hover: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+	--ags-state-active: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	--ags-state-selected: color-mix(in srgb, var(--vscode-foreground) 13%, transparent);
+
+	--ags-border-subtle: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	--ags-border-strong: color-mix(in srgb, var(--vscode-foreground) 14%, transparent);
+
+	/* THE structural number. Measured from the real Gemini desktop app: rows
+		40px, section gaps 44px - a ratio of 1.10, so the gap is LARGER than a
+		row and groups separate on space alone.
+
+		Ours was row 52 / section 44 = 0.85: the gap was SMALLER than a row, so
+		groups ran together and the list read as an undifferentiated log. That
+		RATIO, not the absolute spacing, is what "they leave more room between
+		sections" actually describes - adding section space would have made it
+		worse.
+
+		Rows are 52 because they are TWO lines (title + timestamp); Gemini's are
+		one. Dropping to one line and 40px flips the ratio to 1.10 without
+		touching the section value at all.
+
+		MUST stay in sync with itemHeight in agentWorkspaceShell.ts. */
+	--ags-row-height: 40px;
+	/* TWO separate glass systems exist and they are easy to confuse:
+
+		1. Native macOS vibrancy on the window itself (windowImpl.ts sets
+			`vibrancy: 'fullscreen-ui'` + a zero-alpha background). That is the
+			see-through-to-the-desktop layer, and it is NOT tunable from here.
+			Users who want it gone have `v3code.general.reduceTransparency`.
+		2. These CSS tints, which sit *on top* of that material.
+
+		Darkening (2) to hide (1) only kills the depth and flattens the panel,
+		so keep the tints light and let the native material do its job.
+
+		The premium reference (Cursor, ChatGPT) is two-tone: the rail is a
+		distinctly different value from the chat canvas, with a slight cool cast,
+		rather than one flat sheet of grey across the whole surface.
+
+		CRITICAL: two-tone means two VALUES OF ONE COLOUR, not two colours. Every
+		surface below is mixed from this single base, so the rail, the chat canvas,
+		the request bubble and the composer can only ever differ in lightness -
+		never in hue. The canvas used to be a hardcoded #07070A (near-black, and a
+		bluer family than the sideBar grey the rail is built from), so the two
+		surfaces read as clashing colours meeting at a seam rather than one
+		material stepping down. Retint by changing this base alone. */
+	/* Darkened 26% toward black. Measured against Cursor's shipped glass theme
+		(workbench.glass.main.css), which carries the overall lightness on the
+		base colour rather than on the alpha: their sidebar material is only
+		36-42% of --cursor-bg-sidebar, but it sits over a base that is already
+		near-black, so it reads dark and still translucent. Ours used the raw
+		sideBar-background, which is a mid grey - and because the native vibrancy
+		behind it is variable, on a bright desktop most of that brightness came
+		straight through and the whole panel washed out. */
+	--agent-workspace-surface-base: color-mix(in srgb, #000 26%, var(--vscode-sideBar-background, #141416));
+	/* THE glass knob. One number: higher = more solid, lower = clearer.
+
+	   The RAIL is the only translucent surface, and that is deliberate. The chat
+	   canvas is a full-cell background, so a translucent canvas showed the desktop
+	   through its gutters, and the conversation has to hold a stable text contrast
+	   regardless of what sits behind the window. A narrow column of short labels
+	   can carry the material - the macOS vibrancy behind it is what makes the rail
+	   read as glass instead of a flat grey panel.
+
+	   This knob already existed but NOTHING consumed it, so turning it changed
+	   nothing on screen - which is exactly why "some transparency" never landed.
+	   The rail tint below reads it directly, so there is now one place to dial. */
+	--agent-workspace-glass-opacity: 82%;
+	/* The 4% white lift is kept and the alpha applied to the RESULT, so the rail
+	   stays in the same cool-neutral family as the canvas and the composer. */
+	--agent-workspace-glass-tint: color-mix(in srgb, color-mix(in srgb, #fff 4%, var(--agent-workspace-surface-base)) var(--agent-workspace-glass-opacity), transparent);
+	--agent-workspace-glass-blur: blur(26px) saturate(118%);
+	/* The cool cast that separates rail from canvas. Deliberately tiny - at 4%
+		it reads as "cooler", above ~8% it reads as "blue theme". */
+	--agent-workspace-rail-cast: color-mix(in srgb, #6E8AFF 4%, transparent);
+	/* Canvas sits DARKER than the rail. That value step is most of what reads as
+		"premium" in the reference apps - the conversation is a recessed well, the
+		rail floats above it. One flat tone across both is what made ours look like
+		a single undifferentiated sheet.
+
+		Near-solid on purpose. This well is painted on the grid cell and spans the
+		FULL cell width, while `.interactive-session` is capped at the 780px measure
+		and centred - so at a low alpha the gutters either side of the conversation
+		would show the desktop through, which is the one place translucency is not
+		wanted. Keeping it near-solid also preserves the existing rule that the true
+		see-through material is limited to the narrow session rail.
+
+		The step is deliberately small (14% toward black). A large step is what made
+		this read as a black hole punched into a grey panel instead of a recessed
+		well in the same material. */
+	--agent-workspace-canvas-tint: color-mix(in srgb, #000 14%, var(--agent-workspace-surface-base));
+	/* The Gemini-style bottom glow. Measured from the real Gemini desktop app:
+	   a blue wash that begins at 72.5% of window height and reaches #141B41 at the
+	   bottom edge, running across BOTH panes as one continuous gradient. Painted
+	   separately on the rail and on the canvas well, but both are full-height grid
+	   cells, so a percentage gradient on each lines up into a single glow.
+	   rgba, not `transparent` - transparent interpolates through transparent-BLACK,
+	   which would darken the ramp instead of fading it out. */
+	--agent-workspace-bottom-glow: linear-gradient(to top, rgba(20, 27, 65, 1) 0%, rgba(20, 27, 65, 0) 27.5%);
+
+
+	/* ONE gutter for the whole chat column. The conversation and the composer used
+		to compute their insets separately - composer at min(100% - 48px) = 24px per
+		side, response rows at 22px, request cards at 12/14px - so all three column
+		edges disagreed and the transcript read "fatter" than the box you type in.
+		Every edge below is derived from this single value; change it in one place. */
+	--agent-workspace-chat-gutter: 24px;
+	/* The user's own message. Must NOT be painted with --vscode-editor-background:
+		that token is opaque and LIGHTER than the canvas well, so over the agent
+		window's dark translucent material every request row rendered as a pale slab
+		that "lit up" against the conversation. This is a dark, near-opaque fill in
+		the canvas family, lifted a few percent so it still reads as a bubble. Kept
+		mostly opaque on purpose - the request row is position:sticky, so content
+		scrolling underneath must not ghost through it.
+
+		Sits BETWEEN the rail and the canvas in value (7% toward black, against the
+		canvas's 14%), so the bubble lifts off the well without ever becoming the
+		brightest thing on screen. Same base, so it cannot clash. */
+	--agent-workspace-bubble-fill: color-mix(in srgb, color-mix(in srgb, #000 7%, var(--agent-workspace-surface-base)) 94%, transparent);
+	--agent-workspace-bubble-lift: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+
+	/* THE composer colour. One literal, one place - dial it here and the fill and
+		the border move together. The border is deliberately painted the SAME value
+		as the fill in every state (idle, focused, hover, working) because upstream
+		swaps it to --vscode-focusBorder the moment focus leaves the input, which
+		read as the box changing colour whenever you touched anything else. */
+	--agent-workspace-composer-fill: #1a191b;
+	display: grid;
+	grid-template-columns: var(--agent-workspace-rail-width, 292px) minmax(0, 1fr);
+	grid-template-rows: minmax(0, 1fr);
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+	/* Cursor applies this everywhere — it's the single biggest "premium text"
+	   signal. Subpixel rendering makes light text on dark backgrounds look
+	   heavier than it is; antialiased keeps the weight the designer chose. */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass is a TWO-STATE system, and we only ever shipped one state.
+
+	Cursor ships a token pair per surface - `--glass-vibrancy-on-*` and
+	`--glass-vibrancy-off-*` - and swaps the entire set when transparency is
+	reduced (workbench.glass.main.css). Their "off" values are the opaque chrome
+	colour, not a darker tint.
+
+	Ours did color-mix(..., transparent) with nothing behind it once the native
+	vibrancy is gone, which is strictly worse than either state: the surfaces
+	go murky rather than solid. Swap to opaque values and neutralise the blur by
+	overriding the variable the rail already reads.
+
+	Specificity note: `.monaco-workbench.monaco-reduce-transparency` plus three
+	more classes is what beats the four-class variable block above - a shorter
+	selector here would lose the cascade and silently do nothing. */
+.monaco-workbench.monaco-reduce-transparency .part.editor .chat-editor-relative.agent-workspace-enabled {
+	--agent-workspace-glass-tint: var(--agent-workspace-surface-base);
+	--agent-workspace-glass-blur: none;
+	--agent-workspace-rail-cast: transparent;
+	--agent-workspace-canvas-tint: color-mix(in srgb, #000 10%, var(--agent-workspace-surface-base));
+}
+
+/* Reduce-transparency has to flatten the MIRRORED pair too. The block above is
+	scoped to .chat-editor-relative, which the group title band is not inside, so
+	without this the rail would go opaque while the band above it stayed
+	translucent - the same seam, just inverted. `.agent-workspace-window` is the
+	workbench element itself (see the body:has() rule below), which is why it can
+	be combined with .monaco-workbench here. */
+.monaco-workbench.monaco-reduce-transparency.agent-workspace-window .agent-workspace-primary-group {
+	--agent-workspace-glass-tint: var(--agent-workspace-surface-base);
+	--agent-workspace-glass-blur: none;
+}
+
+/* Reduce-transparency: the composer is already opaque and already driven by one
+	token, so this state only needs to restate the same value - never a different
+	one, or the box would change colour when the OS setting flips. */
+.monaco-workbench.monaco-reduce-transparency .agent-workspace-enabled .chat-input-container {
+	background: var(--agent-workspace-composer-fill) !important;
+	border-color: var(--agent-workspace-composer-fill) !important;
+	backdrop-filter: none;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled.agent-workspace-has-utility {
+	width: calc(100% - 8px);
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled > .agent-workspace-rail {
+	display: flex;
+	grid-column: 1;
+	grid-row: 1;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+	background:
+		var(--agent-workspace-bottom-glow),
+		linear-gradient(var(--agent-workspace-rail-cast), var(--agent-workspace-rail-cast)),
+		radial-gradient(circle at 16% 0%, color-mix(in srgb, var(--vscode-foreground) 3%, transparent), transparent 30%),
+		var(--agent-workspace-glass-tint);
+	border-right: 1px solid color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	backdrop-filter: var(--agent-workspace-glass-blur);
+}
+
+/* The recessed chat well. Painted as its own grid cell rather than on
+	`.interactive-session`, because that element is width-capped and centred - a
+	background there would stop at the text measure and leave the gutters a
+	different colour than the conversation. Sits under the chat content, above
+	the window material. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled::after {
+	content: '';
+	grid-column: 2;
+	grid-row: 1;
+	background: var(--agent-workspace-bottom-glow), var(--agent-workspace-canvas-tint);
+	pointer-events: none;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled > .interactive-session {
+	grid-column: 2;
+	grid-row: 1;
+	/* Above the ::after well. */
+	z-index: 1;
+	width: 100%;
+	/* One measure for the whole chat column. The conversation used to run to 950px
+		while the composer stopped at the workspace content width, so the two never
+		lined up and the chat had no gutter of its own. ChatEditor reads this element's
+		rendered width and hands it to the response renderer, so capping it here also
+		keeps pixel-sized Monaco fences inside the column instead of letting them paint
+		past its right edge.
+
+	   !important is REQUIRED here and is not laziness. void.css:1887 sets
+	   `max-width: var(--v3-chat-column-max) !important` (950px) on
+	   `.part.editor .chat-editor-relative > .interactive-session`. That rule is
+	   LESS specific than this one (4 classes vs 5), but !important beats
+	   specificity outright, so the plain declaration here lost and the column
+	   rendered at 950px while the composer below stopped at 780px. Verified in a
+	   real browser: with no !important the computed width is 950px; with it, 780px.
+	   That 170px disagreement is the "chat is fatter than the composer" report -
+	   both are centred, so the transcript overhung the composer by 85px per side
+	   and left the dead gutter on the right where the floating tool buttons sit. */
+	max-width: var(--agent-workspace-chat-content-width, 780px) !important;
+	min-width: 0;
+	min-height: 0;
+	overflow: hidden;
+	box-sizing: border-box;
+	justify-self: center;
+
+	/* Keep the turn-rail gutter probe HONEST. chatListWidget._hasTurnRailGutter()
+	   (chatListWidget.ts:1011) reads these two custom properties to decide whether
+	   the floating turn rail fits. void.css:1865-1866 claims 36px + 12px = 48px,
+	   but the agent panel's real gutter is 24px - so the probe passed on a lie and
+	   the stock rail (`left:16px` + 26px marker = 42px, chat.css:677/740) painted
+	   straight over the first characters of every row.
+
+	   The fix is NOT to hide the rail (that silently removed a feature the IDE
+	   keeps). It is to state the truth and shrink the rail to the gutter we
+	   actually paint: the override below scales it to 20px, so the requirement
+	   drops to 22px and a 24px gutter genuinely clears it. */
+	--v3-chat-edge-inset: var(--agent-workspace-chat-gutter);
+	--v3-chat-text-inset: 0px;
+	--v3-turn-rail-required-gutter: 22;
+}
+
+/* The compact turn rail. Stock geometry needs ~42px of clear gutter; this host
+   paints 24px, so every dimension is scaled to fit rather than the rail being
+   dropped. The markers stay the same height (one rung per turn reads identically),
+   only the horizontal footprint shrinks. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list > .chat-turn-rail {
+	left: 4px;
+	width: 20px;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-turn-rail-marker::before {
+	width: 14px;
+}
+
+/* The hover preview is a floating panel, not part of the column - clear the
+   narrowed rail rather than the stock 38px, or it opens detached from the rungs. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-turn-rail-preview {
+	left: 24px;
+}
+
+/* The native chat renderer caches its available width for Monaco blocks and
+	tool cards. Keep every intermediate flex/list wrapper shrinkable while a
+	right-hand workspace surface opens, including the first split-frame layout. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list > .monaco-list,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list .monaco-scrollable-element,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list .monaco-list-rows,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list .monaco-list-row,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list .monaco-tl-row,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list .monaco-tl-contents,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container > .value,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .rendered-markdown,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-tool-invocation-part {
+	width: 100%;
+	min-width: 0;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .rendered-markdown-table-scroll-wrapper,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-used-context,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-collapsible-input-output-container,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-thinking-box,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-confirmation-widget,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-subagent-content,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container pre {
+	min-width: 0;
+	max-width: 100%;
+	overflow: auto;
+	box-sizing: border-box;
+}
+
+/* Fenced code, plain/diff fences and tool output are not flow content: the chat
+	renderer replaces each fence with a Monaco editor that is laid out at an
+	explicit pixel width (chatListRenderer.layout -> CodeBlockPart.layout). A stale
+	width therefore paints past the chat column instead of reflowing like a table or
+	a list does. The wrapper the markdown renderer emits around each fence
+	(div[data-code]) and Monaco's own inline-sized internals are the two elements
+	that escaped the containment above, so bound them here as well. This is a
+	backstop that clips/scrolls a bad measurement; the width handoff itself is
+	corrected in ChatEditor's Agent Workspace resize path. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .rendered-markdown [data-code],
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .chat-output-code-block,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .tool-output-part {
+	display: block;
+	min-width: 0;
+	max-width: 100%;
+	/* Scroll a fence that was measured too wide rather than clipping it. Hiding the
+		overflow silently ate the right-hand side of typed diffs and long code lines;
+		this keeps the column intact and still lets the user reach the content. */
+	overflow-x: auto;
+	overflow-y: hidden;
+	box-sizing: border-box;
+}
+
+/* The copy/insert toolbar sits above its fence, so a wrapper that hides overflow
+	cuts it off. Upstream works around that for the FIRST fence in an answer by
+	nudging the toolbar down; in the workspace every fence sits in such a wrapper,
+	so apply the same nudge to all of them instead of leaving the copy control
+	rendered underneath the block. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container [data-code] .interactive-result-code-block .interactive-result-code-block-toolbar > .monaco-action-bar,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container [data-code] .interactive-result-code-block .interactive-result-code-block-toolbar > .monaco-toolbar {
+	top: 6px;
+}
+
+/* Monaco is not a direct child here: CodeBlockPart nests it inside a
+	`.interactive-result-editor` wrapper (codeBlockPart.ts), so these must be
+	descendant selectors or they match nothing. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block .interactive-result-editor,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block .monaco-editor,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block .monaco-editor .overflow-guard,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block .monaco-diff-editor,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-item-container .interactive-result-code-block .monaco-diff-editor .overflow-guard {
+	max-width: 100%;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled > .chat-loading-overlay {
+	grid-column: 2;
+	grid-row: 1;
+}
+
+/* Keep the pinned request useful without letting a long prompt cover the
+	conversation in the dedicated workspace. Ordinary editor chat keeps its
+	existing six-line treatment. */
+/* The pinned prompt is a reminder of what you asked, not a second copy of it. As a
+	four-line rounded card it read as the loudest thing on screen and competed with
+	the answer underneath, so keep it to a slim two-line bar that sits quietly. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list > .chat-sticky-request {
+	top: 2px;
+	padding: 5px 10px;
+	border-radius: 8px;
+	opacity: 0.92;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-list > .chat-sticky-request .chat-sticky-request-text {
+	-webkit-line-clamp: 2;
+	line-clamp: 2;
+	max-height: calc(1.5 * 2 * 13px);
+	font-size: 12px;
+	opacity: 0.8;
+}
+
+.agent-workspace-rail-header {
+	display: flex;
+	/* Let the header give way before the account row does. The rail is
+		overflow:hidden and only the session list shrinks, so with a rigid header the
+		first thing to disappear on a short window was the footer, not the search. */
+	flex: 0 1 auto;
+	flex-direction: column;
+	/* Zero gap: the rows are already 40px tall with their own internal padding,
+		so an extra 3px between them broke the 40px rhythm the list runs on. Nav
+		rows and session rows now tile at exactly the same pitch. */
+	gap: 0;
+	min-height: 0;
+	overflow: hidden;
+	/* Left/right match the list's 5px + the row's 8px = 13px text origin, so
+		nav labels and session titles share one left edge. */
+	padding: var(--ags-space-3) var(--ags-space-3) var(--ags-space-2);
+}
+
+.agent-workspace-rail-toggle {
+	display: flex;
+	align-items: center;
+	align-self: flex-end;
+	justify-content: center;
+	width: 25px;
+	height: 25px;
+	margin: -4px 0 1px;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	font: inherit;
+	font-size: 15px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.agent-workspace-rail-toggle:hover,
+.agent-workspace-rail-toggle:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+/* Nav rows share the session rows' exact rhythm - same height, same padding,
+	same icon column, same radius. They previously ran at 32px/9px/7px against
+	the list's 40px/8px/8px, so the header and the list read as two different
+	components stacked together rather than one continuous rail. */
+.agent-workspace-action {
+	display: flex;
+	align-items: center;
+	gap: var(--ags-space-2);
+	height: var(--ags-row-height);
+	padding: 0 var(--ags-space-2);
+	border: 1px solid transparent;
+	border-radius: var(--ags-radius-md);
+	box-sizing: border-box;
+	color: var(--ags-ink-secondary);
+	cursor: pointer;
+	user-select: none;
+}
+
+.agent-workspace-action:hover {
+	background: var(--ags-state-hover);
+	border-color: transparent;
+	color: var(--ags-ink-primary);
+}
+
+.agent-workspace-action:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: -1px;
+}
+
+/* Same 16px column as the session rows' icon, so nav glyphs and row glyphs
+	share one vertical line down the rail. */
+.agent-workspace-action-icon {
+	flex: 0 0 auto;
+	width: var(--ags-space-4);
+	font-size: var(--ags-text-md);
+	text-align: center;
+	color: var(--ags-ink-tertiary);
+	opacity: 1;
+}
+
+.agent-workspace-action:hover .agent-workspace-action-icon {
+	color: var(--ags-ink-secondary);
+}
+
+.agent-workspace-action-label {
+	min-width: 0;
+	overflow: hidden;
+	font-size: var(--ags-text-md);
+	letter-spacing: var(--ags-tracking-tight);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* The search query now lives behind a picker, so the input is a STATE HOLDER
+	only - `overrideExclude` still reads its value, but it must never occupy a
+	row. display:none would be wrong: a display:none input is removed from the
+	a11y tree and some browsers skip its value on form-adjacent APIs, so it is
+	hidden geometrically instead. */
+.agent-workspace-search-input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	border: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	pointer-events: none;
+}
+
+/* Active nav row. Search and Workspaces both need to show that they are
+	currently constraining the list - without this a filtered list is
+	indistinguishable from an unfiltered one now that the query is not visible
+	in the header. A left marker rather than a fill: it reads as "this is the
+	active scope" without turning the row into a button. */
+.agent-workspace-action.active {
+	background: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+	position: relative;
+}
+
+.agent-workspace-action.active::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 7px;
+	bottom: 7px;
+	width: 2px;
+	border-radius: 2px;
+	background: var(--vscode-focusBorder);
+	opacity: 0.75;
+}
+
+.agent-workspace-action.active .agent-workspace-action-icon {
+	opacity: 1;
+}
+
+.agent-workspace-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+	height: 31px;
+	margin: 2px 0;
+	padding: 0 8px 0 29px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	border-radius: 7px;
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--vscode-input-background, #1e1e22) 82%, transparent);
+}
+
+.agent-workspace-search:focus-within {
+	border-color: var(--vscode-focusBorder);
+}
+
+.agent-workspace-search-icon {
+	position: absolute;
+	left: 9px;
+	font-size: 13px;
+	opacity: 0.62;
+	pointer-events: none;
+}
+
+.agent-workspace-search-input {
+	width: 100%;
+	min-width: 0;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	color: var(--vscode-input-foreground);
+	font: inherit;
+	font-size: 12px;
+}
+
+.agent-workspace-search-input::placeholder {
+	color: var(--vscode-input-placeholderForeground);
+}
+
+.agent-workspace-scope-switch {
+	display: grid;
+	grid-template-columns: 1fr 1.25fr;
+	gap: 2px;
+	height: 30px;
+	margin: 2px 0;
+	padding: 2px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	border-radius: 8px;
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--agent-workspace-surface-base) 40%, transparent);
+}
+
+.agent-workspace-scope-button {
+	min-width: 0;
+	padding: 0 7px;
+	border: 0;
+	border-radius: 5px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	font: inherit;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.agent-workspace-scope-button:hover,
+.agent-workspace-scope-button:focus-visible {
+	outline: none;
+	color: var(--vscode-foreground);
+	background: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+}
+
+.agent-workspace-scope-button.active {
+	color: var(--vscode-foreground);
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, var(--vscode-sideBar-background, #1a1a1d));
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.18);
+}
+
+.agent-workspace-session-list {
+	position: relative;
+	display: flex;
+	flex: 1 1 0;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
+	padding: 0 5px;
+}
+
+.agent-workspace-session-list > *,
+.agent-workspace-session-list .agent-sessions-viewer {
+	flex: 1 1 0;
+	min-height: 0;
+}
+
+.agent-workspace-session-list .monaco-list-row {
+	border-radius: 8px;
+}
+
+/* ---------------------------------------------------------------------------
+	Session row rhythm.
+
+	The list previously inherited the compact 4px/6px sidebar row used in the
+	ordinary editor. At the Agent rail's 292px that reads as a cramped log: the
+	title and its timestamp collide, and every row looks the same weight, so the
+	eye has nothing to anchor on. Premium lists are mostly space - give the row
+	real vertical padding, let the title carry the weight, and push the
+	secondary line down to a quiet caption.
+--------------------------------------------------------------------------- */
+
+/* ONE LINE, not two. This is the structural change the rail needed.
+
+	Every reference list (Gemini, ChatGPT, Cursor) renders a session as a
+	single title line. Ours rendered title + a metadata line, which forced a
+	52px row, which broke the section-gap ratio, which made the list read as
+	an undifferentiated log. The metadata stays in the DOM for a11y and for
+	the hover/selected states - it just no longer claims a permanent line.
+
+	Centred rather than top-aligned: with one line, the title's optical centre
+	must be the row's centre or the icon column sits high. */
+.agent-workspace-session-list .agent-session-item {
+	height: var(--ags-row-height);
+	padding: 0 var(--ags-space-2);
+	gap: 0;
+	flex-direction: row;
+	align-items: center;
+	box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------------
+	Row icon column.
+
+	The shared viewer sizes this for a 14px sidebar row. In the rail the title
+	is 12.5px/17px, so an 11px glyph in a 14px column sits high and slightly
+	left of the text column below it - the row reads as if the icon and the
+	title belong to different grids.
+
+	Widening to 16px and centring on the title's own line-height puts the glyph
+	on the title's optical centre. This is the difference between "icons in a
+	list" and "a list with an icon column".
+--------------------------------------------------------------------------- */
+.agent-workspace-session-list .agent-session-icon-col {
+	width: var(--ags-space-4);
+	min-width: var(--ags-space-4);
+	align-items: center;
+	justify-content: center;
+	line-height: var(--ags-row-height);
+	height: var(--ags-row-height);
+}
+
+.agent-workspace-session-list .agent-session-icon {
+	font-size: var(--ags-text-md);
+	height: var(--ags-row-height);
+	line-height: var(--ags-row-height);
+	color: var(--ags-ink-tertiary);
+	opacity: 1;
+}
+
+/* The open session earns a full-strength icon; everything else stays quiet so
+	the column reads as texture rather than a row of competing marks. */
+.agent-workspace-session-list .monaco-list-row.selected .agent-session-icon {
+	opacity: 1;
+}
+
+.agent-workspace-session-list .agent-session-main-col {
+	padding-left: 8px;
+}
+
+/* Provider/status glyph on the caption line. It ships hidden in most modes and
+	at full strength when shown, which made it louder than the text beside it.
+	Matching the caption's own opacity keeps the metadata line reading as one
+	object instead of an icon plus some text. */
+.agent-workspace-session-list .agent-session-details-icon {
+	font-size: 11px;
+	opacity: 0.9;
+}
+
+.agent-workspace-session-list .agent-session-title-row {
+	line-height: var(--ags-row-height);
+	padding-bottom: 0;
+	display: flex;
+	align-items: center;
+}
+
+.agent-workspace-session-list .agent-session-title {
+	font-size: var(--ags-text-md);
+	letter-spacing: var(--ags-tracking-tight);
+	color: var(--ags-ink-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+	Long titles dissolve into the rail instead of ending in an ellipsis.
+
+	An ellipsis is a PUNCTUATION MARK: it is full-strength ink, it lands at a
+	different x on every row, and the eye reads that ragged column of dots as
+	an edge. Forty rows of "..." is the single loudest thing in a list whose
+	job is to be quiet - which is exactly why our rail reads as a log and the
+	reference panels read as a product.
+
+	A gradient mask fades the glyphs themselves to zero alpha over the last
+	--agent-rail-fade pixels, so the text appears to travel back into the
+	panel's own darkness. No mark, no ragged column, and the truncation point
+	stops being a visible event.
+
+	Why the mask can live on the element unconditionally: the title is flex:1,
+	so its BOX is full width on every row while the TEXT is not. A short title
+	ends well before the fade zone and is never touched. The gradient only
+	bites when the text actually reaches the edge - so this is self-gating and
+	needs no per-row JS measurement.
+
+	text-overflow: clip is required, not optional. Left at ellipsis the browser
+	still draws the dots and then fades them, which is worse than either
+	treatment on its own - a smudge where the mark used to be.
+--------------------------------------------------------------------------- */
+.agent-workspace-session-list .agent-session-title,
+.agent-workspace-session-list .agent-session-description {
+	/* Proportional, not fixed. 18px on a ~300px rail is 6% of the row - the fade
+		existed and computed correctly, but covered roughly one character, which is
+		why it read as no change at all. Cursor uses a similar fixed pixel value on
+		a much SHORTER row, so proportionally theirs covers far more of the title.
+		max() keeps a usable floor when the rail is dragged narrow, and the % keeps
+		the effect constant as it widens. */
+	--agent-rail-fade: max(64px, 24%);
+	/* The text must reach ZERO before the row's edge, leaving clear space after
+		it. A gradient that only hits transparent AT 100% keeps faint ink right up
+		against the border, which reads as "the text ran into the wall" rather
+		than "the text went away" - the exact complaint that the fade looked like
+		a light wash ending at the edge. Cursor lands transparent at
+		calc(100% - 12px) for the same reason.
+
+		CONSTRAINT: this must stay below --agent-rail-fade * 0.22, or the 0.22
+		colour stop lands AFTER the transparent stop. CSS then clamps the
+		out-of-order stop, which silently flattens the whole ramp back into the
+		washed-out linear fade this change exists to fix. At the 64px floor the
+		ceiling is 14.08px, so 12px keeps real headroom. */
+	--agent-rail-fade-gap: 12px;
+	text-overflow: clip;
+	/* Three stops, not two. A straight two-stop ramp is linear, so ink starts
+		dropping immediately and the whole tail looks uniformly greyed. Holding
+		near-full alpha through the first half of the zone and then falling off
+		fast keeps the title SOLID for most of its length and makes the
+		disappearance feel deliberate instead of washed out. */
+	-webkit-mask-image: linear-gradient(90deg,
+		#000 calc(100% - var(--agent-rail-fade)),
+		rgba(0, 0, 0, 0.72) calc(100% - var(--agent-rail-fade) * 0.55),
+		rgba(0, 0, 0, 0.22) calc(100% - var(--agent-rail-fade) * 0.22),
+		transparent calc(100% - var(--agent-rail-fade-gap)));
+	mask-image: linear-gradient(90deg,
+		#000 calc(100% - var(--agent-rail-fade)),
+		rgba(0, 0, 0, 0.72) calc(100% - var(--agent-rail-fade) * 0.55),
+		rgba(0, 0, 0, 0.22) calc(100% - var(--agent-rail-fade) * 0.22),
+		transparent calc(100% - var(--agent-rail-fade-gap)));
+}
+
+/* The title is an IconLabel, and IconLabel declares the ellipsis on its OWN
+	two inner containers (iconlabel.css) - not on our element. Clipping only
+	the outer box therefore changes nothing: the dots are painted one and two
+	levels down and would still show through the fade.
+
+	The mask does not need this treatment - a mask applies to an element's
+	whole rendered subtree - so the gradient stays on the outer box and only
+	the ellipsis declarations have to be chased inwards. */
+.agent-workspace-session-list .agent-session-title .monaco-icon-label,
+.agent-workspace-session-list .agent-session-title .monaco-icon-label-container {
+	text-overflow: clip;
+}
+
+/* ---------------------------------------------------------------------------
+	Hover: the row actions overlay the title rather than reflowing it.
+
+	The shared viewer gives the toolbar real layout width and pushes the title
+	aside with margin-right, so every hover RESIZES the title box - the text
+	visibly re-truncates and shifts under the cursor. That flinch is the most
+	"cheap UI" moment in the whole rail, and it happens on every single row you
+	pass over.
+
+	Taking the toolbar out of flow keeps the title box constant, and widening
+	the fade to clear the buttons means the text dissolves UNDER them instead
+	of colliding. Nothing moves; the shading just deepens where the actions
+	are. Scoped to the rail so the ordinary sidebar keeps its own behaviour.
+--------------------------------------------------------------------------- */
+.agent-workspace-session-list .agent-session-title-row {
+	position: relative;
+}
+
+.agent-workspace-session-list .agent-session-title-toolbar {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+}
+
+.agent-workspace-session-list .monaco-list-row:hover .agent-session-title,
+.agent-workspace-session-list .monaco-list-row.focused .agent-session-title {
+	margin-right: 0;
+	/* Clears the action buttons so the title dissolves UNDER them rather than
+		colliding with them. Must exceed the toolbar's width. */
+	--agent-rail-fade: max(108px, 36%);
+	/* Wider clear gap on hover so the last glyph never touches a button.
+		Ceiling here is 108 * 0.22 = 23.76px; 20px keeps the stops ordered. */
+	--agent-rail-fade-gap: 20px;
+}
+
+/* The caption line is reference material, not content. Dropping it a step in
+	size and opacity is what stops the row reading as two equal lines.
+
+	0.52 is deliberately faint. The reference lists keep the timestamp at roughly
+	half the title's presence so a scan reads a clean column of TITLES with
+	metadata available on inspection - ours read as two competing lines because
+	both were near-full strength. */
+/* The metadata line is removed from LAYOUT but kept in the accessibility tree.
+
+	Forty rows each carrying "2 mos ago" is forty lines of text the eye must
+	skip, all saying roughly the same thing. Gemini and ChatGPT solve this by
+	promoting the time to a section header ("Today", "Previous 30 Days") and
+	dropping it from the row entirely - which is what makes their lists read
+	as a clean column of titles.
+
+	clip-path rather than display:none: a display:none element is removed from
+	the a11y tree, and screen-reader users lose the timestamp entirely. This
+	keeps it announced while claiming zero space. */
+.agent-workspace-session-list .agent-session-details-row {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	pointer-events: none;
+}
+
+/* Selection is a filled pill, not a full-bleed band: the list keeps its 5px
+	side padding and the row's own radius, so the highlight reads as a chip
+	inside the rail instead of a stripe cutting across it. */
+.agent-workspace-session-list .agent-session-title {
+	font-weight: 450;
+}
+
+.agent-workspace-session-list .monaco-list-row.selected .agent-session-title {
+	font-weight: 550;
+}
+
+/* ---------------------------------------------------------------------------
+	Section headers (Pinned / MORE / Archived).
+
+	These shipped at the same 11px/500 as the content around them, so "MORE"
+	competed with the chat titles instead of labelling them. Every premium
+	reference treats a section header as a CAPTION: small, uppercase-ish
+	tracking, and dim enough that it disappears until you look for it. The
+	space above the header does the separating, not the header's weight.
+--------------------------------------------------------------------------- */
+/* 8px matches the row's own horizontal padding, so header icon, row icon and
+	title all share one left edge. The shared viewer uses 6px, which left every
+	header a hair out of alignment with the rows it labels. */
+.agent-workspace-session-list .agent-session-section {
+	padding: 0 var(--ags-space-2);
+	gap: var(--ags-space-2);
+}
+
+.agent-workspace-session-list .agent-session-section-label {
+	font-size: var(--ags-text-xs);
+	font-weight: var(--ags-weight-semibold);
+	letter-spacing: var(--ags-tracking-caps);
+	text-transform: uppercase;
+	color: var(--ags-ink-tertiary);
+	opacity: 1;
+}
+
+.agent-workspace-session-list .agent-session-section-count {
+	font-size: var(--ags-text-xs);
+	color: var(--ags-ink-quaternary);
+	opacity: 1;
+}
+
+/* Section icon (pinned / repo / archived / history). The rail already turns
+	these on - they just inherited the shared 11px at 0.8, which outweighed the
+	0.45 caption beside them and made the icon the loudest thing in a row whose
+	whole job is to be quiet.
+
+	Sitting it slightly BELOW the label's opacity is deliberate: the glyph is
+	recognised by shape long before the eye resolves it, so it can afford to be
+	fainter than the word and still register. Width is pinned so every header's
+	label starts on the same x as the rows beneath it. */
+.agent-workspace-session-list .agent-session-section-icon {
+	font-size: 11px;
+	width: 16px;
+	min-width: 16px;
+	justify-content: center;
+	opacity: 0.38;
+}
+
+/* Header gap: the space above a section is what separates groups - the label
+	weight shouldn't have to.
+
+	IMPORTANT - why this is padding and NOT margin. The row box is measured in
+	JS (sectionHeight: 32 in agentWorkspaceShell.ts) and the header fills it at
+	height:100%. A margin-top pushes that full-height box DOWN inside a fixed
+	row, so the bottom of every label is sliced off - which is exactly the
+	half-cut "MORE" / workspace names. Padding keeps the box inside the row and
+	moves only the text, so the gap is free.
+
+	The 44 in TS and the 22 here are one number in two places: 22 (base row) +
+	22 (this gap). Changing either alone re-breaks the clipping. */
+.agent-workspace-session-list .monaco-list-row:has(.agent-session-section) .agent-session-section {
+	height: 100%;
+	box-sizing: border-box;
+	align-items: flex-end;
+	padding-top: 22px;
+	padding-bottom: 1px;
+}
+
+.agent-workspace-session-list .monaco-list-row:first-child .agent-session-section {
+	padding-top: 2px;
+	align-items: center;
+}
+
+/* The header band was painted as a filled strip in some hosts. In the rail it
+	should be invisible chrome - the label alone carries the grouping. */
+.agent-workspace-session-list .monaco-list-row:has(.agent-session-section) {
+	background: transparent !important;
+	box-shadow: none !important;
+}
+
+.agent-workspace-session-list .monaco-list-row:has(.agent-session-section):hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 4%, transparent) !important;
+}
+
+.agent-workspace-session-list .monaco-list,
+.agent-workspace-session-list .monaco-list-rows,
+.agent-workspace-session-list .monaco-scrollable-element {
+	background: transparent !important;
+}
+
+/* One state ladder for the whole panel: hover < active < selected. These used
+	to be three unrelated mixes (6% / 11%-over-sideBar / 8%), so a hovered nav
+	row, a hovered session row and a selected session row each felt like a
+	different control. */
+.agent-workspace-session-list .monaco-list-row:hover:not(.selected) {
+	background: var(--ags-state-hover) !important;
+}
+
+.agent-workspace-session-list .monaco-list-row.selected,
+.agent-workspace-session-list .monaco-list:focus .monaco-list-row.selected {
+	background: var(--ags-state-selected) !important;
+}
+
+/* The open session is the one row that earns full-strength ink. Everything
+	else sits at secondary, so a scan reads ONE bright title and a calm column
+	beneath it rather than forty competing lines. */
+.agent-workspace-session-list .monaco-list-row.selected .agent-session-title {
+	color: var(--ags-ink-primary);
+}
+
+.agent-workspace-session-list .monaco-list-row:hover .agent-session-title {
+	color: var(--ags-ink-primary);
+}
+
+.agent-workspace-session-list .monaco-list-row.selected .agent-session-icon {
+	color: var(--ags-ink-secondary);
+}
+
+.agent-workspace-compact-activity {
+	display: none;
+}
+
+.agent-workspace-rail-footer {
+	display: flex;
+	align-items: center;
+	gap: var(--ags-space-2);
+	flex: 0 0 auto;
+	height: 56px;
+	padding: 0 var(--ags-space-2);
+	border-top: 1px solid var(--ags-border-subtle);
+	box-sizing: border-box;
+	color: var(--ags-ink-secondary);
+	cursor: pointer;
+	user-select: none;
+}
+
+.agent-workspace-rail-footer:hover,
+.agent-workspace-rail-footer:focus-visible {
+	outline: none;
+	background: var(--ags-state-hover);
+	color: var(--ags-ink-primary);
+}
+
+.agent-workspace-account-avatar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	flex: 0 0 auto;
+	overflow: hidden;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 40%, transparent);
+	border-radius: 50%;
+	box-sizing: border-box;
+	background-color: #0a0a0a;
+	background-position: center;
+	background-size: cover;
+	box-shadow: 0 0 0 0.5px color-mix(in srgb, var(--vscode-foreground) 14%, transparent);
+}
+
+.agent-workspace-account-meta {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	gap: 1px;
+	min-width: 0;
+}
+
+.agent-workspace-account-name,
+.agent-workspace-account-plan {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-account-name {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-account-plan {
+	font-size: 11px;
+	color: var(--vscode-descriptionForeground);
+}
+
+/* The plan line doubles as the sign-in prompt when the stored login was revoked,
+	so it has to read as something to act on rather than ordinary metadata. */
+.agent-workspace-account-plan.agent-workspace-account-attention {
+	color: var(--vscode-notificationsWarningIcon-foreground, var(--vscode-editorWarning-foreground));
+}
+
+/* The button itself carries the codicon classes, whose own rule is more specific
+	than a single class, so these declarations only land when matched at the same
+	specificity. Without this the glyph sat off-centre in its hit box. */
+.agent-workspace-account-gear.codicon[class*='codicon-'] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	flex: 0 0 auto;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--vscode-foreground);
+	font-size: 15px;
+	opacity: 0.72;
+	cursor: pointer;
+}
+
+.agent-workspace-account-gear:hover,
+.agent-workspace-account-gear:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+	opacity: 1;
+}
+
+.agent-workspace-account-menu {
+	padding: 6px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 11%, transparent);
+	border-radius: 10px;
+	box-sizing: border-box;
+	/* Only the menu's bottom edge is pinned, so on a short window the top rows
+		would otherwise run off-screen and Sign Out became unreachable. */
+	max-height: calc(100vh - 24px);
+	overflow-y: auto;
+	background: color-mix(in srgb, var(--vscode-editorWidget-background, #1e1e22) 96%, transparent);
+	box-shadow: 0 14px 42px rgba(0, 0, 0, 0.48);
+	backdrop-filter: blur(22px) saturate(118%);
+	color: var(--vscode-menu-foreground, var(--vscode-foreground));
+	font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+	font-size: 13px;
+}
+
+.agent-workspace-account-menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	height: 34px;
+	padding: 0 10px;
+	border-radius: 6px;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+
+.agent-workspace-account-menu-item:hover,
+.agent-workspace-account-menu-item:focus-visible {
+	outline: none;
+	background: var(--vscode-menu-selectionBackground, color-mix(in srgb, var(--vscode-foreground) 8%, transparent));
+	color: var(--vscode-menu-selectionForeground, var(--vscode-foreground));
+}
+
+.agent-workspace-account-menu-icon {
+	width: 17px;
+	flex: 0 0 auto;
+	font-size: 15px;
+	text-align: center;
+	opacity: 0.88;
+}
+
+.agent-workspace-account-menu-separator {
+	height: 1px;
+	margin: 4px 6px;
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled > .agent-workspace-utility-launcher {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	z-index: 20;
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	padding: 5px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 11%, transparent);
+	border-radius: 13px;
+	background: color-mix(in srgb, var(--agent-workspace-surface-base) 78%, transparent);
+	box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
+	backdrop-filter: blur(18px) saturate(120%);
+	transform: translateY(-50%);
+}
+
+.agent-workspace-utility-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 31px;
+	height: 31px;
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.agent-workspace-utility-button:hover,
+.agent-workspace-utility-button:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-utility-button:disabled {
+	display: none;
+}
+
+.agent-workspace-has-utility:not(.agent-workspace-chat-focused) .agent-workspace-utility-launcher {
+	right: 6px;
+}
+
+.agent-workspace-chat-focused .agent-workspace-utility-button.codicon-layout-sidebar-right-off {
+	color: var(--vscode-foreground);
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-compact-rail > .agent-workspace-rail {
+	align-items: center;
+}
+
+.agent-workspace-compact-rail .agent-workspace-rail-header {
+	align-items: center;
+	width: 100%;
+	padding: 10px 6px;
+	box-sizing: border-box;
+}
+
+.agent-workspace-compact-rail .agent-workspace-rail-toggle {
+	align-self: center;
+}
+
+.agent-workspace-compact-rail .agent-workspace-action {
+	justify-content: center;
+	padding: 0;
+}
+
+.agent-workspace-compact-rail .agent-workspace-action-label,
+.agent-workspace-compact-rail .agent-workspace-search,
+.agent-workspace-compact-rail .agent-workspace-scope-switch,
+.agent-workspace-compact-rail .agent-workspace-session-list,
+.agent-workspace-compact-rail .agent-workspace-account-meta {
+	display: none;
+}
+
+/* The gear's own rule is codicon-qualified so it can beat the codicon class,
+	which means hiding it in the collapsed rail has to match that specificity. */
+.agent-workspace-compact-rail .agent-workspace-account-gear.codicon[class*='codicon-'] {
+	display: none;
+}
+
+.agent-workspace-compact-rail .agent-workspace-compact-activity {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	min-height: 0;
+	padding: 5px 0;
+	overflow: hidden auto;
+	box-sizing: border-box;
+	flex: 1 1 0;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.agent-workspace-compact-session {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 29px;
+	height: 29px;
+	padding: 0;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--agent-workspace-surface-base) 72%, transparent);
+	color: color-mix(in srgb, var(--vscode-descriptionForeground) 78%, transparent);
+	cursor: pointer;
+}
+
+.agent-workspace-compact-session::after {
+	position: absolute;
+	inset: -3px;
+	border: 1px solid transparent;
+	border-radius: 50%;
+	content: '';
+	pointer-events: none;
+}
+
+.agent-workspace-compact-session:hover,
+.agent-workspace-compact-session:focus-visible,
+.agent-workspace-compact-session.active {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	color: var(--vscode-foreground);
+}
+
+/* These three rings share one pseudo-element at equal specificity, so source
+	order is what decides which one a session showing several states renders.
+	Weakest signal first: unread is the ambient state and almost every session
+	has it, so it must never mask which session is selected or running. */
+.agent-workspace-compact-session.attention::after {
+	border-color: color-mix(in srgb, var(--vscode-notificationsInfoIcon-foreground) 72%, transparent);
+}
+
+.agent-workspace-compact-session.active::after {
+	border-color: color-mix(in srgb, var(--vscode-focusBorder) 72%, transparent);
+}
+
+/* The running ring is the "swirl" on a session card. It borrowed
+	testing.iconPassed and so survived the venom->blue sweep as the last green
+	object in the rail. Literal cool blue (hue 205) - NOT charts.green, which
+	also drives git-added marks where green is semantically correct. */
+.agent-workspace-compact-session.working::after {
+	border-color: color-mix(in srgb, #3f86b9 84%, transparent);
+	box-shadow: 0 0 9px color-mix(in srgb, #3f86b9 34%, transparent);
+	animation: agent-workspace-activity-pulse 1.45s ease-in-out infinite;
+}
+
+.agent-workspace-compact-session-icon {
+	font-size: 13px;
+}
+
+@keyframes agent-workspace-activity-pulse {
+	0%,
+	100% {
+		opacity: 0.52;
+		transform: scale(0.94);
+	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.agent-workspace-compact-rail .agent-workspace-rail-footer {
+	justify-content: center;
+	width: 100%;
+	margin-top: auto;
+	padding: 0;
+}
+
+/* The dedicated Agent window is three structural panes: session rail, chat and
+	utility. The primary group's native title height remains the measured header
+	brace, but its generic editor tab is replaced by the product-owned chat title.
+	This avoids double-counting a second header inside ChatEditor. */
+.agent-workspace-window {
+	position: relative;
+	padding-top: 0;
+	box-sizing: border-box;
+	background: transparent !important;
+}
+
+/* The auxiliary document inherits the main window's opaque body color. Clear
+	it only for the dedicated workspace so the rail can sample the native window
+	material instead of blending with another solid editor-colored layer. */
+body:has(> .agent-workspace-window) {
+	background-color: transparent !important;
+}
+
+/* ── Glass pass-through (container-level, WINDOW ONLY) ──────────────
+	The separate Agent window has native vibrancy — the macOS window
+	material IS the background. So the big opaque containers (editor pane,
+	group header) must be punched out to let the glass show through.
+
+	In the IN-WINDOW agent panel these containers still need their opaque
+	backgrounds because there is no vibrancy behind them — the IDE window
+	is a normal opaque window. Making them transparent there shows grey
+	nothing, which is exactly the bug we just fixed. */
+
+.agent-workspace-window .part.editor > .editor-container {
+	background-color: transparent !important;
+}
+
+/* ── Utility panes join the chat's material ────────────────────────
+	Browser, Terminal and Files open in a SECOND editor group beside the
+	chat (this.utilityGroup). That group is ordinary editor chrome, so each
+	pane painted from whatever token its own contribution uses - the webview
+	host, the terminal wrapper and the explorer each resolve a different
+	grey. Three tabs, three backgrounds, against a conversation that was
+	already correct: the seam between chat and tool was visible on every
+	switch.
+
+	Pointing all three at the canvas tint makes the tool surface read as the
+	same material as the conversation, so switching tabs changes the CONTENT
+	and not the colour of the room.
+
+	Scoped to the agent surfaces only - the ordinary IDE keeps its theme
+	backgrounds, where a distinct terminal/editor tone is correct.
+
+	KNOWN LIMIT: xterm paints its viewport on a canvas whose colour comes
+	from the terminal's own theme resolution in JS, not from this rule. The
+	wrapper and padding unify here; if the terminal body itself still reads
+	as a different black it needs terminal.background retinting, which is a
+	theme-level change and deliberately out of scope for this pass. */
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .editor-container,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .editor-container > .editor-instance,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) .webview-container,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) .terminal-outer-container,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) .monaco-workbench-terminal,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) .explorer-folders-view,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) .monaco-list {
+	background-color: var(--agent-workspace-canvas-tint) !important;
+}
+
+.agent-workspace-window .editor-group-container > .title {
+	background-color: transparent !important;
+}
+
+/* Override the theme's editor-background in BOTH agent hosts so every upstream
+   chat.css rule that reads it resolves to the dark surface-base family instead of
+   the lighter IDE grey. This one variable redefinition covers all 17 upstream
+   consumers at once — tool card bodies, code blocks, thinking shimmers, input
+   editors, and the session container itself.
+
+   In the WINDOW the glass material is the real background, so we go transparent.
+   In the IN-WINDOW panel there is no glass, so we point at the surface-base. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled {
+	--vscode-editor-background: var(--agent-workspace-surface-base);
+	--vscode-chat-list-background: var(--agent-workspace-canvas-tint);
+	--vscode-interactive-result-editor-background-color: color-mix(in srgb, var(--agent-workspace-surface-base) 92%, transparent);
+	--vscode-input-background: var(--agent-workspace-composer-fill);
+	/* Border and card tokens — upstream resolves these to lighter greys that
+	   create the patchwork of slightly-different card fills. Redefining here
+	   makes every upstream card, table, separator, and badge read from the
+	   dark surface family instead. */
+	--vscode-chat-requestBorder: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	--vscode-chat-requestBackground: transparent;
+	--vscode-chat-requestBubbleBackground: var(--agent-workspace-bubble-fill);
+	--vscode-chat-requestBubbleHoverBackground: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	--vscode-sideBar-background: var(--agent-workspace-surface-base);
+}
+
+/* TINTED GLASS (Agent window only).
+
+   Previously these were fully `transparent`, which let the raw desktop wallpaper
+   read straight through the conversation — legible only because the macOS
+   vibrancy blur happened to be doing all the work. Pure transparency has no
+   colour of its own, so the panel took on whatever was behind the window and the
+   text contrast changed as you moved it.
+
+   A low-alpha TINT keeps the see-through quality that makes this read as real
+   glass, but gives the surface its own dark colour so text contrast is stable
+   regardless of what is behind the window. Dial --agent-workspace-glass-opacity:
+   higher = more solid, lower = clearer. Everything else derives from it, so the
+   surfaces cannot drift out of sync. */
+.agent-workspace-window .chat-editor-relative.agent-workspace-enabled {
+	/* The CHAT side stays opaque; the RAIL carries the glass.
+
+	   A 58% tint used to sit on the conversation itself, which meant 42% of the
+	   desktop showed through the TEXT and the contrast moved as the window moved.
+	   Transparency now lives on the rail only (dial --agent-workspace-glass-opacity
+	   in the token block above) - which is where the reference apps put it too: a
+	   narrow column of short labels can carry the material, a full-width
+	   transcript cannot. The composer is likewise its own opaque literal. */
+	--vscode-chat-list-background: var(--agent-workspace-canvas-tint) !important;
+	--vscode-interactive-result-editor-background-color: var(--agent-workspace-surface-base) !important;
+	--vscode-editor-background: var(--agent-workspace-surface-base);
+}
+
+/* editorWidget-background is NOT safe to make translucent here. It is the fill
+	for FLOATING widgets - the turn-rail preview, hovers, suggest - which sit over
+	scrolling transcript text, not over the glass. Thinning it made the turn-rail
+	popup see-through and the text underneath bled straight through it.
+	A floating panel needs its own opaque body; only the panel SURFACES behind the
+	conversation may pass the glass. */
+.agent-workspace-window .chat-turn-rail-preview,
+.agent-workspace-window .monaco-hover,
+.agent-workspace-window .monaco-editor-hover {
+	background: var(--agent-workspace-surface-base, #0f0f10) !important;
+	border-color: color-mix(in srgb, var(--vscode-foreground) 12%, transparent) !important;
+	box-shadow: 0 10px 34px rgba(0, 0, 0, 0.55) !important;
+}
+
+.agent-workspace-window .part.editor > .content .editor-group-container {
+	margin: 0 !important;
+	border-radius: 0 !important;
+}
+
+.agent-workspace-window .editor-group-container > .title.tabs,
+.agent-workspace-window .editor-group-container > .editor-container,
+.agent-workspace-window .editor-group-container > .editor-container > .editor-instance,
+.agent-workspace-window .editor-group-container > .editor-container > .editor-instance > .monaco-editor,
+.agent-workspace-window .editor-group-container > .editor-container > .editor-instance > .monaco-editor > .overflow-guard {
+	border-radius: 0 !important;
+}
+
+/* The shared editor chrome rounds each title as a floating card. Agent
+	Workspace uses a full-height pane seam, so flatten every wrapper that crosses
+	the chat/utility boundary instead of trying to cover the cap with another
+	decorative layer. */
+.agent-workspace-window .part.editor > .content .monaco-grid-view,
+.agent-workspace-window .part.editor > .content .split-view-view,
+.agent-workspace-window .part.editor > .content .editor-group-container > .title.title,
+.agent-workspace-window .part.editor > .content .editor-group-container > .title > .tabs-and-actions-container,
+.agent-workspace-window .part.editor > .content .editor-group-container > .title .monaco-scrollable-element,
+.agent-workspace-window .part.editor > .content .editor-group-container > .title .tabs-container {
+	border-radius: 0 !important;
+}
+
+.agent-workspace-window .agent-workspace-primary-group {
+	position: relative;
+	min-width: 0;
+	min-height: 0;
+	isolation: isolate;
+	/* MIRROR of the glass tokens in the block near the top of this file.
+
+	   This element is the nearest common ancestor of the group title band (the
+	   strip behind the traffic lights) and the rail - but the band is a SIBLING of
+	   .editor-container, not a descendant of .chat-editor-relative, so it cannot
+	   inherit the tokens declared there. Without this mirror the band painted its
+	   own opaque grey straight above a translucent rail and left a hard step along
+	   the top of the column, which reads as a broken panel rather than one sheet
+	   of glass running from the window edge down.
+
+	   Keep the two values identical to the canonical block; they are the same
+	   glass seen at two DOM levels. */
+	--agent-workspace-surface-base: color-mix(in srgb, #000 26%, var(--vscode-sideBar-background, #141416));
+	--agent-workspace-glass-opacity: 82%;
+	--agent-workspace-glass-tint: color-mix(in srgb, color-mix(in srgb, #fff 4%, var(--agent-workspace-surface-base)) var(--agent-workspace-glass-opacity), transparent);
+}
+
+.agent-workspace-window .agent-workspace-primary-group > .title {
+	position: relative;
+	display: block !important;
+	padding-left: 0 !important;
+	box-sizing: border-box;
+	background-color: color-mix(in srgb, var(--agent-workspace-surface-base) 96%, transparent) !important;
+}
+
+.agent-workspace-window .agent-workspace-primary-group > .title::before {
+	position: absolute;
+	inset: 0 auto 0 0;
+	z-index: 0;
+	/* Never narrower than the macOS traffic-light cluster, otherwise the compact
+		rail's seam runs straight through the window buttons. */
+	width: max(var(--agent-workspace-rail-width, 292px), 70px);
+	content: '';
+	border-right: 1px solid color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	box-sizing: border-box;
+	background:
+		radial-gradient(circle at 16% 0%, color-mix(in srgb, var(--vscode-foreground) 3%, transparent), transparent 54%),
+		var(--agent-workspace-glass-tint, color-mix(in srgb, var(--vscode-sideBar-background, #141416) 97%, transparent));
+	/* Reads the rail's own blur token rather than its own literal, so the band and
+	   the rail can never end up at different blur radii. */
+	backdrop-filter: var(--agent-workspace-glass-blur, blur(30px) saturate(125%));
+	pointer-events: none;
+}
+
+.agent-workspace-window .agent-workspace-primary-group > .title {
+	-webkit-app-region: drag;
+}
+
+.agent-workspace-window .agent-workspace-primary-group > .title > .tabs-and-actions-container {
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.agent-workspace-window .agent-workspace-primary-group > .title > .agent-workspace-chat-header {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: max(var(--agent-workspace-rail-width, 292px), 96px);
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	min-width: 0;
+	padding: 0 13px;
+	box-sizing: border-box;
+	color: var(--vscode-foreground);
+	-webkit-app-region: drag;
+}
+
+.agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .title > .agent-workspace-chat-header {
+	right: 8px;
+}
+
+/* Windows and Linux put the window controls at the top RIGHT. This header runs to */
+/* right: 0 and puts the IDE button at its right edge, so on those platforms the */
+/* button sits directly under close/minimise/maximise — which are z-index 3000 and */
+/* -webkit-app-region: no-drag, so they take every click and the button cannot be */
+/* pressed at all. macOS is unaffected: its controls are top-LEFT, which is why */
+/* this is invisible when developing on a Mac. */
+/* */
+/* 138px / --zoom-factor is exactly what the titlebar reserves (titlebarpart.css); */
+/* keeping the same expression means the two cannot drift apart. The extra 28px is */
+/* clearance so the button is not flush against the close box — the header has */
+/* plenty of empty space, and a button touching it invites mis-clicks even once it */
+/* is reachable. Change 28px to move the button further from the corner. */
+.monaco-workbench:not(.web):not(.mac).agent-workspace-window .agent-workspace-primary-group > .title > .agent-workspace-chat-header {
+	right: calc(28px + (138px / var(--zoom-factor, 1)));
+}
+
+.monaco-workbench:not(.web):not(.mac).agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .title > .agent-workspace-chat-header {
+	right: calc(8px + 28px + (138px / var(--zoom-factor, 1)));
+}
+
+/* Fullscreen hides the window controls entirely, so reserving the space there */
+/* would leave a dead gap and push the button away from the corner for no reason. */
+.monaco-workbench.fullscreen:not(.web):not(.mac).agent-workspace-window .agent-workspace-primary-group > .title > .agent-workspace-chat-header {
+	right: 0;
+}
+
+.monaco-workbench.fullscreen:not(.web):not(.mac).agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .title > .agent-workspace-chat-header {
+	right: 8px;
+}
+
+.agent-workspace-chat-header-icon {
+	flex: 0 0 auto;
+	font-size: 14px;
+	opacity: 0.86;
+}
+
+.agent-workspace-chat-header-label {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	font-size: 12px;
+	font-weight: 500;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.agent-workspace-chat-header-ide {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	flex: 0 0 auto;
+	height: 24px;
+	padding: 0 5px;
+	border: 0;
+	border-radius: 5px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	font: inherit;
+	font-size: 11px;
+	cursor: pointer;
+	-webkit-app-region: no-drag;
+}
+
+.agent-workspace-chat-header-ide-icon {
+	font-size: 12px;
+}
+
+.agent-workspace-chat-header-ide:hover,
+.agent-workspace-chat-header-ide:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-chat-header-close {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: 0;
+	border-radius: 6px;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	font-size: 14px;
+	opacity: 0;
+	transform: translateX(3px);
+	transition: opacity 120ms ease 800ms, transform 120ms ease 800ms, background-color 120ms ease;
+	pointer-events: none;
+	-webkit-app-region: no-drag;
+}
+
+.agent-workspace-chat-header:hover .agent-workspace-chat-header-close,
+.agent-workspace-chat-header:focus-within .agent-workspace-chat-header-close {
+	opacity: 0.82;
+	transform: translateX(0);
+	transition-delay: 240ms;
+	pointer-events: auto;
+}
+
+.agent-workspace-chat-header-close:hover,
+.agent-workspace-chat-header-close:focus-visible {
+	outline: none;
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+	opacity: 1 !important;
+}
+
+.agent-workspace-session-dismissed .agent-workspace-chat-header-close {
+	display: none;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled > .agent-workspace-landing {
+	display: none;
+	grid-column: 2;
+	grid-row: 1;
+	align-items: center;
+	align-self: stretch;
+	justify-content: center;
+	justify-self: stretch;
+	flex-direction: column;
+	gap: 9px;
+	min-width: 0;
+	min-height: 0;
+	padding: 32px;
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--agent-workspace-surface-base) 96%, transparent);
+	color: var(--vscode-foreground);
+	text-align: center;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled.agent-workspace-session-dismissed > .agent-workspace-landing {
+	display: flex;
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled.agent-workspace-session-dismissed > .interactive-session,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled.agent-workspace-session-dismissed > .chat-loading-overlay {
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.agent-workspace-landing-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	border-radius: 12px;
+	background: color-mix(in srgb, var(--vscode-foreground) 5%, transparent);
+	font-size: 20px;
+}
+
+.agent-workspace-landing-title {
+	margin: 4px 0 0;
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.agent-workspace-landing-description {
+	max-width: 360px;
+	margin: 0;
+	color: var(--vscode-descriptionForeground);
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.agent-workspace-landing-new {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	height: 30px;
+	margin-top: 5px;
+	padding: 0 12px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	border-radius: 7px;
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+	color: var(--vscode-foreground);
+	font: inherit;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.agent-workspace-landing-new:hover,
+.agent-workspace-landing-new:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder);
+	outline-offset: -1px;
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+}
+
+/* A real pane-edge element, owned by the primary group. It reserves the same
+	width that AgentWorkspaceShell removes from ChatEditor's layout and therefore
+	remains continuous across the title and editor body. */
+.agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .agent-workspace-pane-gutter {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 90;
+	display: block;
+	width: 8px;
+	border-right: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	border-left: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--vscode-sideBar-background, #141416) 68%, transparent);
+	box-shadow: inset 0 0 12px color-mix(in srgb, var(--vscode-foreground) 2%, transparent);
+	backdrop-filter: blur(16px) saturate(112%);
+	pointer-events: none;
+}
+
+.agent-workspace-pane-gutter-grip {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 3px;
+	height: 48px;
+	background: repeating-linear-gradient(
+		to bottom,
+		color-mix(in srgb, var(--vscode-descriptionForeground) 68%, transparent) 0 3px,
+		transparent 3px 9px
+	);
+	transform: translate(-50%, -50%);
+}
+
+.agent-workspace-window > .part.editor,
+.agent-workspace-window .editor-group-container,
+.agent-workspace-window .editor-group-container > .title,
+.agent-workspace-window .tabs-and-actions-container,
+.agent-workspace-window .tabs-container {
+	background-color: color-mix(in srgb, var(--agent-workspace-surface-base) 94%, transparent) !important;
+	backdrop-filter: blur(24px) saturate(118%);
+}
+
+/* Utility editors keep native behavior, but share one compact, square,
+	non-wrapping tab row. Overflow remains the native horizontal tab scroller. */
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title > .tabs-and-actions-container,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title .tabs-container {
+	display: flex;
+	flex-wrap: nowrap;
+	min-width: 0;
+	overflow: hidden;
+	border-radius: 0 !important;
+	clip-path: none !important;
+}
+
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title .tabs-container > .tab,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title .tabs-container > .tab > .tab-border-top-container,
+.agent-workspace-window .editor-group-container:not(.agent-workspace-primary-group) > .title .tabs-container > .tab > .tab-border-bottom-container {
+	height: var(--editor-group-tab-height);
+	margin: 0 1px 0 0;
+	border-radius: 0 !important;
+	clip-path: none !important;
+}
+
+.agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .title,
+.agent-workspace-window .agent-workspace-primary-group.agent-workspace-primary-has-utility > .editor-container {
+	border-top-right-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
+.agent-workspace-window .agent-workspace-primary-group:not(.agent-workspace-primary-has-utility) > .title {
+	border-top-right-radius: 13px !important;
+	overflow: hidden;
+}
+
+.agent-workspace-window .agent-workspace-primary-group:not(.agent-workspace-primary-has-utility) > .editor-container {
+	border-bottom-right-radius: 13px !important;
+	overflow: hidden;
+}
+
+/* Keep the conversation and utility surfaces effectively solid. The true
+	translucency is intentionally limited to the narrow session rail.
+
+	This element is the 780px centred column, and it paints ON TOP of the
+	`::after` canvas well. It used to use --vscode-editor-background, which is a
+	LIGHTER grey than the well, so the conversation column showed up as a pale
+	panel floating on a dark background instead of sitting inside a recessed one -
+	and any change to --agent-workspace-canvas-tint appeared to do nothing,
+	because this rule covered it. Paint from the same canvas value so the column
+	and its gutters are one continuous surface. */
+.agent-workspace-window .chat-editor-relative.agent-workspace-enabled > .interactive-session {
+	background-color: var(--agent-workspace-canvas-tint);
+}
+
+.agent-workspace-window .editor-group-container {
+	border-color: color-mix(in srgb, var(--vscode-foreground) 8%, transparent) !important;
+}
+
+.agent-workspace-context-bar {
+	display: none;
+}
+
+.agent-workspace-enabled .interactive-input-part > .agent-workspace-context-bar {
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	min-width: 0;
+	padding: 0 7px;
+	color: var(--vscode-descriptionForeground);
+	font-size: 11px;
+}
+
+/* The bar holds no chips until a real worktree/branch/host picker is wired up.
+	An empty flex row would still reserve its padding and push the composer down
+	by a visible band, so collapse it while it has no children. */
+.agent-workspace-enabled .interactive-input-part > .agent-workspace-context-bar:empty {
+	display: none;
+}
+
+/* The conversation renderer already holds prose to a readable measure, but the
+	sticky composer otherwise inherits the full 950px editor-host width. Use one
+	workspace content measure for the prompt and its context/artifact cards so the
+	bottom surface stays visually aligned with the conversation at every split. */
+.agent-workspace-enabled > .interactive-session > .interactive-input-part {
+	width: min(calc(100% - (var(--agent-workspace-chat-gutter) * 2)), var(--agent-workspace-chat-content-width, 780px));
+	max-width: var(--agent-workspace-chat-content-width, 780px);
+	margin-inline: auto;
+	box-sizing: border-box;
+}
+
+/* THE ALIGNMENT DEFECT, and why every previous attempt to fix it failed.
+	void.css:934 sets, unconditionally for ANY editor-hosted chat:
+
+		.monaco-workbench .part.editor .interactive-session .interactive-input-part {
+			padding-left:  calc(var(--v3-chat-edge-inset, 36px) + var(--v3-chat-text-inset, 12px)) !important;
+		}
+
+	That is 48px per side, with !important, at 4-class specificity - so it wins
+	over the gutter rule above and applies INSIDE the agent panel too. Net effect:
+	the composer's content box was 780 - 96 = 684px while transcript rows were
+	780 - 48 = 732px. A 48px disagreement is exactly the "chat is fatter than the
+	composer" report, and no amount of tuning --agent-workspace-chat-gutter could
+	move it, because the gutter was never the value being applied.
+
+	Restated here at 5 classes + !important so the agent panel's single gutter is
+	the value that actually lands. Deliberately NOT edited in void.css: that rule
+	is correct for the ordinary editor-hosted chat, which has no capped measure and
+	does need the wider inset to keep long lines off the send button. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-session .interactive-input-part {
+	padding-left: var(--agent-workspace-chat-gutter) !important;
+	padding-right: var(--agent-workspace-chat-gutter) !important;
+}
+
+/* Transcript rows share the composer's gutter exactly. Upstream gives the
+	response row 22px of its own padding and the request card a 12/14px margin,
+	which is why the conversation ran wider than the box you type in. Both are
+	restated here from the single gutter value so the column has one left edge and
+	one right edge from the first answer down to the composer. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-session .interactive-item-container {
+	padding-inline: var(--agent-workspace-chat-gutter);
+}
+
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-session .interactive-item-container.interactive-request {
+	/* Margin, not padding: the bubble fill below paints on this element, so the
+		inset has to come off the box itself to line the card up with the answer.
+		The 18px stays as the bubble's INTERNAL padding - without restating it the
+		generic gutter rule above would apply, and the card would lose the space
+		between its border and the text. */
+	margin-inline: var(--agent-workspace-chat-gutter);
+	padding-inline: 18px;
+}
+
+/* Repaint the request bubble in the canvas family. Upstream layers the request
+	tint over --vscode-editor-background, which is opaque and lighter than this
+	window's canvas, so the row lit up as a pale slab instead of reading as a
+	quiet card. Same shape, correct value. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .interactive-session .interactive-item-container.interactive-request {
+	background:
+		linear-gradient(var(--agent-workspace-bubble-lift), var(--agent-workspace-bubble-lift)),
+		var(--agent-workspace-bubble-fill);
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+}
+
+.agent-workspace-context-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	min-width: 0;
+	max-width: 42%;
+	height: 24px;
+	padding: 0 6px;
+	border: 1px solid transparent;
+	border-radius: 7px;
+	box-sizing: border-box;
+	background: color-mix(in srgb, var(--agent-workspace-surface-base) 42%, transparent);
+}
+
+.agent-workspace-context-chip:hover {
+	border-color: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	background: color-mix(in srgb, var(--vscode-foreground) 6%, transparent);
+}
+
+.agent-workspace-context-icon {
+	flex: 0 0 auto;
+	opacity: 0.78;
+}
+
+.agent-workspace-context-label {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* The composer box. Was painted from --vscode-input-background, a THIRD colour
+	family alongside the rail's sideBar grey and the canvas - which is why the
+	black area behind the prompt clashed with the glass instead of belonging to
+	it. Mixed from the shared surface base like every other surface here, and
+	lifted slightly ABOVE the canvas so the box you type in reads as raised out
+	of the well rather than cut into it. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container {
+	/* Solid, and darker than every other surface in the panel, so the box you
+	   type in reads as the deepest point rather than the brightest. Opaque on
+	   purpose: a translucent composer picked up whatever scrolled underneath it
+	   and appeared to shift colour as the transcript moved. */
+	background: var(--agent-workspace-composer-fill) !important;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+	backdrop-filter: none;
+	/* Same value as the fill => the 1px border is invisible but still occupies
+	   its layout box, so nothing shifts by a pixel when upstream toggles it. */
+	border-color: var(--agent-workspace-composer-fill) !important;
+}
+
+/* Every state upstream can put the composer in - focused, hover, focus-within,
+	working, editing, prompt-polishing - pinned to the SAME border colour.
+
+	The bug: upstream (and void.css) repaint this border from --vscode-focusBorder
+	/ #5A5A64 / the venom working colour depending on focus, so the box visibly
+	changed colour the moment you clicked away from it or hovered something else.
+	Focus is already conveyed by the caret and the toolbar; the composer itself
+	should never flicker.
+
+	Specificity matters here: void.css paints these from four- and five-class
+	selectors with !important (e.g. `.monaco-workbench .part.editor
+	.interactive-session .chat-input-container.focused`), so a short
+	`.agent-workspace-enabled ...` selector silently loses the cascade. Each
+	selector below carries six or seven classes to win outright. */
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container.focused,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container:focus,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container:focus-visible,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container:focus-within,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container:hover,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container.working,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container.editing,
+.monaco-workbench .part.editor .chat-editor-relative.agent-workspace-enabled .chat-input-container.v3-prompt-polishing {
+	background: var(--agent-workspace-composer-fill) !important;
+	border-color: var(--agent-workspace-composer-fill) !important;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+}
+
+/* An untouched session starts as a centered launch surface. As soon as the
+	chat receives a request, native flow resumes and the same prompt returns to
+	the bottom without replacing the widget or its model. */
+.agent-workspace-enabled.agent-workspace-empty > .interactive-session > .chat-welcome-view-container {
+	display: none !important;
+}
+
+.agent-workspace-enabled.agent-workspace-empty > .interactive-session > .interactive-input-part {
+	position: absolute !important;
+	top: 50% !important;
+	right: 32px !important;
+	left: 32px !important;
+	z-index: 5;
+	width: auto !important;
+	max-width: var(--agent-workspace-chat-content-width, 780px) !important;
+	margin: 0 auto !important;
+	transform: translateY(-50%) !important;
+}
+
+@media (max-height: 640px) {
+	.agent-workspace-enabled.agent-workspace-empty > .interactive-session > .interactive-input-part {
+		right: 18px !important;
+		left: 18px !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.agent-workspace-compact-session.working::after {
+		animation: none;
+	}
+}
+
+/* ---------------------------------------------------------------------------
+	Ambient status lights (Turbo Draft / V-Go), below the launcher buttons.
+
+	Deliberately dim and translucent: this is peripheral vision. You should be
+	able to tell at a glance that something is running without it pulling focus
+	from the work. Colour only ever means "this is live" - an idle light is
+	monochrome, so brightness carries the signal rather than decoration.
+--------------------------------------------------------------------------- */
+
+.agent-workspace-status-strip {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 5px;
+	margin-top: 10px;
+	padding-top: 9px;
+	border-top: 1px solid color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+}
+
+.agent-workspace-status-chip {
+	display: flex;
+	max-width: 128px;
+	align-items: center;
+	gap: 5px;
+	padding: 3px 7px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 9%, transparent);
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--vscode-foreground) 4%, transparent);
+	color: color-mix(in srgb, var(--vscode-descriptionForeground) 70%, transparent);
+	font-size: 10px;
+	line-height: 1;
+	white-space: nowrap;
+	font-family: inherit;
+	cursor: default;
+	transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.agent-workspace-status-chip.is-turbo.is-active,
+.agent-workspace-status-chip.is-turbo.is-settled {
+	cursor: pointer;
+}
+
+.agent-workspace-status-chip:hover {
+	border-color: color-mix(in srgb, var(--vscode-foreground) 16%, transparent);
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.agent-workspace-status-key {
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	opacity: 0.9;
+}
+
+.agent-workspace-status-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Turbo, mid-draft: warm amber, still translucent so it glows rather than shouts. */
+.agent-workspace-status-chip.is-turbo.is-active {
+	border-color: color-mix(in srgb, #f0a03c 20%, transparent);
+	background: color-mix(in srgb, #f0a03c 7%, transparent);
+	color: color-mix(in srgb, #f0a03c 55%, var(--vscode-descriptionForeground));
+}
+
+/* Settled: the draft is waiting on the developer, so it cools without going dark. */
+.agent-workspace-status-chip.is-turbo.is-settled {
+	border-color: color-mix(in srgb, #f0a03c 13%, transparent);
+	color: color-mix(in srgb, #f0a03c 42%, var(--vscode-descriptionForeground));
+}
+
+/* V-Go paired: cool blue, matching the running-session rings in the rail. */
+.agent-workspace-status-chip.is-vgo.is-active {
+	border-color: color-mix(in srgb, #3f86b9 38%, transparent);
+	background: color-mix(in srgb, #3f86b9 13%, transparent);
+	color: color-mix(in srgb, #3f86b9 84%, var(--vscode-foreground));
+}
+
+/* Waiting for a scan: same hue, breathing, so "pending" is legible without text. */
+.agent-workspace-status-chip.is-vgo.is-pending {
+	border-color: color-mix(in srgb, #3f86b9 24%, transparent);
+	color: color-mix(in srgb, #3f86b9 66%, var(--vscode-foreground));
+	animation: agent-workspace-activity-pulse 1.8s ease-in-out infinite;
+}
+
+/* The compact rail has no room for a label; the key alone still carries the colour. */
+.agent-workspace-compact-rail .agent-workspace-status-label {
+	display: none;
+}
+
+/* ---------------------------------------------------------------------------
+	Composer surround: transparent in the Agents window only.
+
+	void.css paints .part.editor .interactive-input-part with the card colour so a
+	scrolling transcript cannot show through behind the composer. The Agents window
+	does not have that problem — the conversation column is capped to the same
+	measure as the composer, so nothing passes behind it — and there the opaque
+	block is actively wrong: it reads as a dark slab bolted onto the frosted panel
+	and squares off a surface whose whole point is that it is translucent.
+
+	Deliberately not removed globally. The sidebar and editor-hosted chats keep it.
+--------------------------------------------------------------------------- */
+
+.agent-workspace-window .interactive-session > .interactive-input-part,
+.chat-editor-relative.agent-workspace-enabled > .interactive-session > .interactive-input-part {
+	background-color: transparent !important;
+}

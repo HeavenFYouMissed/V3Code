@@ -1,0 +1,91 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 Glass Devtools, Inc. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
+ *--------------------------------------------------------------------------------------*/
+
+import * as assert from 'assert';
+import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../../base/test/common/utils.js';
+import { Chunker, _windowRanges } from '../../common/semanticIndex/chunker.js';
+import { chunkId, contentHash, toPosix, sha256 } from '../../common/semanticIndex/hashing.js';
+
+suite('semanticIndex / hashing', () => {
+	ensureNoDisposablesAreLeakedInTestSuite();
+
+	test('toPosix replaces backslashes', () => {
+		assert.strictEqual(toPosix('a\\b\\c.ts'), 'a/b/c.ts');
+		assert.strictEqual(toPosix('a/b/c.ts'), 'a/b/c.ts');
+	});
+
+	test('sha256 is deterministic + hex', () => {
+		const h = sha256('hello');
+		assert.strictEqual(h, sha256('hello'));
+		assert.match(h, /^[0-9a-f]{64}$/);
+	});
+
+	test('chunkId normalizes path separators', () => {
+		assert.strictEqual(chunkId('a\\b.ts', 1, 10), chunkId('a/b.ts', 1, 10));
+	});
+
+	test('contentHash differs when content differs', () => {
+		assert.notStrictEqual(contentHash('foo'), contentHash('foo '));
+	});
+});
+
+suite('semanticIndex / chunker (window fallback)', () => {
+	ensureNoDisposablesAreLeakedInTestSuite();
+
+	test('_windowRanges covers entire file with overlap', () => {
+		const r = _windowRanges(100, 80, 10);
+		assert.deepStrictEqual(r[0], [1, 80]);
+		assert.deepStrictEqual(r[r.length - 1][1], 100);
+		// Adjacent windows share `overlap` lines.
+		assert.strictEqual(r[1][0], 71);
+	});
+
+	test('_windowRanges with tiny file emits a single window', () => {
+		const r = _windowRanges(5, 80, 10);
+		assert.deepStrictEqual(r, [[1, 5]]);
+	});
+
+	test('_windowRanges handles overlap >= win by clamping stride to 1', () => {
+		const r = _windowRanges(10, 5, 10); // overlap >= win — stride should clamp to 1
+		assert.ok(r.length >= 10); // not infinite loop, makes forward progress
+	});
+
+	test('chunkFile with unknown language uses window fallback', async () => {
+		const chunker = new Chunker({ grammarsDir: '/nonexistent/path' });
+		const source = Array.from({ length: 200 }, (_, i) => `line ${i + 1}`).join('\n');
+		const chunks = await chunker.chunkFile('test/sample.unknownlang', source, 'unknownlang');
+		assert.ok(chunks.length >= 2, 'should produce multiple windows');
+		// First chunk starts at line 1.
+		assert.strictEqual(chunks[0].startLine, 1);
+		// All chunks claim 'block' kind in fallback mode.
+		for (const c of chunks) {
+			assert.strictEqual(c.kind, 'block');
+			assert.strictEqual(c.file, 'test/sample.unknownlang');
+			assert.ok(c.name);
+			assert.ok(c.contentHash);
+		}
+	});
+
+	test('chunkFile with empty source returns empty array', async () => {
+		const chunker = new Chunker({ grammarsDir: '/nonexistent/path' });
+		const chunks = await chunker.chunkFile('empty.txt', '', 'plaintext');
+		assert.strictEqual(chunks.length, 0);
+	});
+
+	test('chunkFile respects maxFileBytes', async () => {
+		const chunker = new Chunker({ grammarsDir: '/nonexistent/path', maxFileBytes: 100 });
+		const big = 'x'.repeat(500);
+		const chunks = await chunker.chunkFile('big.txt', big, 'plaintext');
+		assert.strictEqual(chunks.length, 0);
+	});
+
+	test('chunkFile produces stable ids across runs', async () => {
+		const chunker = new Chunker({ grammarsDir: '/nonexistent/path' });
+		const source = Array.from({ length: 50 }, (_, i) => `line ${i}`).join('\n');
+		const a = await chunker.chunkFile('stable.txt', source, 'plaintext');
+		const b = await chunker.chunkFile('stable.txt', source, 'plaintext');
+		assert.deepStrictEqual(a.map(c => c.id), b.map(c => c.id));
+	});
+});

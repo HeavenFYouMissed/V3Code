@@ -1,0 +1,32 @@
+{
+	"id": "real-work",
+	"description": "End-to-end build task: write a module + a self-test, run it, iterate until it passes. Measures edit→run→verify loop and drift (dependency-free, no npm install).",
+	"newThreadAtStart": true,
+	"autoApprove": true,
+	"timeoutMs": 300000,
+	"turns": [
+		{
+			"send": "Build this end to end in THIS workspace only (do not touch any file outside it) and iterate until it works: 1) Create a file priceList.mjs exporting a PriceList class backed by a Map with setPrice(item, cents), getPrice(item) returning the number or undefined, removePrice(item) returning true/false, and total() returning the sum of all prices. 2) Create a file priceList.selftest.mjs that imports PriceList, exercises every method INCLUDING removePrice on a missing item and total() after a removal, and prints exactly 'ALL PASS' only if every assertion holds, otherwise prints which assertion failed. 3) Run it with run_command using 'node priceList.selftest.mjs'. 4) If it fails, fix and re-run until it prints ALL PASS. Report the final command output.",
+			"checks": [
+				{
+					"type": "status",
+					"equals": "completed"
+				},
+				{
+					"type": "tool_used",
+					"tool": "create_file_or_folder"
+				},
+				{
+					"type": "tool_used",
+					"tool": "run_command"
+				},
+				{
+					"type": "contains_any",
+					"values": [
+						"ALL PASS"
+					]
+				}
+			]
+		}
+	]
+}

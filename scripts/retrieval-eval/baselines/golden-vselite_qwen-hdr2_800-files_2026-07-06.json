@@ -1,0 +1,259 @@
+{
+	"at": "2026-07-06T08:07:06.275Z",
+	"repoRoot": "/Users/daniel/dev/VSElite",
+	"goldset": "docs/v3index-beast-packet/eval/golden-vselite.jsonl",
+	"mode": "shared-suffix-rule",
+	"embedder": "Qwen/Qwen3-Embedding-0.6B-GGUF@Q8_0",
+	"chunker": "tree-sitter structural parent/child chunking",
+	"corpus": {
+		"files": 799,
+		"chunks": 19974,
+		"embeddable": 15194,
+		"structuralFiles": 746
+	},
+	"topK": 10,
+	"results": [
+		{
+			"config": "+headers",
+			"queries": 11,
+			"skipped": 0,
+			"recallAt5": 1,
+			"recallAt10": 1,
+			"mrr": 0.7348484848484848,
+			"avgRetrieveMs": 54.09090909090909,
+			"perQuery": [
+				{
+					"query": "persist memory across sessions",
+					"targets": [
+						"void/electron-main/memory/memoryDatabase.ts",
+						"void/browser/memoryService.ts",
+						"void/common/memory/memoryTypes.ts"
+					],
+					"firstRank": 2,
+					"topFiles": [
+						"extensions/copilot/src/extension/chronicle/node/cloudSessionIdStore.ts",
+						"src/vs/workbench/contrib/void/browser/memoryService.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/copilotcliSession.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/vscode-node/chatSessionMetadataStoreImpl.ts",
+						"extensions/copilot/src/extension/chronicle/vscode-node/sessionStoreTracker.ts",
+						"extensions/copilot/src/extension/chatSessions/common/chatSessionMetadataStore.ts",
+						"extensions/copilot/src/extension/chronicle/vscode-node/sessionSyncStatus.ts",
+						"src/vs/workbench/contrib/void/browser/v3codeDefaultSettings.ts",
+						"eslint.config.js",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/common/copilotCLITools.ts"
+					],
+					"mrr": 0.5
+				},
+				{
+					"query": "color theme tokens in design system",
+					"targets": [
+						"void/browser/v3codeGreyChromeContribution.ts",
+						"void/browser/v3codeDefaultSettings.ts",
+						"void/common/helpers/colors.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/v3codeDefaultSettings.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/light-hc.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/dark-hc.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/highlighter.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/kimbie-dark.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/vs-dark.ts",
+						"src/vs/workbench/contrib/void/browser/v3codeGreyChromeContribution.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/vs-light.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/monokai-dim.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/extension/src/panelShared/themes/tomorrow-night-blue.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "how does AI decide which function to call",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts",
+						"void/browser/toolsService.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/common/router/routeDecision.ts",
+						"extensions/copilot/src/extension/agents/node/adapters/openaiAdapterForSTests.ts",
+						".eslint-plugin-local/code-no-accessor-after-await.ts",
+						"src/vs/workbench/contrib/void/common/router/routerLadder.ts",
+						"extensions/copilot/src/extension/byok/node/openAIEndpoint.ts",
+						".eslint-plugin-local/code-no-reader-after-await.ts",
+						".eslint-plugin-local/code-must-use-super-dispose.ts",
+						"extensions/copilot/src/extension/agents/node/adapters/anthropicAdapter.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/node/claudeCodeModels.ts",
+						".eslint-plugin-local/code-no-observable-get-in-reactive-context.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "auto complete code while typing",
+					"targets": [
+						"void/browser/autocompleteService.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/autocompleteService.ts",
+						".eslint-plugin-local/vscode-dts-vscode-in-comments.ts",
+						".github/skills/heap-snapshot-analysis/helpers/streamSnapshot.mjs",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/ghostText/current.ts",
+						"extensions/copilot/script/cleanLog.ts",
+						"cli/src/tunnels/code_server.rs",
+						"src/vs/workbench/contrib/void/browser/v3codeDefaultSettings.ts",
+						"cli/src/tunnels/control_server.rs",
+						"cli/src/util/command.rs",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/ghostText/test/current.test.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "sync local semantic index to cloud storage",
+					"targets": [
+						"void/browser/cloudIndexSyncService.ts",
+						"void/browser/cloudIndexSyncContribution.ts",
+						"void/browser/cloudIndexProxy.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/cloudIndexSyncContribution.ts",
+						"extensions/copilot/src/extension/chronicle/vscode-node/remoteSessionExporter.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexSyncService.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/vscode-node/chatSessionMetadataStoreImpl.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexProxy.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/chatSessionWorktreeCheckpointServiceImpl.ts",
+						"extensions/copilot/src/extension/chronicle/node/sessionReindexer.ts",
+						"extensions/copilot/src/extension/chronicle/common/sessionIndexingPreference.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/chatSessionWorkspaceFolderServiceImpl.ts",
+						"src/vs/workbench/contrib/void/browser/autocompleteService.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "expose local tools as MCP servers",
+					"targets": [
+						"void/browser/mcpExposeContribution.ts"
+					],
+					"firstRank": 2,
+					"topFiles": [
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/mcpHandler.ts",
+						"src/vs/workbench/contrib/void/browser/mcpExposeContribution.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/vscode-node/inProcHttpServer.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/vscode-node/mcpServers/v3codeNativeToolsMcpServer.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/vscode-node/tools/index.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/vscode-node/mcpServers/index.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/node/test/mcpHandler.spec.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/common/claudeMcpServerRegistry.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/node/claudeCodeAgent.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/vscode-node/contribution.ts"
+					],
+					"mrr": 0.5
+				},
+				{
+					"query": "hybrid retrieval fuse lexical vector graph",
+					"targets": [
+						"void/browser/semanticIndex/hybridRetriever.ts"
+					],
+					"firstRank": 3,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/electron-main/memory/memoryDatabase.ts",
+						"src/vs/workbench/contrib/void/browser/memoryService.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						".github/skills/heap-snapshot-analysis/helpers/findRetainers.ts",
+						"src/vs/workbench/contrib/void/browser/cloudIndexSyncContribution.ts",
+						"src/vs/workbench/contrib/void/browser/toolsService.ts",
+						".github/skills/heap-snapshot-analysis/helpers/parseSnapshot.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/dependencyGraph.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/llamaReranker.ts",
+						"src/vs/workbench/contrib/void/common/memory/memoryTypes.ts"
+					],
+					"mrr": 0.3333333333333333
+				},
+				{
+					"query": "escalate to a stronger model when the task is hard",
+					"targets": [
+						"void/common/router/routeDecision.ts",
+						"void/common/router/routerLadder.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/common/router/routerLadder.ts",
+						"src/vs/workbench/contrib/void/common/router/routeDecision.ts",
+						"extensions/copilot/src/extension/chatSessions/vscode-node/copilotCloudSessionContentBuilder.ts",
+						"extensions/copilot/src/extension/chatSessions/claude/node/claudeCodeModels.ts",
+						"extensions/copilot/src/extension/byok/vscode-node/xAIProvider.ts",
+						"extensions/copilot/src/extension/chatSessions/copilotcli/common/copilotCLITools.ts",
+						"extensions/copilot/src/extension/byok/vscode-node/byokModelInfo.ts",
+						"src/vs/workbench/contrib/void/browser/autocompleteService.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/openai/model.ts",
+						"extensions/copilot/src/extension/byok/vscode-node/anthropicProvider.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "quick inline edit without opening a diff",
+					"targets": [
+						"void/browser/quickEditActions.ts",
+						"void/browser/editCodeService.ts"
+					],
+					"firstRank": 1,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/editCodeService.ts",
+						"src/vs/workbench/contrib/void/browser/quickEditActions.ts",
+						"docs/mockups/visual-edit.js",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/recentEdits/recentEditsReducer.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/components/recentEdits.tsx",
+						"eslint.config.js",
+						"extensions/copilot/script/analyzeEdits.ts",
+						"src/vs/workbench/contrib/void/browser/v3codeDefaultSettings.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/recentEdits/test/recentEditsReducer.test.ts",
+						"extensions/copilot/src/extension/common/modelContextProtocol.ts"
+					],
+					"mrr": 1
+				},
+				{
+					"query": "dependency graph neighbor expansion",
+					"targets": [
+						"void/browser/semanticIndex/dependencyGraph.ts"
+					],
+					"firstRank": 2,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/dependencyGraph.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/similarFiles/neighborFiles.ts",
+						".github/skills/heap-snapshot-analysis/helpers/findRetainers.ts",
+						".vscode/extensions/vscode-selfhost-test-provider/src/importGraph.ts",
+						".github/skills/heap-snapshot-analysis/helpers/parseSnapshot.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/similarFiles/openTabFiles.ts",
+						"src/vs/workbench/contrib/void/browser/toolsService.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/prompt/similarFiles/test/relatedFiles.test.ts",
+						"extensions/copilot/src/extension/completions-core/vscode-node/lib/src/experiments/features.ts"
+					],
+					"mrr": 0.5
+				},
+				{
+					"query": "rerank search results with local model",
+					"targets": [
+						"void/common/semanticIndex/llamaReranker.ts",
+						"void/common/semanticIndex/llamaRerankerPure.ts"
+					],
+					"firstRank": 4,
+					"topFiles": [
+						"src/vs/workbench/contrib/void/browser/memoryService.ts",
+						"src/vs/workbench/contrib/void/browser/toolsService.ts",
+						"src/vs/workbench/contrib/void/electron-main/memory/memoryDatabase.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/llamaReranker.ts",
+						"extensions/copilot/src/extension/agents/node/langModelServer.ts",
+						"src/vs/workbench/contrib/void/browser/semanticIndex/hybridRetriever.ts",
+						"extensions/copilot/src/extension/byok/vscode-node/xAIProvider.ts",
+						"extensions/copilot/src/extension/byok/vscode-node/anthropicProvider.ts",
+						"src/vs/workbench/contrib/void/common/router/routerLadder.ts",
+						"src/vs/workbench/contrib/void/common/semanticIndex/llamaRerankerPure.ts"
+					],
+					"mrr": 0.25
+				}
+			]
+		}
+	]
+}

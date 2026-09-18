@@ -1,0 +1,10 @@
+* @HeavenFYouMissed
+
+# Licensing and distribution boundaries need maintainer review.
+/CLA.md @HeavenFYouMissed
+/LICENSE* @HeavenFYouMissed
+/LICENSING.md @HeavenFYouMissed
+/NOTICE.txt @HeavenFYouMissed
+/.github/workflows/ @HeavenFYouMissed
+/build/ @HeavenFYouMissed
+/product.json @HeavenFYouMissed

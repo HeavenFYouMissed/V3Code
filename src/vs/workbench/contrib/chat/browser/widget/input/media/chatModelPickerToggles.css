@@ -1,0 +1,234 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* V3Code model-picker toggle strip — co-located with chatModelPicker.ts so switches */
+/* and the router slider always load with the picker (not only via void.css). */
+
+.action-widget .v3code-picker-toggles {
+	--v3-accent: #9587ff;
+	display: flex;
+	flex-direction: column;
+	padding: 2px 0 2px;
+	margin-top: 4px;
+	border-top: 1px solid var(--vscode-menu-separatorBackground, rgba(255, 255, 255, 0.10));
+}
+
+.action-widget .v3code-picker-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	height: 28px;
+	padding: 0 12px;
+	border-radius: 5px;
+	cursor: pointer;
+	user-select: none;
+	outline: none;
+}
+
+.action-widget .v3code-picker-toggle:hover,
+.action-widget .v3code-picker-toggle:focus-visible {
+	background: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.06));
+}
+
+.action-widget .v3code-picker-toggle-label {
+	font-size: 13px;
+	line-height: 28px;
+	color: var(--vscode-foreground, #cfcfcf);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.action-widget .v3code-picker-toggle-switch {
+	position: relative;
+	flex: 0 0 auto;
+	width: 26px;
+	height: 15px;
+	border-radius: 999px;
+	background: var(--vscode-input-background, rgba(255, 255, 255, 0.10));
+	box-shadow: inset 0 0 0 1px var(--vscode-checkbox-border, rgba(255, 255, 255, 0.22));
+	transition: background 130ms ease, box-shadow 130ms ease;
+}
+
+.action-widget .v3code-picker-toggle-switch::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 3px;
+	width: 11px;
+	height: 11px;
+	margin-top: -5.5px;
+	border-radius: 50%;
+	background: var(--vscode-foreground, #cfcfcf);
+	opacity: 0.7;
+	transition: left 130ms ease, background 130ms ease, opacity 130ms ease;
+}
+
+.action-widget .v3code-picker-toggle.on .v3code-picker-toggle-switch {
+	background: color-mix(in srgb, #6AA3CC 70%, transparent);
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, #6AA3CC 80%, transparent);
+}
+
+.action-widget .v3code-picker-toggle.on .v3code-picker-toggle-switch::after {
+	left: 12px;
+	background: #ffffff;
+	opacity: 1;
+}
+
+.action-widget .v3code-picker-toggle.disabled {
+	opacity: 0.45;
+	cursor: default;
+	pointer-events: none;
+}
+
+.action-widget .v3code-picker-rung-row {
+	padding: 4px 12px 8px;
+}
+
+.action-widget .v3code-picker-rung-track {
+	position: relative;
+	height: 20px;
+	border-radius: 999px;
+	background:
+		linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.05)),
+		color-mix(in srgb, var(--v3-accent, #8b5cf6) 14%, var(--vscode-input-background, #2a1f47));
+	box-shadow:
+		inset 0 1px 2px rgba(0, 0, 0, 0.45),
+		inset 0 0 0 1px color-mix(in srgb, var(--v3-accent, #8b5cf6) 40%, transparent);
+	cursor: pointer;
+	outline: none;
+}
+
+.action-widget .v3code-picker-rung-track:focus-visible {
+	box-shadow:
+		inset 0 1px 2px rgba(0, 0, 0, 0.45),
+		0 0 0 2px color-mix(in srgb, var(--v3-accent, #8b5cf6) 70%, transparent);
+}
+
+.action-widget .v3code-picker-rung-lane {
+	position: absolute;
+	left: 11px;
+	right: 11px;
+	top: 0;
+	bottom: 0;
+}
+
+.action-widget .v3code-picker-rung-fill {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	height: 6px;
+	border-radius: 999px;
+	background: linear-gradient(90deg,
+		color-mix(in srgb, var(--v3-accent, #8b5cf6) 55%, transparent),
+		var(--v3-accent, #8b5cf6) 70%,
+		color-mix(in srgb, #c4b5fd 90%, var(--v3-accent, #8b5cf6)));
+	box-shadow: 0 0 8px color-mix(in srgb, var(--v3-accent, #8b5cf6) 58%, transparent);
+	transition: width 160ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms ease, opacity 180ms ease;
+	z-index: 1;
+}
+
+.action-widget .v3code-picker-rung-dot {
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: 5px;
+	height: 5px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	appearance: none;
+	-webkit-appearance: none;
+	font-size: 0;
+	line-height: 0;
+	background: rgba(255, 255, 255, 0.22);
+	cursor: pointer;
+	z-index: 2;
+	transition: background 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+}
+
+.action-widget .v3code-picker-rung-dot:hover {
+	transform: translate(-50%, -50%) scale(1.4);
+}
+
+.action-widget .v3code-picker-rung-dot.active {
+	background: color-mix(in srgb, #c8c1ff 76%, var(--v3-accent, #8b5cf6));
+	box-shadow: 0 0 7px color-mix(in srgb, var(--v3-accent, #8b5cf6) 66%, transparent);
+}
+
+.action-widget .v3code-picker-rung-dot.current {
+	transform: translate(-50%, -50%) scale(1.35);
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--v3-accent, #8b5cf6) 26%, transparent),
+		0 0 10px color-mix(in srgb, var(--v3-accent, #8b5cf6) 82%, transparent);
+}
+
+.action-widget .v3code-picker-rung-knob {
+	position: absolute;
+	top: 50%;
+	left: 0;
+	transform: translate(-50%, -50%);
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1px solid color-mix(in srgb, #b9b3c9 72%, var(--v3-accent, #8b5cf6));
+	background: radial-gradient(circle at 38% 32%, #3b3747, #17151d 62%, #0d0c11);
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--v3-accent, #8b5cf6) 52%, transparent),
+		0 0 11px color-mix(in srgb, var(--v3-accent, #8b5cf6) 68%, transparent),
+		0 1px 3px rgba(0, 0, 0, 0.5);
+	pointer-events: none;
+	z-index: 3;
+	transition: left 160ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 140ms ease;
+}
+
+.action-widget .v3code-picker-rung-track:hover .v3code-picker-rung-knob {
+	box-shadow:
+		0 0 0 2px color-mix(in srgb, var(--v3-accent, #8b5cf6) 72%, transparent),
+		0 0 16px color-mix(in srgb, var(--v3-accent, #8b5cf6) 88%, transparent),
+		0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.action-widget .v3code-picker-rung-track[data-budget="0"] .v3code-picker-rung-fill {
+	opacity: 0.18;
+	box-shadow: none;
+}
+
+.action-widget .v3code-picker-rung-track[data-budget="3"] .v3code-picker-rung-fill,
+.action-widget .v3code-picker-rung-track[data-budget="4"] .v3code-picker-rung-fill {
+	box-shadow: 0 0 13px color-mix(in srgb, var(--v3-accent, #8b5cf6) 76%, transparent);
+}
+
+.action-widget .v3code-picker-rung-track.sliding-glow {
+	animation: v3code-budget-track-glow 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.action-widget .v3code-picker-rung-track.sliding-glow .v3code-picker-rung-fill,
+.action-widget .v3code-picker-rung-track.sliding-glow .v3code-picker-rung-knob,
+.action-widget .v3code-picker-rung-track.sliding-glow .v3code-picker-rung-dot.current {
+	filter: drop-shadow(0 0 7px color-mix(in srgb, var(--v3-accent, #8b5cf6) 92%, transparent));
+}
+
+@keyframes v3code-budget-track-glow {
+	0% {
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 0 0 1px color-mix(in srgb, var(--v3-accent, #8b5cf6) 40%, transparent);
+	}
+	45% {
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 0 0 1px color-mix(in srgb, var(--v3-accent, #8b5cf6) 76%, transparent), 0 0 20px color-mix(in srgb, var(--v3-accent, #8b5cf6) 72%, transparent);
+	}
+	100% {
+		box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 0 0 1px color-mix(in srgb, var(--v3-accent, #8b5cf6) 40%, transparent);
+	}
+}
+
+.action-widget .v3code-picker-rung-track.dragging .v3code-picker-rung-knob,
+.action-widget .v3code-picker-rung-track.dragging .v3code-picker-rung-fill {
+	transition: none;
+}

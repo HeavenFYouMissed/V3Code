@@ -1,0 +1,715 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.interactive-session .interactive-response .chat-used-context-list.chat-thinking-items {
+	color: var(--vscode-descriptionForeground);
+	padding-top: 0;
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box {
+	outline: none;
+	position: relative;
+	color: var(--vscode-descriptionForeground);
+
+	contain: layout style;
+
+	.chat-thinking-external-resources {
+		margin-top: 4px;
+		margin-left: 5px;
+	}
+
+	.chat-used-context {
+		margin: 0px;
+	}
+
+	> .chat-used-context-label .monaco-button.monaco-icon-button {
+		display: flex;
+		align-items: center;
+		line-height: 1.5em;
+		font-size: 13px;
+
+		.monaco-button-mdlabel {
+			font-size: var(--vscode-chat-font-size-body-s);
+		}
+
+		.codicon {
+			font-size: 12px;
+		}
+
+		.rendered-markdown.collapsible-title-content {
+			line-height: unset;
+		}
+
+		.rendered-markdown.chat-thinking-title-detail {
+			display: inline;
+			font-size: inherit;
+			line-height: inherit;
+
+			> p {
+				display: inline;
+				margin: 0;
+			}
+		}
+
+		.chat-thinking-title-detail-text {
+			opacity: 0.7;
+		}
+
+		.chat-thinking-title-diff {
+			padding-left: 6px;
+
+			> .label-added {
+				color: var(--vscode-chat-linesAddedForeground);
+			}
+
+			> .label-removed {
+				padding-left: 4px;
+				color: var(--vscode-chat-linesRemovedForeground);
+			}
+		}
+	}
+
+	&.chat-thinking-active > .chat-used-context-label .monaco-button.monaco-icon-button {
+
+		.codicon.codicon-circle-filled {
+			display: none;
+		}
+	}
+
+	&.chat-thinking-active.chat-used-context-collapsed > .chat-used-context-label .monaco-button.monaco-icon-button {
+
+		.chat-thinking-title-shimmer {
+			background: linear-gradient(90deg,
+					var(--vscode-descriptionForeground) 0%,
+					var(--vscode-descriptionForeground) 30%,
+					var(--vscode-chat-thinkingShimmer) 50%,
+					var(--vscode-descriptionForeground) 70%,
+					var(--vscode-descriptionForeground) 100%);
+			background-size: 400% 100%;
+			background-clip: text;
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			animation: chat-thinking-shimmer 2s linear infinite;
+			will-change: background-position;
+		}
+	}
+
+	/* shimmer animation stuffs */
+	.chat-thinking-spinner-item .chat-thinking-spinner-label {
+		background: linear-gradient(90deg,
+				var(--vscode-descriptionForeground) 0%,
+				var(--vscode-descriptionForeground) 30%,
+				var(--vscode-chat-thinkingShimmer) 50%,
+				var(--vscode-descriptionForeground) 70%,
+				var(--vscode-descriptionForeground) 100%);
+		background-size: 400% 100%;
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		animation: chat-thinking-shimmer 2s linear infinite;
+		will-change: background-position;
+	}
+
+	&:not(.chat-used-context-collapsed) .chat-used-context-list.chat-thinking-collapsible {
+		overflow: visible;
+		max-height: none;
+	}
+
+	/* Curved connector from the header to the first thinking item */
+	&:not(.chat-used-context-collapsed)::after {
+		content: '';
+		position: absolute;
+		left: 3px;
+		top: 22px;
+		height: 16px;
+		width: 5px;
+		border-left: 1px solid var(--vscode-chat-requestBorder);
+		border-bottom: 1px solid var(--vscode-chat-requestBorder);
+		border-bottom-left-radius: 5px;
+	}
+
+	.monaco-button.hidden,
+	.chat-pinned-preview.hidden {
+		display: none;
+	}
+
+	.chat-used-context-list.chat-thinking-collapsible {
+		border: none;
+		border-radius: 0;
+		margin-bottom: 0;
+		position: relative;
+		overflow: hidden;
+		padding-top: 0;
+		margin-left: 5px;
+
+		.chat-tool-invocation-part {
+			padding: 4px 12px 4px 18px;
+			position: relative;
+		}
+
+		.chat-thinking-tool-wrapper {
+			/*
+			 * Compact grouped activity is a text transcript beside the shared connector rail,
+			 * not a stack of individually-iconed rows. Full input/output cards keep their
+			 * wrapper icon (and standalone cards never enter this selector).
+			 */
+			&:not(:has(> .chat-tool-invocation-part > .chat-confirmation-widget-container)) > .chat-thinking-icon:not(.codicon-error):not(.codicon-warning) {
+				display: none;
+			}
+
+			.chat-used-context {
+				margin-bottom: 0px;
+				margin-left: 4px;
+				padding-left: 2px;
+
+				.monaco-button.monaco-text-button {
+					color: var(--vscode-descriptionForeground);
+					display: flex;
+					align-items: center;
+
+					:hover {
+						color: var(--vscode-foreground);
+					}
+
+					.monaco-button:hover .chat-collapsible-hover-chevron {
+						opacity: 1;
+					}
+				}
+			}
+
+			.chat-used-context:not(.chat-used-context-collapsed) {
+				.monaco-button.monaco-text-button {
+					color: var(--vscode-foreground);
+				}
+			}
+
+			.progress-container,
+			.chat-confirmation-widget-container {
+				margin: 0 0 2px 6px;
+			}
+
+			/*
+			 * Compact progress rows render a second standalone icon inside their content.
+			 * Hide it with the wrapper glyph so Created/List/Search rows stay text-only.
+			 *
+			 * todo: ideally not !important, but the competing css has 14 specificity
+			 */
+			&:not(:has(> .chat-tool-invocation-part > .chat-confirmation-widget-container)) .progress-container > .codicon:first-child:not(.codicon-error):not(.codicon-warning),
+			.codicon.codicon-check,
+			.codicon.codicon-loading {
+				display: none !important;
+			}
+
+			.chat-collapsible-hover-chevron.codicon {
+				display: inline-flex;
+			}
+
+			.show-checkmarks .chat-confirmation-widget-title > .codicon:first-child:not(.chat-collapsible-hover-chevron) {
+				display: inline-block;
+			}
+
+			.show-checkmarks & .progress-container > .codicon.codicon-check {
+				display: inline-flex !important;
+			}
+
+			.chat-used-context.chat-hook-outcome-blocked,
+			.chat-used-context.chat-hook-outcome-warning {
+				padding: 4px 12px 4px 20px;
+				margin-bottom: 0;
+			}
+		}
+
+		.chat-thinking-item.markdown-content {
+			padding: 6px 12px 6px 24px;
+			position: relative;
+			font-size: var(--vscode-chat-font-size-body-s);
+
+			.progress-container {
+				margin-bottom: 0px;
+				padding-top: 0px;
+			}
+
+			[data-code] {
+				background-color: var(--vscode-textPreformat-background);
+				padding: 1px 3px;
+				border-radius: 4px;
+				border: 1px solid var(--vscode-textPreformat-border);
+				white-space: pre-wrap;
+			}
+		}
+
+		.chat-thinking-tool-wrapper .chat-markdown-part.rendered-markdown {
+			padding: 5px 12px 4px 24px;
+
+			.status-icon.codicon-check {
+				display: none;
+			}
+
+			.show-checkmarks .status-icon.codicon-check {
+				display: inline-flex;
+			}
+
+			.code:has(.chat-codeblock-pill-container) {
+				margin-bottom: 0px;
+
+				.chat-codeblock-pill-container {
+					margin-bottom: 0px;
+				}
+			}
+		}
+
+		/*
+		 * External-edit pills (agent host) sit directly inside
+		 * `.chat-thinking-tool-wrapper` rather than nested inside a markdown
+		 * code block, so they need the same left padding to clear the
+		 * absolutely-positioned thinking icon.
+		 */
+		.chat-thinking-tool-wrapper > .chat-codeblock-pill-container {
+			padding: 5px 12px 4px 24px;
+
+			.status-icon.codicon-check {
+				display: none;
+			}
+
+			.show-checkmarks .status-icon.codicon-check {
+				display: inline-flex;
+			}
+		}
+
+		.chat-confirmation-widget2 .chat-confirmation-message-terminal-disclaimer .chat-markdown-part.rendered-markdown {
+			padding: 2px 0px;
+		}
+
+		.chat-thinking-tool-wrapper .chat-terminal-thinking-content .chat-markdown-part.rendered-markdown {
+			padding: 0;
+		}
+
+		/* chain of thought lines */
+		.chat-thinking-tool-wrapper,
+		.chat-thinking-item.markdown-content,
+		.chat-thinking-spinner-item {
+			position: relative;
+
+			&::before {
+				content: '';
+				position: absolute;
+				left: 10.5px;
+				top: 0px;
+				bottom: 0px;
+				width: 1px;
+				border-radius: 0;
+				background-color: var(--vscode-chat-requestBorder);
+				mask-image: linear-gradient(to bottom, #000 0 5px, transparent 5px 25px, #000 24px 100%);
+			}
+
+			&:first-child::before {
+				mask-image: linear-gradient(to bottom, transparent 0 25px, #000 25px 100%);
+			}
+
+			&:last-child::before {
+				mask-image: linear-gradient(to bottom, #000 0 5px, transparent 5px 100%);
+			}
+
+			&:only-child::before {
+				background: none;
+				mask-image: none;
+			}
+
+			> .chat-thinking-icon {
+				position: absolute;
+				left: 5px;
+				top: 9px;
+				width: 12px;
+				height: 12px;
+				font-size: 12px;
+				line-height: 12px;
+				text-align: center;
+				color: var(--vscode-descriptionForeground);
+			}
+
+			/* the default book icon has a pixel of space at the bottom */
+			> .chat-thinking-icon .codicon.codicon-book {
+				top: 10px;
+			}
+		}
+
+		.chat-thinking-spinner-item {
+			padding: 6px 12px 6px 24px;
+			font-size: var(--vscode-chat-font-size-body-s);
+
+			.chat-thinking-spinner-label {
+				color: var(--vscode-descriptionForeground);
+			}
+		}
+	}
+
+	.chat-thinking-item {
+		padding: 6px 12px;
+		position: relative;
+
+		.progress-container {
+			margin-bottom: 0px;
+			padding-top: 0px;
+		}
+	}
+
+	.chat-thinking-text {
+		font-size: var(--vscode-chat-font-size-body-s);
+		padding: 0 10px;
+		display: block;
+	}
+
+	.rendered-markdown > p {
+		margin: 0;
+
+		& + p {
+			margin-top: 5px;
+		}
+	}
+}
+
+.interactive-session .interactive-response .value .chat-used-context.chat-terminal-thinking-collapsible {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	.monaco-button.monaco-text-button {
+		display: flex;
+		align-items: center;
+	}
+
+	.chat-used-context-list.chat-terminal-thinking-content {
+		border: none;
+		padding: 0;
+		margin-bottom: 2px;
+		overflow: hidden;
+
+		.codicon:not(.codicon-check, .codicon-loading) {
+			display: inline-flex;
+		}
+
+		.progress-container {
+			margin: 0;
+		}
+	}
+
+	.chat-terminal-thinking-content .rendered-markdown [data-code] {
+		margin-bottom: 0px;
+	}
+}
+
+.interactive-session .interactive-response .value .chat-thinking-fixed-mode {
+	outline: none;
+
+	/* Hide the header/collapse button while streaming — it reappears when chat-thinking-streaming is removed */
+	&:has(.chat-thinking-streaming) > .chat-used-context-label {
+		display: none;
+	}
+
+	&.chat-thinking-persistent-streaming {
+		margin-bottom: 3px;
+	}
+
+	> .monaco-scrollable-element > .shadow {
+		display: none;
+	}
+
+	/* Directional fade indicators via mask-image on the scrollable viewport */
+	&.chat-thinking-fade-top > .monaco-scrollable-element {
+		mask-image: linear-gradient(to bottom, transparent 0px, rgb(0 0 0 / 55%) 12px, black 32px);
+		-webkit-mask-image: linear-gradient(to bottom, transparent 0px, rgb(0 0 0 / 55%) 12px, black 32px);
+	}
+
+	&.chat-thinking-fade-bottom > .monaco-scrollable-element {
+		mask-image: linear-gradient(to top, transparent 0px, rgb(0 0 0 / 55%) 10px, black 24px);
+		-webkit-mask-image: linear-gradient(to top, transparent 0px, rgb(0 0 0 / 55%) 10px, black 24px);
+	}
+
+	&.chat-thinking-fade-top.chat-thinking-fade-bottom > .monaco-scrollable-element {
+		mask-image: linear-gradient(to bottom, transparent 0px, rgb(0 0 0 / 55%) 12px, black 32px, black calc(100% - 24px), rgb(0 0 0 / 55%) calc(100% - 10px), transparent 100%);
+		-webkit-mask-image: linear-gradient(to bottom, transparent 0px, rgb(0 0 0 / 55%) 12px, black 32px, black calc(100% - 24px), rgb(0 0 0 / 55%) calc(100% - 10px), transparent 100%);
+	}
+
+	&.chat-used-context-collapsed > .monaco-scrollable-element:has(.chat-used-context-list.chat-thinking-collapsible:not(.chat-thinking-streaming)) {
+		display: none;
+	}
+
+	&.chat-used-context-collapsed .chat-used-context-list.chat-thinking-collapsible.chat-thinking-streaming {
+		max-height: 200px;
+		overflow: hidden;
+		display: block;
+		margin-left: 0px;
+		padding-left: 0px;
+
+		.chat-tool-invocation-part {
+			padding-left: 13px;
+		}
+
+		.chat-thinking-spinner-item {
+			padding-left: 19px;
+		}
+
+		.chat-used-context.chat-hook-outcome-blocked,
+		.chat-used-context.chat-hook-outcome-warning {
+			padding-left: 15px;
+		}
+
+		.chat-thinking-item.markdown-content {
+			padding-left: 19px;
+		}
+
+		.chat-thinking-tool-wrapper .chat-markdown-part.rendered-markdown {
+			padding-left: 19px;
+		}
+
+		.chat-thinking-tool-wrapper > .chat-codeblock-pill-container {
+			padding-left: 19px;
+		}
+
+		/* chain of thought lines */
+		.chat-thinking-tool-wrapper,
+		.chat-thinking-item.markdown-content,
+		.chat-thinking-spinner-item {
+			&::before {
+				left: 5.5px;
+			}
+
+			> .chat-thinking-icon {
+				left: 0px;
+			}
+		}
+	}
+
+	&:not(.chat-used-context-collapsed) .chat-used-context-list.chat-thinking-collapsible.chat-thinking-streaming {
+		max-height: none;
+		overflow: visible;
+		display: block;
+	}
+
+	&:not(.chat-used-context-collapsed) > .monaco-scrollable-element {
+		overflow: visible;
+		height: auto;
+	}
+
+	.chat-used-context-list.chat-thinking-collapsible:not(.chat-thinking-streaming) {
+		max-height: none;
+		overflow: visible;
+	}
+
+	.chat-thinking-tool-wrapper .chat-used-context:not(.chat-used-context-collapsed) .chat-used-context-list {
+		display: block;
+	}
+}
+
+.editor-instance .interactive-session .interactive-response .value .chat-thinking-box .chat-thinking-item ::before {
+	background: var(--vscode-editor-background);
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box .chat-used-context-label code {
+	display: inline;
+	line-height: inherit;
+	padding: 1px 3px;
+}
+
+/* V3Code / Cursor-style collapsed thinking preview — muted one-line summary above the answer */
+.interactive-session .interactive-response .value .chat-thinking-box {
+	> .chat-used-context-label .monaco-button.monaco-icon-button {
+		color: var(--vscode-descriptionForeground);
+		opacity: 0.92;
+	}
+
+	&.chat-used-context-collapsed > .chat-used-context-label {
+		margin-bottom: 2px;
+
+		.monaco-button.monaco-icon-button {
+			font-size: 12px;
+			min-height: 22px;
+			height: auto;
+			padding: 2px 0;
+		}
+
+		.chat-thinking-title-detail-text {
+			opacity: 0.72;
+			font-size: 12.5px;
+			line-height: 1.5;
+			font-style: normal;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			max-width: 100%;
+		}
+
+		.rendered-markdown.chat-thinking-title-detail {
+			color: var(--vscode-descriptionForeground);
+		}
+	}
+
+	.chat-thinking-item.markdown-content {
+		color: var(--vscode-foreground);
+		opacity: 0.9;
+		font-size: 13px;
+		line-height: 1.55;
+	}
+}
+
+.interactive-session .interactive-response .value .chat-markdown-part.rendered-markdown {
+	line-height: 1.55;
+}
+
+/* V3Code: thinking items fade/slide in as they stream (Cursor-style). Opacity/transform only + reduced-motion guard. */
+@keyframes chat-thinking-item-in {
+	from {
+		opacity: 0;
+		transform: translateY(3px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box .chat-used-context-list.chat-thinking-collapsible {
+
+	.chat-thinking-item.markdown-content,
+	.chat-thinking-tool-wrapper {
+		animation: chat-thinking-item-in 180ms ease-out;
+		will-change: opacity, transform;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.interactive-session .interactive-response .value .chat-thinking-box .chat-used-context-list.chat-thinking-collapsible {
+
+		.chat-thinking-item.markdown-content,
+		.chat-thinking-tool-wrapper {
+			animation: none;
+		}
+	}
+}
+
+/* V3Code: soften diff stat colors inside thinking headers */
+.interactive-session .interactive-response .value .chat-thinking-box .chat-thinking-title-diff > .label-removed {
+	opacity: 0.78;
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box .chat-thinking-title-diff > .label-added {
+	opacity: 0.92;
+}
+
+/* =========================================================================================
+ * V3Code: THE SINGLE LIVE ACCENT.
+ * The whole field is intentionally restrained/monochrome. The one spark of color is V3 green
+ * (#6AA3CC) and it lives on exactly ONE thing: the active working row — its shimmering label and
+ * the chain-of-thought rail segment beside it. Cards, chips, diffs and completed rows stay
+ * colorless so the eye snaps to what's happening right now (Bloomberg/Linear "live edge").
+ * ========================================================================================= */
+
+/* The active working LABEL keeps the neutral theme-driven silver/chrome shimmer
+ * (see the base `.chat-thinking-spinner-label` rules ~L100 using `--vscode-chat-thinkingShimmer`).
+ * The single green live-accent lives ONLY on the rail/snake below — not the lettering. A prior
+ * high-specificity override recolored the label crest green (`#6AA3CC`), which erased the silver
+ * shimmer; it was removed so the label reads as chrome again while the rail stays the live spark. */
+
+/* The live edge: the rail next to the active working row is a solid green spark (no fade mask). */
+.interactive-session .interactive-response .value .chat-thinking-box .chat-used-context-list.chat-thinking-collapsible .chat-thinking-spinner-item::before {
+	background-color: color-mix(in srgb, #6AA3CC 80%, transparent);
+	mask-image: none;
+	-webkit-mask-image: none;
+	box-shadow: 0 0 5px color-mix(in srgb, #6AA3CC 45%, transparent);
+}
+
+/* =========================================================================================
+ * V3Code: SNAKE — a digital wave on the active working row. A short row of dots whose lit crest
+ * travels left-to-right (staggered per-dot animation-delay). It is the one bit of motion that says
+ * "thinking", and it shares the lone green accent. Disabled under reduced-motion.
+ * ========================================================================================= */
+.interactive-session .interactive-response .value .chat-thinking-box .v3-thinking-snake {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	margin: 0 7px 0 1px;
+	vertical-align: middle;
+	height: 8px;
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box .v3-thinking-snake .v3-snake-dot {
+	width: 3px;
+	height: 3px;
+	border-radius: 50%;
+	background-color: color-mix(in srgb, #6AA3CC 28%, var(--vscode-descriptionForeground));
+	/* The crest travels because each dot's animation-delay is staggered by index (set inline in the TS). */
+	animation: v3-snake-wave 1.1s ease-in-out infinite;
+	will-change: transform, opacity, background-color;
+}
+
+@keyframes v3-snake-wave {
+	0%, 100% {
+		transform: translateY(2px) scale(0.85);
+		opacity: 0.35;
+		background-color: color-mix(in srgb, #6AA3CC 22%, var(--vscode-descriptionForeground));
+	}
+	50% {
+		transform: translateY(-3px) scale(1.15);
+		opacity: 1;
+		background-color: color-mix(in srgb, #6AA3CC 95%, white);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.interactive-session .interactive-response .value .chat-thinking-box .v3-thinking-snake .v3-snake-dot {
+		animation: none;
+		opacity: 0.6;
+	}
+}
+
+/* Same snake on the working progress row that sits BELOW the thinking box (the "Working through
+ * it..." / "Reviewing results..." narration the agent emits between steps). That row hides its
+ * codicon while shimmering, so without this it is lettering only -- and a flattened text gradient
+ * leaves it looking completely static. The dots animate transform/opacity, so they stay visibly
+ * alive regardless of what any later rule does to the label's color. */
+.interactive-item-container .progress-container.shimmer-progress .v3-thinking-snake {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	margin: 0 6px 0 1px;
+	vertical-align: middle;
+	height: 8px;
+	flex: none;
+}
+
+.interactive-item-container .progress-container.shimmer-progress .v3-thinking-snake .v3-snake-dot {
+	width: 3px;
+	height: 3px;
+	border-radius: 50%;
+	background-color: color-mix(in srgb, #6AA3CC 28%, var(--vscode-descriptionForeground));
+	animation: v3-snake-wave 1.1s ease-in-out infinite;
+	will-change: transform, opacity, background-color;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.interactive-item-container .progress-container.shimmer-progress .v3-thinking-snake .v3-snake-dot {
+		animation: none;
+		opacity: 0.6;
+	}
+}
+
+/* Title variant: the same snake, shown inline-left of the collapsed subagent title (subagents run
+ * collapsed, so this is the visible "working now" motion on the agent card). Slightly tighter than the
+ * spinner-row snake so it reads as a compact indicator beside the title text. */
+.interactive-session .interactive-response .value .chat-thinking-box .v3-thinking-snake.v3-subagent-title-snake {
+	margin: 0 6px 0 0;
+	height: 7px;
+	gap: 2.5px;
+}
+
+.interactive-session .interactive-response .value .chat-thinking-box .v3-thinking-snake.v3-subagent-title-snake .v3-snake-dot {
+	width: 2.5px;
+	height: 2.5px;
+}

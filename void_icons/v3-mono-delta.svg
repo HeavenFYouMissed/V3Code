@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code Mono Delta</title>
+  <!--
+    Outer triangle vertices (apex tilted toward upper-left, sideways stance):
+      A = (380, 180)   apex top
+      B = (880, 540)   right
+      C = (200, 820)   lower-left
+    Interior vertex twisted right of the centroid:
+      I = (560, 500)
+    Three sub-triangles:
+      F1 = A-B-I  (top-right face, lightest)
+      F2 = B-C-I  (bottom face, mid-dark)
+      F3 = C-A-I  (left face, darkest)
+  -->
+  <defs>
+    <linearGradient id="lightFace" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#5A5A62"/>
+      <stop offset="100%" stop-color="#3C3C42"/>
+    </linearGradient>
+    <linearGradient id="midFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#2E2E33"/>
+      <stop offset="100%" stop-color="#1C1C20"/>
+    </linearGradient>
+    <linearGradient id="darkFace" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#191920"/>
+      <stop offset="100%" stop-color="#0A0A0E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Pure black canvas -->
+  <rect width="1024" height="1024" fill="#000000"/>
+
+  <!-- Three faceted sub-triangles -->
+  <g>
+    <!-- F3 left/back face — darkest -->
+    <polygon points="200,820 380,180 560,500" fill="url(#darkFace)"/>
+    <!-- F2 bottom face — mid grey -->
+    <polygon points="880,540 200,820 560,500" fill="url(#midFace)"/>
+    <!-- F1 top-right face — lightest (catches the light) -->
+    <polygon points="380,180 880,540 560,500" fill="url(#lightFace)"/>
+  </g>
+
+  <!-- Thin white edges: outer silhouette + three interior lines to the offset point -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Outer triangle -->
+    <polygon points="380,180 880,540 200,820"/>
+    <!-- Interior edges to the twisted-right vertex -->
+    <line x1="380" y1="180" x2="560" y2="500"/>
+    <line x1="880" y1="540" x2="560" y2="500"/>
+    <line x1="200" y1="820" x2="560" y2="500"/>
+  </g>
+</svg>

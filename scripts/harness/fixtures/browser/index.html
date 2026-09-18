@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>V3Code Browser Harness Fixture</title>
+	<style>
+		body { font-family: system-ui, sans-serif; margin: 2rem; }
+		#result { margin-top: 1rem; padding: 0.5rem; border: 1px solid #ccc; min-height: 1.5rem; }
+	</style>
+</head>
+<body>
+	<h1>V3Code Browser Harness Fixture</h1>
+	<p id="intro">Deterministic page for browser-tool evals.</p>
+	<button id="action-btn" type="button">Run test action</button>
+	<label>
+		Test input
+		<input id="test-input" type="text" placeholder="Type here" aria-label="Test input field">
+	</label>
+	<div id="result" aria-live="polite">Waiting for action</div>
+	<script>
+		document.getElementById('action-btn').addEventListener('click', () => {
+			document.getElementById('result').textContent = 'Action completed';
+		});
+		document.getElementById('test-input').addEventListener('input', (e) => {
+			document.getElementById('result').textContent = 'Typed: ' + e.target.value;
+		});
+	</script>
+</body>
+</html>

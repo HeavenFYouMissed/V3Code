@@ -1,0 +1,410 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* Cursor-faithful Agents rail (`workbench.parts.unifiedsidebar`) */
+
+.monaco-workbench .part.unifiedsidebar {
+	/* Height from floating-card gap layer; do not force 100% (clips radius). */
+	padding-top: 0 !important;
+	background: var(--vscode-sideBar-background, #131316);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.monaco-workbench .part.unifiedsidebar > .content {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar {
+	box-sizing: border-box;
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+	width: 100%;
+}
+
+/* Cursor: top row is just the collapse toggle, flush left. */
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar-header {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 8px;
+	height: 36px;
+	padding: 0 8px;
+	flex: 0 0 auto;
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar-actions .action-label {
+	padding: 3px;
+	opacity: 0.8;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar-actions .action-label:hover {
+	opacity: 1;
+}
+
+/* ===== Cursor-style content header: Search / New Agent / Customize ===== */
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+	background:
+		radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--vscode-foreground) 3%, transparent), transparent 28%),
+		color-mix(in srgb, var(--vscode-sideBar-background, #141416) 96%, transparent);
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-header {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 0 0 auto;
+	padding: 0 8px 6px;
+	/* Keep sticky session rows from painting over New Agent / Customize */
+	position: relative;
+	z-index: 2;
+	background: color-mix(in srgb, var(--vscode-sideBar-background, #141416) 96%, transparent);
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+	height: 30px;
+	margin-bottom: 6px;
+	padding: 0 8px 0 28px;
+	border-radius: 6px;
+	background: var(--vscode-input-background, #1e1e22);
+	border: 1px solid var(--vscode-input-border, transparent);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-search:focus-within {
+	border-color: var(--vscode-focusBorder, #4d4d55);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-search-icon {
+	position: absolute;
+	left: 8px;
+	font-size: 13px;
+	opacity: 0.6;
+	pointer-events: none;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-search-input {
+	flex: 1 1 auto;
+	background: transparent;
+	border: none;
+	outline: none;
+	color: var(--vscode-input-foreground, #ddd);
+	font-size: 12px;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-search-input::placeholder {
+	color: var(--vscode-input-placeholderForeground, #7a7a82);
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	height: 30px;
+	padding: 0 8px;
+	border-radius: 6px;
+	border: 1px solid transparent;
+	box-sizing: border-box;
+	cursor: pointer;
+	color: var(--vscode-foreground, #d4d4d4);
+	user-select: none;
+	transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row:hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+	border-color: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row:active {
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row:focus-visible {
+	outline: none;
+	border-color: color-mix(in srgb, var(--vscode-focusBorder) 70%, transparent);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--vscode-focusBorder) 18%, transparent);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row-icon {
+	font-size: 14px;
+	opacity: 0.85;
+	width: 16px;
+	text-align: center;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row-label {
+	flex: 1 1 auto;
+	font-size: 12px;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row-kbd {
+	font-size: 11px;
+	opacity: 0.5;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row-badge {
+	flex: 0 0 auto;
+	padding: 1px 6px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 12%, transparent);
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--vscode-foreground) 5%, transparent);
+	color: var(--vscode-descriptionForeground);
+	font-size: 9px;
+	font-weight: 600;
+	letter-spacing: 0.05em;
+	line-height: 15px;
+	text-transform: uppercase;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-row-tail-icon {
+	flex: 0 0 auto;
+	width: 16px;
+	font-size: 12px;
+	text-align: center;
+	opacity: 0.5;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-mobile-preview {
+	color: color-mix(in srgb, var(--vscode-foreground) 82%, var(--vscode-descriptionForeground));
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-mobile-preview:hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list {
+	display: flex;
+	flex: 1 1 0;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
+	position: relative;
+	z-index: 0;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list > * {
+	flex: 1 1 0;
+	min-height: 0;
+	overflow: hidden;
+}
+
+/* The unified rail uses its own quiet, persistent selection language. Keep
+ * these overrides scoped so Explorer, search and the full Sessions editor
+ * retain their normal workbench list behavior. */
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row {
+	border-radius: 8px;
+	box-sizing: border-box;
+	outline: none !important;
+	transition: background-color 140ms ease, box-shadow 140ms ease, color 140ms ease;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-item {
+	padding: 5px 7px;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-title-row {
+	padding-bottom: 3px;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row:hover:not(.selected) {
+	background: color-mix(in srgb, var(--vscode-foreground) 6%, transparent) !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row.focused:not(.selected) {
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent) !important;
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vscode-foreground) 9%, transparent) !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row.selected,
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list:focus .monaco-list-row.selected {
+	background: color-mix(in srgb, var(--vscode-foreground) 11%, var(--vscode-sideBar-background, #1a1a1d)) !important;
+	box-shadow:
+		inset 2px 0 0 color-mix(in srgb, var(--vscode-foreground) 38%, transparent),
+		inset 0 0 0 1px color-mix(in srgb, var(--vscode-foreground) 7%, transparent) !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row.selected:hover,
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row.selected.focused {
+	background: color-mix(in srgb, var(--vscode-foreground) 15%, var(--vscode-sideBar-background, #1a1a1d)) !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row:has(.agent-session-section) {
+	background: color-mix(in srgb, var(--vscode-foreground) 4%, transparent) !important;
+	box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vscode-foreground) 5%, transparent);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row:has(.agent-session-section):hover,
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-sessions-viewer .monaco-list-row:has(.agent-session-section).focused {
+	background: color-mix(in srgb, var(--vscode-foreground) 8%, transparent) !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-section {
+	padding: 0 9px;
+	text-transform: none;
+	letter-spacing: 0.01em;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-section-label {
+	font-weight: 600;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-live-status.running .agent-session-live-dot {
+		/* Matches the running dot's own colour (cool blue, hue 205). Was green via
+		testing.iconPassed, which left a green halo on a blue rail. */
+	box-shadow: 0 0 6px color-mix(in srgb, #73a5c9 65%, transparent);
+	animation: unified-agent-live-pulse 1.8s ease-in-out infinite;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .monaco-list-row:hover .agent-session-live-status,
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .monaco-list-row.focused .agent-session-live-status {
+	display: none;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .monaco-list:focus::before {
+	display: none !important;
+}
+
+@keyframes unified-agent-live-pulse {
+	0%, 100% { opacity: 0.62; transform: scale(0.82); }
+	50% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .agent-session-live-status.running .agent-session-live-dot {
+		animation: none;
+		opacity: 1;
+		transform: none;
+	}
+}
+/* Breath so the last session isn't jammed into the account chip */
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .monaco-list-rows {
+	padding-bottom: 16px !important;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-cursor-list .monaco-scrollable-element {
+	padding-bottom: 4px;
+}
+
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar-content,
+.monaco-workbench .part.unifiedsidebar .unified-agents-sidebar-content > * {
+	display: flex;
+	flex: 1 1 0;
+	flex-direction: column;
+	min-height: 0;
+	overflow: hidden;
+}
+
+/* Cursor-style account chip at bottom of Agents rail */
+.monaco-workbench .part.unifiedsidebar .unified-agents-account {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex: 0 0 auto;
+	height: 56px;
+	padding: 0 10px;
+	border-top: 1px solid rgba(255, 255, 255, 0.06);
+	cursor: pointer;
+	user-select: none;
+	box-sizing: border-box;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account:hover {
+	background: rgba(255, 255, 255, 0.04);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--vscode-badge-background, #0a0a0a);
+	color: var(--vscode-badge-foreground, #e8e6e0);
+	font-size: 12px;
+	font-weight: 700;
+	overflow: hidden;
+	border: 1px solid var(--vscode-contrastBorder, color-mix(in srgb, var(--vscode-foreground) 35%, transparent));
+	box-shadow: 0 0 0 0.5px color-mix(in srgb, var(--vscode-foreground) 12%, transparent);
+	box-sizing: border-box;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-meta {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	flex: 1 1 auto;
+	gap: 1px;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-name {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--vscode-foreground, #e8e6e0);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-plan {
+	font-size: 11px;
+	color: var(--vscode-descriptionForeground, #8a8a92);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-update {
+	flex: 0 0 auto;
+	height: 24px;
+	padding: 0 10px;
+	border: none;
+	border-radius: 999px;
+	background: var(--vscode-button-background, #9ecbff);
+	color: var(--vscode-button-foreground, #1a1a1d);
+	font-size: 11px;
+	font-weight: 600;
+	cursor: pointer;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-update:hover {
+	filter: brightness(1.05);
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-gear {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: var(--vscode-foreground, #ddd);
+	opacity: 0.7;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.monaco-workbench .part.unifiedsidebar .unified-agents-account-gear:hover {
+	opacity: 1;
+}
+
+.unified-agents-account-menu {
+	background: var(--vscode-menu-background, #1e1e22);
+	border: 1px solid var(--vscode-menu-border, color-mix(in srgb, var(--vscode-foreground) 10%, transparent));
+	border-radius: 10px;
+	padding: 6px;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+	color: var(--vscode-menu-foreground, #f0eee8);
+	font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+	font-size: 13px;
+}
+.unified-agents-account-menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 10px;
+	border-radius: 6px;
+	cursor: pointer;
+}
+.unified-agents-account-menu-item:hover {
+	background: rgba(255, 255, 255, 0.06);
+}
+.unified-agents-account-menu-icon {
+	opacity: 0.85;
+	width: 16px;
+	text-align: center;
+}
+.unified-agents-account-menu-sep {
+	height: 1px;
+	margin: 4px 6px;
+	background: rgba(255, 255, 255, 0.08);
+}
+
+/* Agents is its own floating card — no flush border into Chat. */

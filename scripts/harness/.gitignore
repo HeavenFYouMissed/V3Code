@@ -1,0 +1,3 @@
+# Run artifacts (transcripts + eval result JSON) are regenerated every run.
+# Keep the runner + prompt-sets in git; don't commit per-run output.
+results/

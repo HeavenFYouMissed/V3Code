@@ -1,0 +1,30 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* Chat is intentionally independent from the Agent Sessions view. The workbench view container
+ * owns the sash, visibility, and persisted placement between the two panes. */
+.chat-viewpane {
+	display: flex;
+	flex-direction: column;
+
+	.chat-controls-container {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+		height: 100%;
+		min-height: 0;
+		min-width: 0;
+
+		.interactive-session {
+			/* needed so that the chat input does not overflow and input grows over content above */
+			width: 100%;
+			min-height: 0;
+			min-width: 0;
+		}
+	}
+}

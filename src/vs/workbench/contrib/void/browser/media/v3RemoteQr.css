@@ -1,0 +1,139 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 V3Code / Glass Devtools. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
+ *--------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+.v3-remote-overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 2600;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.55);
+	backdrop-filter: blur(6px);
+}
+
+.v3-remote-panel {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	max-width: min(92vw, 420px);
+	padding: 26px 26px 22px;
+	border: 1px solid color-mix(in srgb, var(--vscode-foreground) 12%, transparent);
+	border-radius: 16px;
+	background: var(--vscode-editorWidget-background, #1e1e22);
+	box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.v3-remote-close {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--vscode-descriptionForeground);
+	cursor: pointer;
+}
+
+.v3-remote-close:hover {
+	background: color-mix(in srgb, var(--vscode-foreground) 10%, transparent);
+	color: var(--vscode-foreground);
+}
+
+.v3-remote-title {
+	font-size: 17px;
+	font-weight: 600;
+	text-align: center;
+	color: var(--vscode-foreground);
+}
+
+.v3-remote-body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+}
+
+/* The canvas already paints its own white plate and quiet zone, so this only
+	rounds the corners. Deliberately no filter, opacity or theme colour: contrast is
+	what a scanner needs most. */
+.v3-remote-qr {
+	display: block;
+	border-radius: 10px;
+	background: #ffffff;
+	image-rendering: pixelated;
+	user-select: none;
+}
+
+.v3-remote-status {
+	font-size: 13px;
+	color: var(--vscode-foreground);
+}
+
+.v3-remote-status.is-connected {
+	color: var(--vscode-testing-iconPassed, #3fb950);
+	font-weight: 600;
+}
+
+.v3-remote-status.is-error {
+	color: var(--vscode-errorForeground);
+	font-weight: 600;
+}
+
+.v3-remote-hint {
+	max-width: 300px;
+	font-size: 12px;
+	line-height: 1.45;
+	text-align: center;
+	color: var(--vscode-descriptionForeground);
+}
+
+/* Numbered onboarding steps above the QR. Left-aligned: centred multi-line
+	instructions read as decoration, and these are the part users must not skip. */
+.v3-remote-steps {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	width: 100%;
+}
+
+.v3-remote-step {
+	font-size: 12px;
+	line-height: 1.45;
+	color: var(--vscode-foreground);
+}
+
+.v3-remote-url {
+	max-width: 320px;
+	padding: 6px 9px;
+	border-radius: 7px;
+	background: color-mix(in srgb, var(--vscode-foreground) 7%, transparent);
+	color: var(--vscode-descriptionForeground);
+	font-family: var(--monaco-monospace-font, monospace);
+	font-size: 10px;
+	overflow-wrap: anywhere;
+	cursor: pointer;
+}
+
+.v3-remote-url:hover {
+	color: var(--vscode-foreground);
+}
+
+.v3-remote-url.is-copied {
+	color: var(--vscode-testing-iconPassed, #3fb950);
+}

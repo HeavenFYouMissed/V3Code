@@ -1,0 +1,35 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "v3update",
+	"account_id": "ccc21ee52b1ee0531162c3b2215e2f85",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-06-01",
+	"triggers": {
+		// Delete anonymous runtime-adoption rows after 180 days. The table stores
+		// one bounded state row per install/build, never a raw event stream.
+		"crons": ["17 3 * * *"]
+	},
+	// The update feed host baked into VSElite product.json (updateUrl:
+	// https://update.v3code.dev). custom_domain:true makes `wrangler deploy`
+	// auto-provision the DNS record + edge TLS cert — but ONLY if v3code.dev is a
+	// zone on this Cloudflare account. If it is not (e.g. DNS lives elsewhere),
+	// delete this "routes" block and instead point update.v3code.dev at the
+	// worker with a CNAME to the workers.dev subdomain. Either way the client
+	// just needs https://update.v3code.dev to reach this worker.
+	// See docs/V3CODE-UPDATE-ROUTE.md.
+	"routes": [
+		{ "pattern": "update.v3code.dev", "custom_domain": true }
+	],
+	"r2_buckets": [
+		// manifests/{quality}/{platform}/latest.json (update-check reads) and
+		// builds/{quality}/{platform}/{filename} (release artifact bytes), both
+		// produced by CI. This worker never writes to the bucket.
+		{ "binding": "RELEASES", "bucket_name": "v3code-releases" }
+	],
+	"d1_databases": [
+		// Download + install analytics. Written non-blocking via ctx.waitUntil in
+		// the download/update paths; a D1 failure never affects serving bytes.
+		// Read back via GET /api/stats?token=<ADMIN_TOKEN>. See migrations/.
+		{ "binding": "ANALYTICS", "database_name": "v3code-analytics", "database_id": "ef7d82ed-8729-4529-8702-55bab9f02414" }
+	]
+}

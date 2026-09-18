@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code — The Void Cutout</title>
+  <defs>
+    <!-- Solid dark icon body -->
+    <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#10131F"/>
+      <stop offset="100%" stop-color="#06070C"/>
+    </linearGradient>
+    <!-- Interior glow: purple top -> green bottom -->
+    <linearGradient id="interior" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%"  stop-color="#B794FF"/>
+      <stop offset="35%" stop-color="#8B5CF6"/>
+      <stop offset="65%" stop-color="#52A36F"/>
+      <stop offset="100%" stop-color="#7FE650"/>
+    </linearGradient>
+    <!-- Inner glow on the cutout -->
+    <filter id="cutGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="b"/>
+      <feColorMatrix in="b" values="0 0 0 0 0.55  0 0 0 0 0.4  0 0 0 0 0.95  0 0 0 0.9 0" result="pg"/>
+      <feMerge>
+        <feMergeNode in="pg"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Clip to rounded-square -->
+    <clipPath id="bodyClip">
+      <rect x="96" y="96" width="832" height="832" rx="190" ry="190"/>
+    </clipPath>
+    <!-- The V-chevron cutout mask -->
+    <mask id="vCut" maskUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="1024" height="1024" fill="white"/>
+      <!-- Two diagonal slices meeting at center-bottom forming a V -->
+      <polygon points="220,200 512,760 412,760 160,260" fill="black"/>
+      <polygon points="804,200 864,260 612,760 512,760" fill="black"/>
+    </mask>
+  </defs>
+
+  <!-- Outer dark canvas -->
+  <rect width="1024" height="1024" fill="#0B0D14"/>
+
+  <g clip-path="url(#bodyClip)">
+    <!-- Interior glow layer (revealed through the V cutout) -->
+    <rect x="96" y="96" width="832" height="832" fill="url(#interior)" filter="url(#cutGlow)"/>
+
+    <!-- Dark body painted over interior, with V cut out via mask -->
+    <rect x="96" y="96" width="832" height="832" fill="url(#bodyFill)" mask="url(#vCut)"/>
+
+    <!-- Crisp edge highlights along the cutout -->
+    <polyline points="220,200 512,760" fill="none" stroke="#C8B0FF" stroke-width="3" opacity="0.85"/>
+    <polyline points="160,260 412,760" fill="none" stroke="#A8F58A" stroke-width="2" opacity="0.55"/>
+    <polyline points="804,200 512,760" fill="none" stroke="#C8B0FF" stroke-width="3" opacity="0.85"/>
+    <polyline points="864,260 612,760" fill="none" stroke="#A8F58A" stroke-width="2" opacity="0.55"/>
+
+    <!-- Soft hot-spot at the V tip -->
+    <circle cx="512" cy="760" r="14" fill="#FFFFFF" opacity="0.85"/>
+    <circle cx="512" cy="760" r="40" fill="#7FE650" opacity="0.35"/>
+  </g>
+
+  <!-- Hairline border -->
+  <rect x="96" y="96" width="832" height="832" rx="190" ry="190"
+        fill="none" stroke="#1A1E2E" stroke-width="2"/>
+</svg>

@@ -1,0 +1,1284 @@
+{
+	"$comment": "Required artifacts per platform, verified after packaging and before signing by build/verify/verify-package.mjs. Every path was taken from a walked real package (mac 1.4.9-0084) or from the packaging script line that stages it (win32 beast/helper) — never from memory. shared=true means the artifact must exist on EVERY platform (feature parity); the --parity mode enforces that every shared id is declared everywhere. minBytes is ~half the observed real size, to catch truncated or zero-byte copies. NOTE .v3code is a MIX: skills/, rules/, and mcp/ are shipped product content the runtime resolves at appRoot, everything else in it is dev state — so the required and forbidden lists both point INTO that directory. 'forbidden' paths must NOT exist in a shippable tree (a trailing * is a prefix match on the parent directory's entries; a <dir>/**/*<suffix> pattern matches any file under <dir>, recursively, whose name ends with <suffix>). 'asar' entries assert what lives INSIDE an archive — the one place a file-level tree walk is blind; expect:'empty' pins the current build's behaviour (all modules unpacked) so a future switch to packing them fails loudly instead of passing a tree check while the app cannot resolve them.",
+	"minBytesDefault": 1024,
+	"runtimeAssetGroups": {
+		"semantic-index-structural": {
+			"artifactIds": [
+				"tree-sitter-runtime-js",
+				"tree-sitter-runtime-wasm"
+			],
+			"dynamic": "semantic-index-grammars"
+		},
+		"semantic-index-potion": {
+			"artifactIds": [
+				"transformers-js",
+				"onnx-node-binding",
+				"onnx-node-runtime-lib",
+				"onnx-web-wasm",
+				"sharp-xenova-native",
+				"sharp-xenova-libvips"
+			]
+		},
+		"semantic-index-qwen": {
+			"artifactIds": [
+				"node-llama-cpp-js",
+				"llama-addon"
+			],
+			"externalAssets": [
+				"Qwen3 embedding and reranker GGUF files in the per-user model cache"
+			]
+		},
+		"beast-local-index": {
+			"artifactIds": [
+				"beast-sidecar"
+			]
+		},
+		"computer-use": {
+			"platforms": ["darwin-arm64", "win32-x64"],
+			"artifactIds": [
+				"computer-use-helper"
+			]
+		},
+		"native-workspace-services": {
+			"artifactIds": [
+				"ripgrep",
+				"sqlite3-native",
+				"reflink-native"
+			]
+		},
+		"bundled-agent-content": {
+			"artifactIds": [
+				"bundled-skills",
+				"bundled-rules",
+				"mcp-stdio-bridge"
+			]
+		},
+		"app-process-bootstrap": {
+			"artifactIds": [
+				"bootstrap-fork",
+				"extension-host-main",
+				"shared-process-main"
+			]
+		},
+		"workbench-window-shell": {
+			"artifactIds": [
+				"workbench-shell-html",
+				"workbench-shell-js",
+				"workbench-shell-css",
+				"preload-main",
+				"preload-aux",
+				"preload-browser-view"
+			]
+		},
+		"sessions-window-shell": {
+			"artifactIds": [
+				"sessions-shell-html",
+				"sessions-shell-js",
+				"sessions-shell-css"
+			]
+		},
+		"integrated-terminal": {
+			"artifactIds": [
+				"pty-host-main",
+				"node-pty-native",
+				"node-pty-helper"
+			]
+		},
+		"textmate-tokenization": {
+			"artifactIds": [
+				"oniguruma-wasm"
+			]
+		},
+		"markdown-preview": {
+			"artifactIds": [
+				"markdown-preview-index",
+				"markdown-preview-pre",
+				"markdown-preview-mermaid",
+				"markdown-preview-katex-css"
+			]
+		},
+		"localization-bootstrap": {
+			"artifactIds": [
+				"nls-messages",
+				"nls-keys"
+			]
+		}
+	},
+	"derivedPlatforms": {
+		"darwin-x64": {
+			"from": "darwin-arm64",
+			"replacements": [
+				["darwin-arm64v8", "darwin-x64"],
+				["mac-arm64-metal", "mac-x64"],
+				["darwin/arm64", "darwin/x64"],
+				["darwin-arm64", "darwin-x64"]
+			],
+			"overrides": {
+				"artifacts": {
+					"node-pty-helper": {
+						"minBytes": 9000
+					}
+				}
+			}
+		}
+	},
+	"platforms": {
+		"darwin-arm64": {
+			"root": ".build/VSCode-darwin-arm64/V3Code.app",
+			"themeContributions": {
+				"extensionsPath": "Contents/Resources/app/extensions",
+				"requiredThemeLabels": ["Dark 2026"],
+				"forbiddenExtensionNameSha256": ["f286871fda0467c9b352375ff460be7e9a794f9dd565b4f778e16a979a8001cd"]
+			},
+			"artifacts": [
+				{
+					"id": "bootstrap-fork",
+					"path": "Contents/Resources/app/out/bootstrap-fork.js",
+					"minBytes": 19000,
+					"shared": true
+				},
+				{
+					"id": "extension-host-main",
+					"path": "Contents/Resources/app/out/vs/workbench/api/node/extensionHostProcess.js",
+					"minBytes": 1000000,
+					"shared": true
+				},
+				{
+					"id": "shared-process-main",
+					"path": "Contents/Resources/app/out/vs/code/electron-utility/sharedProcess/sharedProcessMain.js",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-html",
+					"path": "Contents/Resources/app/out/vs/code/electron-browser/workbench/workbench.html",
+					"minBytes": 700,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-js",
+					"path": "Contents/Resources/app/out/vs/code/electron-browser/workbench/workbench.js",
+					"minBytes": 13000,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-css",
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.css",
+					"minBytes": 650000,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-html",
+					"path": "Contents/Resources/app/out/vs/sessions/electron-browser/sessions.html",
+					"minBytes": 700,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-js",
+					"path": "Contents/Resources/app/out/vs/sessions/electron-browser/sessions.js",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-css",
+					"path": "Contents/Resources/app/out/vs/sessions/sessions.desktop.main.css",
+					"minBytes": 600000,
+					"shared": true
+				},
+				{
+					"id": "preload-main",
+					"path": "Contents/Resources/app/out/vs/base/parts/sandbox/electron-browser/preload.js",
+					"minBytes": 1000,
+					"shared": true
+				},
+				{
+					"id": "preload-aux",
+					"path": "Contents/Resources/app/out/vs/base/parts/sandbox/electron-browser/preload-aux.js",
+					"minBytes": 300,
+					"shared": true
+				},
+				{
+					"id": "preload-browser-view",
+					"path": "Contents/Resources/app/out/vs/platform/browserView/electron-browser/preload-browserView.js",
+					"minBytes": 6000,
+					"shared": true
+				},
+				{
+					"id": "pty-host-main",
+					"path": "Contents/Resources/app/out/vs/platform/terminal/node/ptyHostMain.js",
+					"minBytes": 180000,
+					"shared": true
+				},
+				{
+					"id": "node-pty-native",
+					"path": "Contents/Resources/app/node_modules/node-pty/build/Release/pty.node",
+					"minBytes": 45000,
+					"shared": true
+				},
+				{
+					"id": "node-pty-helper",
+					"path": "Contents/Resources/app/node_modules/node-pty/build/Release/spawn-helper",
+					"minBytes": 25000,
+					"shared": true
+				},
+				{
+					"id": "oniguruma-wasm",
+					"path": "Contents/Resources/app/node_modules/vscode-oniguruma/release/onig.wasm",
+					"minBytes": 230000,
+					"shared": true
+				},
+				{
+					"id": "nls-messages",
+					"path": "Contents/Resources/app/out/nls.messages.json",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "nls-keys",
+					"path": "Contents/Resources/app/out/nls.keys.json",
+					"minBytes": 330000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-index",
+					"path": "Contents/Resources/app/extensions/markdown-language-features/media/index.js",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-pre",
+					"path": "Contents/Resources/app/extensions/markdown-language-features/media/pre.js",
+					"minBytes": 900,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-mermaid",
+					"path": "Contents/Resources/app/extensions/mermaid-markdown-features/markdown-preview-out/index.js",
+					"minBytes": 12000000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-katex-css",
+					"path": "Contents/Resources/app/extensions/markdown-math/notebook-out/katex.min.css",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "beast-sidecar",
+					"path": "Contents/Resources/beast/beast",
+					"minBytes": 6000000,
+					"shared": true
+				},
+				{
+					"id": "computer-use-helper",
+					"path": "Contents/Resources/computerUse/darwin/v3code-computer-use-helper",
+					"minBytes": 1150000,
+					"shared": true,
+					"platforms": ["darwin-arm64", "win32-x64"]
+				},
+				{
+					"id": "claude-agent-sdk-native",
+					"path": "Contents/Resources/app/node_modules/@anthropic-ai/claude-agent-sdk-darwin-arm64/claude",
+					"minBytes": 107000000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-sdk-mjs",
+					"path": "Contents/Resources/app/node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs",
+					"minBytes": 344000,
+					"shared": true
+				},
+				{
+					"id": "acp-sdk-js",
+					"path": "Contents/Resources/app/node_modules/@agentclientprotocol/sdk/dist/acp.js",
+					"minBytes": 60000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-bridge-mjs",
+					"path": "Contents/Resources/app/node_modules/@anthropic-ai/claude-agent-sdk/bridge.mjs",
+					"minBytes": 438000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-assistant-mjs",
+					"path": "Contents/Resources/app/node_modules/@anthropic-ai/claude-agent-sdk/assistant.mjs",
+					"minBytes": 712000,
+					"shared": true
+				},
+				{
+					"id": "anthropic-api-sdk",
+					"path": "Contents/Resources/app/node_modules/@anthropic-ai/sdk/index.js",
+					"minBytes": 1900,
+					"shared": true
+				},
+				{
+					"id": "agent-host-main",
+					"path": "Contents/Resources/app/out/vs/platform/agentHost/node/agentHostMain.js",
+					"minBytes": 421000,
+					"shared": true
+				},
+				{
+					"id": "sessions-window-bundle",
+					"path": "Contents/Resources/app/out/vs/sessions/sessions.desktop.main.js",
+					"minBytes": 9250000,
+					"shared": true
+				},
+				{
+					"id": "transformers-js",
+					"path": "Contents/Resources/app/node_modules/@xenova/transformers/dist/transformers.js",
+					"minBytes": 865000,
+					"shared": true
+				},
+				{
+					"id": "onnx-node-binding",
+					"path": "Contents/Resources/app/node_modules/onnxruntime-node/bin/napi-v3/darwin/arm64/onnxruntime_binding.node",
+					"minBytes": 102000,
+					"shared": true
+				},
+				{
+					"id": "onnx-node-runtime-lib",
+					"path": "Contents/Resources/app/node_modules/onnxruntime-node/bin/napi-v3/darwin/arm64/libonnxruntime.1.14.0.dylib",
+					"minBytes": 10500000,
+					"shared": true
+				},
+				{
+					"id": "onnx-web-wasm",
+					"path": "Contents/Resources/app/node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded.wasm",
+					"minBytes": 4980000,
+					"shared": true
+				},
+				{
+					"id": "sharp-xenova-native",
+					"path": "Contents/Resources/app/node_modules/@xenova/transformers/node_modules/sharp/build/Release/sharp-darwin-arm64v8.node",
+					"minBytes": 209000,
+					"shared": true
+				},
+				{
+					"id": "sharp-xenova-libvips",
+					"path": "Contents/Resources/app/node_modules/@xenova/transformers/node_modules/sharp/vendor/8.14.5/darwin-arm64v8/lib/libvips-cpp.42.dylib",
+					"minBytes": 7900000,
+					"shared": true
+				},
+				{
+					"id": "sharp-img-native",
+					"path": "Contents/Resources/app/node_modules/@img/sharp-darwin-arm64/lib/sharp-darwin-arm64.node",
+					"minBytes": 139000,
+					"shared": true
+				},
+				{
+					"id": "sharp-img-libvips",
+					"path": "Contents/Resources/app/node_modules/@img/sharp-libvips-darwin-arm64/lib/libvips-cpp.42.dylib",
+					"minBytes": 7750000,
+					"shared": true
+				},
+				{
+					"id": "llama-addon",
+					"path": "Contents/Resources/app/node_modules/@node-llama-cpp/mac-arm64-metal/bins/mac-arm64-metal/llama-addon.node",
+					"minBytes": 315000,
+					"shared": true
+				},
+				{
+					"id": "node-llama-cpp-js",
+					"path": "Contents/Resources/app/node_modules/node-llama-cpp/dist/index.js",
+					"minBytes": 3500,
+					"shared": true
+				},
+				{
+					"id": "mcp-sdk",
+					"path": "Contents/Resources/app/node_modules/@modelcontextprotocol/sdk/dist/cjs/server/mcp.js",
+					"minBytes": 20000,
+					"shared": true
+				},
+				{
+					"id": "ripgrep",
+					"path": "Contents/Resources/app/node_modules/@vscode/ripgrep-universal/bin/darwin-arm64/rg",
+					"minBytes": 2260000,
+					"shared": true
+				},
+				{
+					"id": "sqlite3-native",
+					"path": "Contents/Resources/app/node_modules/@vscode/sqlite3/build/Release/vscode-sqlite3.node",
+					"minBytes": 946000,
+					"shared": true
+				},
+				{
+					"id": "reflink-native",
+					"path": "Contents/Resources/app/node_modules/@reflink/reflink-darwin-arm64/reflink.darwin-arm64.node",
+					"minBytes": 210000,
+					"shared": true
+				},
+				{
+					"id": "openai-sdk",
+					"path": "Contents/Resources/app/node_modules/openai/index.js",
+					"minBytes": 9000,
+					"shared": true
+				},
+				{
+					"id": "groq-sdk",
+					"path": "Contents/Resources/app/node_modules/groq-sdk/index.js",
+					"minBytes": 4300,
+					"shared": true
+				},
+				{
+					"id": "google-genai-sdk",
+					"path": "Contents/Resources/app/node_modules/@google/genai/dist/node/index.mjs",
+					"minBytes": 211000,
+					"shared": true
+				},
+				{
+					"id": "mistral-sdk",
+					"path": "Contents/Resources/app/node_modules/@mistralai/mistralai/index.js",
+					"minBytes": 1200,
+					"shared": true
+				},
+				{
+					"id": "ollama-client",
+					"path": "Contents/Resources/app/node_modules/ollama/dist/browser.cjs",
+					"minBytes": 7500,
+					"shared": true
+				},
+				{
+					"id": "playwright-core",
+					"path": "Contents/Resources/app/node_modules/playwright-core/lib/server/index.js",
+					"minBytes": 1200,
+					"shared": true
+				},
+				{
+					"id": "hono",
+					"path": "Contents/Resources/app/node_modules/hono/dist/cjs/index.js",
+					"minBytes": 512,
+					"shared": true
+				},
+				{
+					"id": "three-js",
+					"path": "Contents/Resources/app/node_modules/three/build/three.module.js",
+					"minBytes": 324000,
+					"shared": true
+				},
+				{
+					"id": "mcp-stdio-bridge",
+					"path": "Contents/Resources/app/.v3code/mcp/v3code-mcp-bridge.mjs",
+					"minBytes": 3000,
+					"shared": true
+				},
+				{
+					"id": "bundled-skills",
+					"path": "Contents/Resources/app/.v3code/skills",
+					"minBytes": 200000,
+					"shared": true
+				},
+				{
+					"id": "bundled-rules",
+					"path": "Contents/Resources/app/.v3code/rules",
+					"minBytes": 3000,
+					"shared": true
+				},
+				{
+					"id": "tree-sitter-runtime-js",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter.js",
+					"minBytes": 80000,
+					"shared": true
+				},
+				{
+					"id": "tree-sitter-runtime-wasm",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter.wasm",
+					"minBytes": 100000,
+					"shared": true
+				},
+				{
+					"id": "grammar-python",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-python.wasm",
+					"minBytes": 200000,
+					"shared": true
+				},
+				{
+					"id": "grammar-javascript",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-javascript.wasm",
+					"minBytes": 150000,
+					"shared": true
+				},
+				{
+					"id": "grammar-tsx",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-tsx.wasm",
+					"minBytes": 650000,
+					"shared": true
+				},
+				{
+					"id": "grammar-go",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-go.wasm",
+					"minBytes": 100000,
+					"shared": true
+				},
+				{
+					"id": "grammar-rust",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-rust.wasm",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-java",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-java.wasm",
+					"minBytes": 150000,
+					"shared": true
+				},
+				{
+					"id": "grammar-c-sharp",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-c-sharp.wasm",
+					"minBytes": 2400000,
+					"shared": true
+				},
+				{
+					"id": "grammar-cpp",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-cpp.wasm",
+					"minBytes": 2500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-ruby",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-ruby.wasm",
+					"minBytes": 1000000,
+					"shared": true
+				},
+				{
+					"id": "grammar-php",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-php.wasm",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-typescript",
+					"path": "Contents/Resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-typescript.wasm",
+					"minBytes": 500000,
+					"shared": true
+				}
+			],
+			"forbidden": [
+				{
+					"id": "no-isolated-vm-source-archive",
+					"path": "Contents/Resources/app/node_modules/isolated-vm/**/*.tgz"
+				},
+				{
+					"id": "no-external-vselite-dependencies",
+					"path": "Contents/Resources/VSElite"
+				},
+				{
+					"id": "no-workspace-id",
+					"path": "Contents/Resources/app/.v3code/workspace-id"
+				},
+				{
+					"id": "no-project-status",
+					"path": "Contents/Resources/app/.v3code/PROJECT_STATUS.md"
+				},
+				{
+					"id": "no-active-plan",
+					"path": "Contents/Resources/app/.v3code/active-plan.json"
+				},
+				{
+					"id": "no-browser-sessions",
+					"path": "Contents/Resources/app/.v3code/browser-sessions"
+				},
+				{
+					"id": "no-copilot-extension",
+					"path": "Contents/Resources/app/extensions/copilot"
+				},
+				{
+					"id": "no-copilot-modules",
+					"path": "Contents/Resources/app/node_modules/@github/copilot*"
+				},
+				{
+					"id": "no-core-sourcemaps",
+					"path": "Contents/Resources/app/out/**/*.js.map"
+				}
+			],
+			"asar": [
+				{
+					"id": "node-modules-asar-empty",
+					"path": "Contents/Resources/app/node_modules.asar",
+					"expect": "empty"
+				}
+			],
+			"content": [
+				{
+					"id": "renderer-0095-onboarding",
+					"shared": true,
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"Click to begin",
+						"Try the V3Code Terminal",
+						"Click the page\\.",
+						"Change it yourself\\."
+					],
+					"hint": "The packaged onboarding bundle is stale or missing the 0095 premium onboarding and Visual Edit discovery flow. Run npm run buildreact before packaging."
+				},
+				{
+					"id": "renderer-0095-settings-feedback-router",
+					"shared": true,
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"Live from Daniel & V3Code",
+						"Agents beta vote",
+						"Manual.{0,40}Economy.{0,40}Value.{0,40}Balanced.{0,40}Premium"
+					],
+					"hint": "The packaged Settings bundle is stale or missing the 0095 live-status, feedback/vote, or provider-contained Auto Router controls. Run npm run buildreact before packaging."
+				},
+				{
+					"id": "main-process-mcp-runtime-0093",
+					"shared": true,
+					"path": "Contents/Resources/app/out/main.js",
+					"requiredPatterns": ["v3code-mcp-runtime-0093"],
+					"hint": "The package contains a stale main-process MCP server bundle. Recompile core from the immutable candidate before signing."
+				},
+				{
+					"id": "renderer-mcp-current-ui-and-tools",
+					"shared": true,
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"v3code-mcp-ui-version.{0,80}0093",
+						"Teach Claude when to use V3Code",
+						"Universal stable config",
+						"Copy the stable stdio definition",
+						"get_memory_checkpoint",
+						"deep_recall",
+						"impact_trace"
+					],
+					"hint": "The generated React hosts or exposed MCP tool catalog are stale. Run npm run buildreact before core-ci; never package a previous react/out tree."
+				},
+				{
+					"id": "renderer-theme-border-safety",
+					"shared": true,
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"--void-border-1:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*14%,\\s*transparent\\)",
+						"--void-border-2:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*18%,\\s*transparent\\)",
+						"--void-border-3:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*12%,\\s*transparent\\)",
+						"--void-border-4:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*14%,\\s*transparent\\)",
+						"\\[\\s*['\"]panel\\.border['\"]\\s*,\\s*['\"]contrastBorder['\"]\\s*,\\s*['\"]contrastActiveBorder['\"]\\s*\\]"
+					],
+					"hint": "Settings and onboarding borders must retain literal CSS fallbacks, and the runtime must remove retired Theme Builder border overrides. Missing either path can turn every control outline red from one stale profile value."
+				},
+				{
+					"id": "renderer-no-node-builtins",
+					"shared": true,
+					"path": "Contents/Resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"forbiddenPatterns": [
+						"from\\s*['\"]node:[a-z_/]+['\"]",
+						"import\\(\\s*['\"]node:[a-z_/]+['\"]",
+						"require\\(\\s*['\"]node:[a-z_/]+['\"]"
+					],
+					"hint": "a node: specifier in the renderer bundle is refused by the workbench CSP (script-src self unsafe-eval blob:), which aborts the whole bundle and blanks the window on every platform — regression 1.4.9-0086, caused by common/semanticIndex/hashing.ts importing node:crypto. Fix by moving the Node dependency behind a node/ or electron-main/ layer, or reimplementing it dependency-free in common/."
+				}
+			]
+		},
+		"win32-x64": {
+			"root": ".build/VSCode-win32-x64",
+			"themeContributions": {
+				"extensionsPath": "resources/app/extensions",
+				"requiredThemeLabels": ["Dark 2026"],
+				"forbiddenExtensionNameSha256": ["f286871fda0467c9b352375ff460be7e9a794f9dd565b4f778e16a979a8001cd"]
+			},
+			"artifacts": [
+				{
+					"id": "bootstrap-fork",
+					"path": "resources/app/out/bootstrap-fork.js",
+					"minBytes": 19000,
+					"shared": true
+				},
+				{
+					"id": "extension-host-main",
+					"path": "resources/app/out/vs/workbench/api/node/extensionHostProcess.js",
+					"minBytes": 1000000,
+					"shared": true
+				},
+				{
+					"id": "shared-process-main",
+					"path": "resources/app/out/vs/code/electron-utility/sharedProcess/sharedProcessMain.js",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-html",
+					"path": "resources/app/out/vs/code/electron-browser/workbench/workbench.html",
+					"minBytes": 700,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-js",
+					"path": "resources/app/out/vs/code/electron-browser/workbench/workbench.js",
+					"minBytes": 13000,
+					"shared": true
+				},
+				{
+					"id": "workbench-shell-css",
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.css",
+					"minBytes": 650000,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-html",
+					"path": "resources/app/out/vs/sessions/electron-browser/sessions.html",
+					"minBytes": 700,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-js",
+					"path": "resources/app/out/vs/sessions/electron-browser/sessions.js",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "sessions-shell-css",
+					"path": "resources/app/out/vs/sessions/sessions.desktop.main.css",
+					"minBytes": 600000,
+					"shared": true
+				},
+				{
+					"id": "preload-main",
+					"path": "resources/app/out/vs/base/parts/sandbox/electron-browser/preload.js",
+					"minBytes": 1000,
+					"shared": true
+				},
+				{
+					"id": "preload-aux",
+					"path": "resources/app/out/vs/base/parts/sandbox/electron-browser/preload-aux.js",
+					"minBytes": 300,
+					"shared": true
+				},
+				{
+					"id": "preload-browser-view",
+					"path": "resources/app/out/vs/platform/browserView/electron-browser/preload-browserView.js",
+					"minBytes": 6000,
+					"shared": true
+				},
+				{
+					"id": "pty-host-main",
+					"path": "resources/app/out/vs/platform/terminal/node/ptyHostMain.js",
+					"minBytes": 180000,
+					"shared": true
+				},
+				{
+					"id": "node-pty-native",
+					"path": "resources/app/node_modules/node-pty/build/Release/conpty.node",
+					"minBytes": 150000,
+					"shared": true
+				},
+				{
+					"id": "node-pty-helper",
+					"path": "resources/app/node_modules/node-pty/build/Release/conpty/OpenConsole.exe",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "oniguruma-wasm",
+					"path": "resources/app/node_modules/vscode-oniguruma/release/onig.wasm",
+					"minBytes": 230000,
+					"shared": true
+				},
+				{
+					"id": "nls-messages",
+					"path": "resources/app/out/nls.messages.json",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "nls-keys",
+					"path": "resources/app/out/nls.keys.json",
+					"minBytes": 330000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-index",
+					"path": "resources/app/extensions/markdown-language-features/media/index.js",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-pre",
+					"path": "resources/app/extensions/markdown-language-features/media/pre.js",
+					"minBytes": 900,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-mermaid",
+					"path": "resources/app/extensions/mermaid-markdown-features/markdown-preview-out/index.js",
+					"minBytes": 12000000,
+					"shared": true
+				},
+				{
+					"id": "markdown-preview-katex-css",
+					"path": "resources/app/extensions/markdown-math/notebook-out/katex.min.css",
+					"minBytes": 11000,
+					"shared": true
+				},
+				{
+					"id": "beast-sidecar",
+					"path": "resources/beast/beast.exe",
+					"minBytes": 4000000,
+					"shared": true
+				},
+				{
+					"id": "computer-use-helper",
+					"path": "resources/computerUse/win32/v3code-computer-use-helper.exe",
+					"minBytes": 300000,
+					"shared": true,
+					"platforms": ["darwin-arm64", "win32-x64"]
+				},
+				{
+					"id": "claude-agent-sdk-native",
+					"path": "resources/app/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64",
+					"minBytes": 100000000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-sdk-mjs",
+					"path": "resources/app/node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs",
+					"minBytes": 344000,
+					"shared": true
+				},
+				{
+					"id": "acp-sdk-js",
+					"path": "resources/app/node_modules/@agentclientprotocol/sdk/dist/acp.js",
+					"minBytes": 60000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-bridge-mjs",
+					"path": "resources/app/node_modules/@anthropic-ai/claude-agent-sdk/bridge.mjs",
+					"minBytes": 438000,
+					"shared": true
+				},
+				{
+					"id": "claude-agent-sdk-assistant-mjs",
+					"path": "resources/app/node_modules/@anthropic-ai/claude-agent-sdk/assistant.mjs",
+					"minBytes": 712000,
+					"shared": true
+				},
+				{
+					"id": "anthropic-api-sdk",
+					"path": "resources/app/node_modules/@anthropic-ai/sdk/index.js",
+					"minBytes": 1900,
+					"shared": true
+				},
+				{
+					"id": "agent-host-main",
+					"path": "resources/app/out/vs/platform/agentHost/node/agentHostMain.js",
+					"minBytes": 421000,
+					"shared": true
+				},
+				{
+					"id": "sessions-window-bundle",
+					"path": "resources/app/out/vs/sessions/sessions.desktop.main.js",
+					"minBytes": 8300000,
+					"shared": true
+				},
+				{
+					"id": "transformers-js",
+					"path": "resources/app/node_modules/@xenova/transformers/dist/transformers.js",
+					"minBytes": 865000,
+					"shared": true
+				},
+				{
+					"id": "onnx-node-binding",
+					"path": "resources/app/node_modules/onnxruntime-node/bin/napi-v3/win32/x64/onnxruntime_binding.node",
+					"minBytes": 110000,
+					"shared": true
+				},
+				{
+					"id": "onnx-node-runtime-lib",
+					"path": "resources/app/node_modules/onnxruntime-node/bin/napi-v3/win32/x64/onnxruntime.dll",
+					"minBytes": 4600000,
+					"shared": true
+				},
+				{
+					"id": "onnx-web-wasm",
+					"path": "resources/app/node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded.wasm",
+					"minBytes": 4980000,
+					"shared": true
+				},
+				{
+					"id": "sharp-xenova-native",
+					"path": "resources/app/node_modules/@xenova/transformers/node_modules/sharp/build/Release/sharp-win32-x64.node",
+					"minBytes": 218000,
+					"shared": true
+				},
+				{
+					"id": "sharp-xenova-libvips",
+					"path": "resources/app/node_modules/@xenova/transformers/node_modules/sharp/build/Release/libvips-42.dll",
+					"minBytes": 9500000,
+					"shared": true
+				},
+				{
+					"id": "sharp-img-native",
+					"path": "resources/app/node_modules/@img/sharp-win32-x64/lib/sharp-win32-x64.node",
+					"minBytes": 219000,
+					"shared": true
+				},
+				{
+					"id": "sharp-img-libvips",
+					"path": "resources/app/node_modules/@img/sharp-win32-x64/lib/libvips-42.dll",
+					"minBytes": 9480000,
+					"shared": true
+				},
+				{
+					"id": "llama-addon",
+					"path": "resources/app/node_modules/@node-llama-cpp/win-x64/bins/win-x64/llama-addon.node",
+					"minBytes": 415000,
+					"shared": true
+				},
+				{
+					"id": "llama-cuda",
+					"path": "resources/app/node_modules/@node-llama-cpp/win-x64-cuda",
+					"minBytes": 64000000,
+					"shared": false
+				},
+				{
+					"id": "llama-vulkan",
+					"path": "resources/app/node_modules/@node-llama-cpp/win-x64-vulkan",
+					"minBytes": 28000000,
+					"shared": false
+				},
+				{
+					"id": "node-llama-cpp-js",
+					"path": "resources/app/node_modules/node-llama-cpp/dist/index.js",
+					"minBytes": 3500,
+					"shared": true
+				},
+				{
+					"id": "mcp-sdk",
+					"path": "resources/app/node_modules/@modelcontextprotocol/sdk/dist/cjs/server/mcp.js",
+					"minBytes": 20000,
+					"shared": true
+				},
+				{
+					"id": "ripgrep",
+					"path": "resources/app/node_modules/@vscode/ripgrep-universal/bin/win32-x64/rg.exe",
+					"minBytes": 2720000,
+					"shared": true
+				},
+				{
+					"id": "sqlite3-native",
+					"path": "resources/app/node_modules/@vscode/sqlite3/build/Release/vscode-sqlite3.node",
+					"minBytes": 923000,
+					"shared": true
+				},
+				{
+					"id": "reflink-native",
+					"path": "resources/app/node_modules/@reflink/reflink-win32-x64-msvc/reflink.win32-x64-msvc.node",
+					"minBytes": 189000,
+					"shared": true
+				},
+				{
+					"id": "openai-sdk",
+					"path": "resources/app/node_modules/openai/index.js",
+					"minBytes": 9000,
+					"shared": true
+				},
+				{
+					"id": "groq-sdk",
+					"path": "resources/app/node_modules/groq-sdk/index.js",
+					"minBytes": 4300,
+					"shared": true
+				},
+				{
+					"id": "google-genai-sdk",
+					"path": "resources/app/node_modules/@google/genai/dist/node/index.mjs",
+					"minBytes": 211000,
+					"shared": true
+				},
+				{
+					"id": "mistral-sdk",
+					"path": "resources/app/node_modules/@mistralai/mistralai/index.js",
+					"minBytes": 1200,
+					"shared": true
+				},
+				{
+					"id": "ollama-client",
+					"path": "resources/app/node_modules/ollama/dist/browser.cjs",
+					"minBytes": 7500,
+					"shared": true
+				},
+				{
+					"id": "playwright-core",
+					"path": "resources/app/node_modules/playwright-core/lib/server/index.js",
+					"minBytes": 1200,
+					"shared": true
+				},
+				{
+					"id": "hono",
+					"path": "resources/app/node_modules/hono/dist/cjs/index.js",
+					"minBytes": 512,
+					"shared": true
+				},
+				{
+					"id": "three-js",
+					"path": "resources/app/node_modules/three/build/three.module.js",
+					"minBytes": 324000,
+					"shared": true
+				},
+				{
+					"id": "mcp-stdio-bridge",
+					"path": "resources/app/.v3code/mcp/v3code-mcp-bridge.mjs",
+					"minBytes": 3000,
+					"shared": true
+				},
+				{
+					"id": "bundled-skills",
+					"path": "resources/app/.v3code/skills",
+					"minBytes": 200000,
+					"shared": true
+				},
+				{
+					"id": "bundled-rules",
+					"path": "resources/app/.v3code/rules",
+					"minBytes": 3000,
+					"shared": true
+				},
+				{
+					"id": "tree-sitter-runtime-js",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter.js",
+					"minBytes": 80000,
+					"shared": true
+				},
+				{
+					"id": "tree-sitter-runtime-wasm",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter.wasm",
+					"minBytes": 100000,
+					"shared": true
+				},
+				{
+					"id": "grammar-python",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-python.wasm",
+					"minBytes": 200000,
+					"shared": true
+				},
+				{
+					"id": "grammar-javascript",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-javascript.wasm",
+					"minBytes": 150000,
+					"shared": true
+				},
+				{
+					"id": "grammar-tsx",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-tsx.wasm",
+					"minBytes": 650000,
+					"shared": true
+				},
+				{
+					"id": "grammar-go",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-go.wasm",
+					"minBytes": 100000,
+					"shared": true
+				},
+				{
+					"id": "grammar-rust",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-rust.wasm",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-java",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-java.wasm",
+					"minBytes": 150000,
+					"shared": true
+				},
+				{
+					"id": "grammar-c-sharp",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-c-sharp.wasm",
+					"minBytes": 2400000,
+					"shared": true
+				},
+				{
+					"id": "grammar-cpp",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-cpp.wasm",
+					"minBytes": 2500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-ruby",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-ruby.wasm",
+					"minBytes": 1000000,
+					"shared": true
+				},
+				{
+					"id": "grammar-php",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-php.wasm",
+					"minBytes": 500000,
+					"shared": true
+				},
+				{
+					"id": "grammar-typescript",
+					"path": "resources/app/node_modules/@vscode/tree-sitter-wasm/wasm/tree-sitter-typescript.wasm",
+					"minBytes": 500000,
+					"shared": true
+				}
+			],
+			"forbidden": [
+				{
+					"id": "no-workspace-id",
+					"path": "resources/app/.v3code/workspace-id"
+				},
+				{
+					"id": "no-project-status",
+					"path": "resources/app/.v3code/PROJECT_STATUS.md"
+				},
+				{
+					"id": "no-active-plan",
+					"path": "resources/app/.v3code/active-plan.json"
+				},
+				{
+					"id": "no-browser-sessions",
+					"path": "resources/app/.v3code/browser-sessions"
+				},
+				{
+					"id": "no-copilot-extension",
+					"path": "resources/app/extensions/copilot"
+				},
+				{
+					"id": "no-copilot-modules",
+					"path": "resources/app/node_modules/@github/copilot*"
+				},
+				{
+					"id": "no-core-sourcemaps",
+					"path": "resources/app/out/**/*.js.map"
+				}
+			],
+			"asar": [
+				{
+					"id": "node-modules-asar-empty",
+					"path": "resources/app/node_modules.asar",
+					"expect": "empty"
+				}
+			],
+			"content": [
+				{
+					"id": "renderer-0095-onboarding",
+					"shared": true,
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"Click to begin",
+						"Try the V3Code Terminal",
+						"Click the page\\.",
+						"Change it yourself\\."
+					],
+					"hint": "The packaged onboarding bundle is stale or missing the 0095 premium onboarding and Visual Edit discovery flow. Run npm run buildreact before packaging."
+				},
+				{
+					"id": "renderer-0095-settings-feedback-router",
+					"shared": true,
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"Live from Daniel & V3Code",
+						"Agents beta vote",
+						"Manual.{0,40}Economy.{0,40}Value.{0,40}Balanced.{0,40}Premium"
+					],
+					"hint": "The packaged Settings bundle is stale or missing the 0095 live-status, feedback/vote, or provider-contained Auto Router controls. Run npm run buildreact before packaging."
+				},
+				{
+					"id": "main-process-mcp-runtime-0093",
+					"shared": true,
+					"path": "resources/app/out/main.js",
+					"requiredPatterns": ["v3code-mcp-runtime-0093"],
+					"hint": "The package contains a stale main-process MCP server bundle. Recompile core from the immutable candidate before signing."
+				},
+				{
+					"id": "renderer-mcp-current-ui-and-tools",
+					"shared": true,
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"v3code-mcp-ui-version.{0,80}0093",
+						"Teach Claude when to use V3Code",
+						"Universal stable config",
+						"Copy the stable stdio definition",
+						"get_memory_checkpoint",
+						"deep_recall",
+						"impact_trace"
+					],
+					"hint": "The generated React hosts or exposed MCP tool catalog are stale. Run npm run buildreact before core-ci; never package a previous react/out tree."
+				},
+				{
+					"id": "renderer-theme-border-safety",
+					"shared": true,
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"requiredPatterns": [
+						"--void-border-1:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*14%,\\s*transparent\\)",
+						"--void-border-2:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*18%,\\s*transparent\\)",
+						"--void-border-3:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*12%,\\s*transparent\\)",
+						"--void-border-4:\\s*color-mix\\(in srgb,\\s*var\\(--vscode-foreground,\\s*#EDEBE6\\)\\s*14%,\\s*transparent\\)",
+						"\\[\\s*['\"]panel\\.border['\"]\\s*,\\s*['\"]contrastBorder['\"]\\s*,\\s*['\"]contrastActiveBorder['\"]\\s*\\]"
+					],
+					"hint": "Settings and onboarding borders must retain literal CSS fallbacks, and the runtime must remove retired Theme Builder border overrides. Missing either path can turn every control outline red from one stale profile value."
+				},
+				{
+					"id": "renderer-no-node-builtins",
+					"shared": true,
+					"path": "resources/app/out/vs/workbench/workbench.desktop.main.js",
+					"forbiddenPatterns": [
+						"from\\s*['\"]node:[a-z_/]+['\"]",
+						"import\\(\\s*['\"]node:[a-z_/]+['\"]",
+						"require\\(\\s*['\"]node:[a-z_/]+['\"]"
+					],
+					"hint": "a node: specifier in the renderer bundle is refused by the workbench CSP (script-src self unsafe-eval blob:), which aborts the whole bundle and blanks the window on every platform — regression 1.4.9-0086, caused by common/semanticIndex/hashing.ts importing node:crypto. Fix by moving the Node dependency behind a node/ or electron-main/ layer, or reimplementing it dependency-free in common/."
+				}
+			]
+		},
+		"linux-x64": {
+			"extends": "win32-x64",
+			"root": ".build/VSCode-linux-x64",
+			"themeContributions": {
+				"extensionsPath": "resources/app/extensions",
+				"requiredThemeLabels": ["Dark 2026"],
+				"forbiddenExtensionNameSha256": ["f286871fda0467c9b352375ff460be7e9a794f9dd565b4f778e16a979a8001cd"]
+			},
+			"artifactOverrides": {
+				"node-pty-native": {
+					"path": "resources/app/node_modules/node-pty/build/Release/pty.node",
+					"minBytes": 50000
+				},
+				"node-pty-helper": {
+					"path": "resources/app/node_modules/node-pty/build/Release/spawn-helper",
+					"minBytes": 10000
+				},
+				"beast-sidecar": {
+					"path": "resources/beast/beast"
+				},
+				"computer-use-helper": null,
+				"claude-agent-sdk-native": {
+					"path": "resources/app/node_modules/@anthropic-ai/claude-agent-sdk-linux-x64/claude"
+				},
+				"onnx-node-binding": {
+					"path": "resources/app/node_modules/onnxruntime-node/bin/napi-v3/linux/x64/onnxruntime_binding.node"
+				},
+				"onnx-node-runtime-lib": {
+					"path": "resources/app/node_modules/onnxruntime-node/bin/napi-v3/linux/x64/libonnxruntime.so.1.14.0"
+				},
+				"sharp-xenova-native": {
+					"path": "resources/app/node_modules/@xenova/transformers/node_modules/sharp/build/Release/sharp-linux-x64.node"
+				},
+				"sharp-xenova-libvips": {
+					"path": "resources/app/node_modules/@xenova/transformers/node_modules/sharp/vendor/8.14.5/linux-x64/lib/libvips-cpp.so.42"
+				},
+				"sharp-img-native": {
+					"path": "resources/app/node_modules/@img/sharp-linux-x64/lib/sharp-linux-x64.node"
+				},
+				"sharp-img-libvips": {
+					"path": "resources/app/node_modules/@img/sharp-libvips-linux-x64/lib/libvips-cpp.so.42"
+				},
+				"llama-addon": {
+					"path": "resources/app/node_modules/@node-llama-cpp/linux-x64/bins/linux-x64/llama-addon.node"
+				},
+				"llama-cuda": {
+					"path": "resources/app/node_modules/@node-llama-cpp/linux-x64-cuda"
+				},
+				"llama-vulkan": {
+					"path": "resources/app/node_modules/@node-llama-cpp/linux-x64-vulkan"
+				},
+				"ripgrep": {
+					"path": "resources/app/node_modules/@vscode/ripgrep-universal/bin/linux-x64/rg"
+				},
+				"reflink-native": {
+					"path": "resources/app/node_modules/@reflink/reflink-linux-x64-gnu/reflink.linux-x64-gnu.node"
+				}
+			}
+		}
+	}
+}

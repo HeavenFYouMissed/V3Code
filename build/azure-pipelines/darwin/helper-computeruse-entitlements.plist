@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+	Entitlements for the V3Code computer-use helper
+	(Contents/Resources/computerUse/darwin/v3code-computer-use-helper).
+
+	DELIBERATELY EMPTY. Every entitlement was considered and rejected; the helper needs nothing
+	beyond the hardened runtime, which build/darwin/sign.ts already requests via
+	`hardenedRuntime: true` (that becomes codesign's "options runtime" flag, not a key in this file).
+
+	NOTE FOR EDITORS: a doubled hyphen is illegal inside an XML comment. `plutil -lint` accepts one
+	anyway, but the AMFI parser codesign uses for entitlements does not, and codesign then fails the
+	whole file with "AMFIUnserializeXML: syntax error". Never write a long-form command flag in here.
+
+	Why each candidate is absent:
+
+	* com.apple.security.cs.allow-jit — the three Electron helper plists carry this because V8
+	  JITs. The computer-use helper is a plain Swift executable with no JIT and no interpreter.
+
+	* Accessibility (AXIsProcessTrusted / AXUIElementPerformAction) and Screen Recording
+	  (ScreenCaptureKit / CGWindowListCreateImage) have NO entitlement. They are ordinary TCC
+	  services: the user grants them per-executable in System Settings > Privacy & Security, and a
+	  Developer-ID-signed binary needs no additional capability to request them. Forensics on both
+	  shipping implementations of this feature found no private and no TCC-bypass entitlement,
+	  because none exists to find. Adding com.apple.security.automation.apple-events (as
+	  app-entitlements.plist does) would not help either — that gates AppleScript/Apple events, not
+	  the Accessibility API.
+
+	* com.apple.security.cs.disable-library-validation — NOT wanted. It would weaken the helper for
+	  no benefit: `otool -L` shows it links only /System/Library/Frameworks/* and /usr/lib/*
+	  (including the ABI-stable OS Swift runtime at /usr/lib/swift). There is no bundled or
+	  Homebrew dylib to load, so library validation never has anything to reject.
+
+	* com.apple.security.cs.allow-unsigned-executable-memory — no unsigned executable memory.
+
+	* com.apple.security.app-sandbox — the helper cannot be sandboxed. Driving other applications
+	  through the Accessibility API is precisely what the sandbox forbids.
+
+	Do NOT copy app-entitlements.plist here: it grants camera, audio-input and apple-events, none of
+	which the helper uses, and each broadens what a compromised helper could reach.
+
+	If a future change makes an entitlement genuinely necessary, add it here with a comment saying
+	which call requires it — and re-read scripts/v3-sign-notarize-computer-use-helper.sh, which
+	prints the resulting entitlements so a silent broadening is visible in the signing log.
+-->
+<plist version="1.0">
+<dict/>
+</plist>

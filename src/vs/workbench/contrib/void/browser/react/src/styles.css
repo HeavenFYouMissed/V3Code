@@ -1,0 +1,294 @@
+/*--------------------------------------------------------------------------------------
+ *  Copyright 2025 Glass Devtools, Inc. All rights reserved.
+ *  Licensed under the Apache License, Version 2.0. See LICENSE.txt for more information.
+ *  V3Code brand variables added 2026-05-24 — see V3CODE-BRANDING.md at repo root.
+ *--------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   V3Code brand palette — canonical color tokens.
+   Defined globally so any component (React or workbench CSS) can reference them
+   via var(--v3-amethyst), var(--v3-venom), etc. Theme variants (Onyx Deep main,
+   dark+red mix, mocha light, etc.) override these by setting a theme class on
+   the React root scope; the default values below are Onyx Deep.
+   ============================================================================ */
+:root,
+.v3-theme-onyx {
+	/* Base — layered blacks with slight blue undertone */
+	--v3-abyss: #07080C;
+	--v3-void-bg: #0B0D14;
+	--v3-obsidian: #10121A;
+	--v3-slate: #161820;
+	--v3-ash: #1C1E27;
+	--v3-smoke: #252730;
+
+	/* Amethyst — intelligence color (AI / brand) */
+	--v3-amethyst: #8B5CF6;
+	--v3-amethyst-glow: #A78BFA;
+	--v3-amethyst-deep: #6D28D9;
+	--v3-amethyst-muted: rgba(124, 58, 237, 0.125);
+	--v3-amethyst-wash: rgba(139, 92, 246, 0.0625);
+	--v3-amethyst-focus: rgba(139, 92, 246, 0.5);
+
+	/* Venom — alive / active / memory color.
+	   The role is "accent motion", not a hue: this ramp was venom-GREEN and is now
+	   venom-BLUE at the identical saturation/lightness (hue 205), so every alpha
+	   and color-mix ratio tuned against the green still reads correctly. */
+	--v3-venom: #6AA3CC;
+	--v3-venom-bright: #5FB0DE;
+	--v3-venom-muted: rgba(80, 168, 230, 0.1875);
+	--v3-venom-deep: #3F7FA8;
+
+	/* Semantic */
+	--v3-error: #EF4444;
+	--v3-warning: #F59E0B;
+	--v3-info: #8B5CF6;
+	--v3-success: #6AA3CC;
+
+	/* Text */
+	--v3-text-primary: #E4E4ED;
+	--v3-text-secondary: #9898A6;
+	--v3-text-tertiary: #5A5A6E;
+	--v3-text-bright: #FFFFFF;
+}
+
+/* ============================================================================
+   Override Void's --void-* tokens with V3Code brand palette.
+   The chat sidebar, settings pane, onboarding, and every React surface that
+   uses these tokens automatically inherits the V3Code look — no per-component
+   restyling required. Editor surface itself still follows the user's chosen
+   VS Code color theme via --vscode-* tokens, so power users can keep their
+   preferred syntax highlighting. The React UI is OUR canvas.
+   ============================================================================ */
+/* ============================================================================
+   Bind Void's --void-* tokens to the ACTIVE VS Code theme so the chat panel
+   adapts to light/dark/high-contrast like the rest of the editor. We layer
+   V3Code brand variables on top as accents (rings, AI message borders, link
+   color) but never lock the chat background to a hardcoded dark value.
+   ============================================================================ */
+& {
+	--void-bg-1: var(--vscode-sideBar-background);
+	--void-bg-1-alt: var(--vscode-sideBarSectionHeader-background, var(--vscode-sideBar-background));
+	--void-bg-2: var(--vscode-sideBar-background);
+	--void-bg-2-alt: var(--vscode-sideBarSectionHeader-background, var(--vscode-sideBar-background));
+	--void-bg-2-hover: var(--vscode-list-hoverBackground);
+	--void-bg-3: var(--vscode-input-background, var(--vscode-sideBar-background));
+
+	--void-fg-0: var(--vscode-foreground);
+	--void-fg-1: var(--vscode-foreground);
+	--void-fg-2: var(--vscode-descriptionForeground);
+	--void-fg-3: var(--vscode-disabledForeground, var(--vscode-descriptionForeground));
+	--void-fg-4: var(--vscode-disabledForeground, var(--vscode-descriptionForeground));
+
+	--void-warning: var(--v3-warning);
+
+	/* Settings/chat chrome borders must NOT follow Theme Builder "Borders"
+	   (panel.border). That token is for workbench panel seams — wiring it into
+	   every card made a single accidental #ff0000 paint the whole Settings UI red.
+
+	   EVERY --vscode-* reference below carries a literal fallback on purpose. Without
+	   one, an unresolved token makes the whole color-mix() invalid, which makes the
+	   custom property invalid, which makes `border-color: var(--void-border-N)`
+	   invalid at computed-value time — and border-color's initial value is
+	   `currentColor`, so the border paints in the element's text colour. That is the
+	   red seen on onboarding underlines, API-key boxes and connector cards: not a red
+	   value anywhere, just a border with no colour left to use. */
+	--void-border-1: color-mix(in srgb, var(--vscode-foreground, #EDEBE6) 14%, transparent);
+	--void-border-2: color-mix(in srgb, var(--vscode-foreground, #EDEBE6) 18%, transparent);
+	/* Muted, non-bright border for chat cards/dividers. The bright accent line is
+	   reserved for the composer (input box) only -- everything else stays subtle.
+	   Derived from the theme foreground so it stays visible in light AND dark themes. */
+	--void-border-3: color-mix(in srgb, var(--vscode-foreground, #EDEBE6) 12%, transparent);
+	--void-border-4: color-mix(in srgb, var(--vscode-foreground, #EDEBE6) 14%, transparent);
+
+	--void-ring-color: var(--v3-amethyst);
+	--void-link-color: var(--v3-amethyst-glow);
+
+	/* Composer + accepted-user-message surface: a lighter muted purple that lifts the
+	   input/user bubbles off the chat background for depth (a soft "mocha" effect).
+	   Mixed against the active theme background so it adapts to light/dark/high-contrast
+	   while keeping the amethyst brand tint. */
+	--v3-input-surface: color-mix(in srgb, var(--vscode-sideBar-background) 82%, var(--v3-amethyst) 18%);
+}
+
+.select-child-restyle select {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding-right: 24px;
+}
+
+.void-force-child-placeholder-void-fg-1 ::placeholder {
+	color: var(--void-fg-3);
+}
+
+* {
+	outline: none !important;
+}
+
+/* The chat composer textarea must be completely borderless -- the only visible line on
+   the composer is its single rounded container. Kills any inherited/global textarea
+   border so there's never a "box within the box" around the text the user types in. */
+textarea.void-bg-transparent,
+textarea.void-bg-transparent:focus,
+textarea.void-bg-transparent:hover {
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+	background: transparent !important;
+}
+
+.inherit-bg-all-restyle > * {
+	background-color: inherit !important;
+}
+
+.bg-editor-style-override {
+	--vscode-sideBar-background: var(--vscode-editor-background);
+}
+
+/* ============================================================================
+   V3Code utility classes — opt-in brand accents for components that want them.
+   These are NOT applied globally; React components add `.v3-ai-message` etc.
+   to specific elements where the brand signal is meaningful.
+   ============================================================================ */
+
+/* AI assistant messages get a subtle amethyst left border — the "intelligence
+   is speaking" cue. Not a full glow, just a hint that an agent produced this. */
+.v3-ai-message {
+	border-left: 2px solid var(--v3-amethyst);
+	padding-left: 8px;
+}
+
+/* Memory indicators — venom dot for symbols with attached notes, venom tint
+   for AI responses that reference a stored memory. Discoverable, not loud. */
+.v3-memory-dot {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background-color: var(--v3-venom);
+	box-shadow: 0 0 4px var(--v3-venom-muted);
+}
+
+.v3-memory-tint {
+	background-color: var(--v3-venom-muted);
+	border-radius: 3px;
+	padding: 1px 4px;
+}
+
+/* Status indicators — agent state pills (idle / thinking / acting). Replace
+   spinner gifs with a slow color pulse driven by CSS keyframes. */
+.v3-status-idle {
+	color: var(--v3-amethyst-deep);
+}
+
+.v3-status-thinking {
+	color: var(--v3-amethyst);
+	animation: v3-pulse-amethyst 1.8s ease-in-out infinite;
+}
+
+.v3-status-acting {
+	color: var(--v3-venom);
+	animation: v3-pulse-venom 1.0s ease-in-out infinite;
+}
+
+@keyframes v3-pulse-amethyst {
+	0%, 100% { opacity: 0.5; }
+	50% { opacity: 1; }
+}
+
+@keyframes v3-pulse-venom {
+	0%, 100% { opacity: 0.6; text-shadow: 0 0 4px var(--v3-venom-muted); }
+	50% { opacity: 1; text-shadow: 0 0 8px var(--v3-venom); }
+}
+
+/* Cursor caret — venom green for the "alive" feel, only inside V3Code-themed
+   surfaces (the React inputs). Editor cursor follows the VS Code theme. */
+.v3-input::selection,
+.v3-input *::selection {
+	background-color: var(--v3-amethyst-muted);
+}
+
+.v3-input {
+	caret-color: var(--v3-venom);
+}
+
+/* Brand button — for primary actions inside our React surfaces. Replaces the
+   hardcoded blue button on the open-folder watermark and similar CTAs. */
+.v3-button-primary {
+	background-color: var(--v3-amethyst);
+	color: var(--v3-text-bright);
+	border: 1px solid var(--v3-amethyst-deep);
+	transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.v3-button-primary:hover {
+	background-color: var(--v3-amethyst-glow);
+	box-shadow: 0 0 12px var(--v3-amethyst-focus);
+}
+
+.v3-button-primary:active {
+	background-color: var(--v3-amethyst-deep);
+}
+
+/* Focus ring — amethyst, replaces the default VS Code blue. */
+.v3-focus-ring:focus-visible {
+	outline: 2px solid var(--v3-amethyst);
+	outline-offset: 1px;
+}
+
+/* Continue-style composer pills — class names match scope-tailwind output (void-* prefix) */
+.void-continue-composer-control {
+	border: none !important;
+	border-left: none !important;
+	border-right: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+	background-image: none !important;
+}
+.void-continue-composer-control:focus,
+.void-continue-composer-control:focus-visible {
+	outline: 1px solid var(--vscode-focusBorder) !important;
+	outline-offset: 0;
+	box-shadow: none !important;
+}
+
+.void-continue-composer-menu .void-continue-composer-control {
+	border-radius: 0 !important;
+	background: transparent !important;
+}
+.void-continue-composer-control svg {
+	width: 10px;
+	height: 10px;
+	flex-shrink: 0;
+}
+
+/* Chat composer wrapper — use chat-composer in TSX so scoped class is void-chat-composer */
+.void-chat-composer {
+	transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.void-chat-composer:focus-within,
+.void-chat-composer.void-chat-composer--focused {
+	border-color: var(--vscode-focusBorder) !important;
+	box-shadow: 0 0 0 1px var(--vscode-focusBorder);
+}
+.void-chat-composer.void-chat-composer--streaming:not(:focus-within):not(.void-chat-composer--focused) {
+	/* widget.border is undefined on themes that never declare it (V3Code Hard), which
+	   would leave border-color at its initial value — currentColor — painting the
+	   composer edge in the text colour. Fall back to our own token. */
+	border-color: var(--vscode-widget-border, var(--void-border-2));
+}
+
+/* Tool chain — tight vertical spacing, override negative margins from tool bubbles */
+.void-tool-chain > div > div {
+	margin-top: 0 !important;
+	margin-bottom: 0 !important;
+}
+.void-tool-chain div[class*="-mt-"] {
+	margin-top: 0 !important;
+}

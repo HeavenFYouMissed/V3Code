@@ -1,0 +1,37 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "v3index-test",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-06-01",
+	"compatibility_flags": ["nodejs_compat"],
+	"durable_objects": {
+		"bindings": [
+			{ "name": "WORKSPACE", "class_name": "WorkspaceDO" }
+		]
+	},
+	"migrations": [
+		{ "tag": "v1", "new_sqlite_classes": ["WorkspaceDO"] }
+	],
+	"r2_buckets": [
+		{ "binding": "BLOBS", "bucket_name": "v3index-test-blobs" }
+	],
+	"kv_namespaces": [
+		{ "binding": "KEYS", "id": "00000000000000000000000000000000" }
+	],
+	"queues": {
+		"producers": [
+			{ "binding": "EMBED_QUEUE", "queue": "v3index-test-embed" }
+		]
+	},
+	"vars": {
+		"EMBED_MODEL": "@cf/qwen/qwen3-embedding-0.6b",
+		"EMBED_DIM": "1024",
+		"VOYAGE_MODEL": "voyage-code-3",
+		"VOYAGE_DIM": "1024"
+	}
+	// Deliberately no account_id, Vectorize binding, or Workers AI binding.
+	// There is no queue consumer either: integration tests inspect durable staging,
+	// while queue delivery and live vector drains remain staging smoke tests. This
+	// keeps the suite free of remote proxies, credentials, browser login,
+	// production data, and billable requests.
+}

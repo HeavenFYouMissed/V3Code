@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code — The V3 Delta</title>
+  <defs>
+    <!-- Primary front face: purple core with vertical glow -->
+    <linearGradient id="frontFace" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%"  stop-color="#B794FF"/>
+      <stop offset="55%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#5B2FB8"/>
+    </linearGradient>
+    <!-- Right shadowed face -->
+    <linearGradient id="rightFace" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#3A2470"/>
+      <stop offset="100%" stop-color="#1A1230"/>
+    </linearGradient>
+    <!-- Left lit face catching the green rim -->
+    <linearGradient id="leftFace" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%"  stop-color="#7FE650"/>
+      <stop offset="35%" stop-color="#4A8C5C"/>
+      <stop offset="100%" stop-color="#1F2A2B"/>
+    </linearGradient>
+    <!-- Top facet (subtle) -->
+    <linearGradient id="topFace" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%"  stop-color="#D4C2FF"/>
+      <stop offset="100%" stop-color="#6B47C9"/>
+    </linearGradient>
+    <!-- Background radial halo -->
+    <radialGradient id="bgHalo" cx="0.5" cy="0.5" r="0.6">
+      <stop offset="0%"  stop-color="#1A1530"/>
+      <stop offset="60%" stop-color="#0B0D14"/>
+      <stop offset="100%" stop-color="#06070C"/>
+    </radialGradient>
+    <!-- Inner glow filter for purple face -->
+    <filter id="innerGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14" result="blur"/>
+      <feComposite in="blur" in2="SourceAlpha" operator="in"/>
+      <feColorMatrix values="0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.96  0 0 0 1 0"/>
+      <feComposite in2="SourceGraphic" operator="over"/>
+    </filter>
+    <!-- Soft outer drop glow -->
+    <filter id="outerGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="22" result="blur"/>
+      <feColorMatrix in="blur" values="0 0 0 0 0.55  0 0 0 0 0.36  0 0 0 0 0.96  0 0 0 0.85 0" result="purpleGlow"/>
+      <feMerge>
+        <feMergeNode in="purpleGlow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bgHalo)"/>
+
+  <!-- Outer glow halo behind delta -->
+  <g opacity="0.55" filter="url(#outerGlow)">
+    <polygon points="512,220 820,780 204,780" fill="#8B5CF6" opacity="0.35"/>
+  </g>
+
+  <!-- 3D Delta / Tetrahedron, tilted in perspective.
+       Apex at top, three visible faces: front (purple), right (dark), left (green rim) -->
+  <g transform="translate(0,20)">
+    <!-- Right shadowed face -->
+    <polygon points="512,200 836,790 600,820" fill="url(#rightFace)"/>
+    <!-- Left face with green highlight catching edge -->
+    <polygon points="512,200 188,790 424,820" fill="url(#leftFace)"/>
+    <!-- Front (primary) face — the glowing purple -->
+    <polygon points="424,820 600,820 512,200" fill="url(#frontFace)" filter="url(#innerGlow)"/>
+    <!-- Top facet hint (small bevel near apex) -->
+    <polygon points="512,200 476,260 548,260" fill="url(#topFace)" opacity="0.85"/>
+
+    <!-- Crisp edge highlights -->
+    <polyline points="512,200 600,820" fill="none" stroke="#C8B0FF" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <polyline points="512,200 424,820" fill="none" stroke="#A7F079" stroke-width="2.5" stroke-linecap="round" opacity="0.75"/>
+    <polyline points="424,820 600,820" fill="none" stroke="#3A2470" stroke-width="2" opacity="0.7"/>
+    <polyline points="512,200 188,790" fill="none" stroke="#9FE070" stroke-width="1.5" opacity="0.45"/>
+    <polyline points="512,200 836,790" fill="none" stroke="#4A2F8A" stroke-width="1.5" opacity="0.55"/>
+
+    <!-- Apex spark -->
+    <circle cx="512" cy="200" r="6" fill="#FFFFFF" opacity="0.9"/>
+    <circle cx="512" cy="200" r="18" fill="#B794FF" opacity="0.35"/>
+  </g>
+</svg>

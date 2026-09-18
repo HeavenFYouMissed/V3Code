@@ -1,0 +1,173 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+/* Part of V3Code, distributed by KandD Labs LLC.
+ * Existing copyright and license notices remain applicable.
+ */
+
+/* Subagent-specific styles — each parallel subagent is its own card block. */
+.interactive-session .interactive-response .value .chat-thinking-fixed-mode.chat-subagent-part {
+	margin: 6px 0;
+	padding: 2px 0;
+	border-radius: 8px;
+	border: 1px solid color-mix(in srgb, var(--vscode-widget-border, #2A2A30) 80%, transparent);
+	background: color-mix(in srgb, var(--vscode-sideBar-background, #1a1a1d) 88%, transparent);
+	overflow: hidden;
+
+	/* Working: green glow so parallel cards read as live even collapsed. */
+	&.chat-thinking-active {
+		border-color: color-mix(in srgb, #6AA3CC 55%, transparent);
+		box-shadow:
+			inset 2px 0 0 rgba(80, 168, 230, 0.95),
+			0 0 0 1px color-mix(in srgb, #6AA3CC 22%, transparent),
+			0 0 14px color-mix(in srgb, #6AA3CC 18%, transparent);
+		background: color-mix(in srgb, #6AA3CC 6%, var(--vscode-sideBar-background, #1a1a1d));
+		animation: chat-subagent-glow-pulse 2.4s ease-in-out infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&.chat-thinking-active {
+			animation: none;
+		}
+	}
+
+	&.chat-thinking-active > .chat-used-context-label {
+		padding: 4px 8px 4px 6px;
+	}
+
+	/* Done: quiet card with a subtle completed accent — not a dead ghost. */
+	&:not(.chat-thinking-active) {
+		border-color: color-mix(in srgb, var(--vscode-widget-border, #2A2A30) 70%, transparent);
+		box-shadow: none;
+		opacity: 1;
+	}
+
+	/* Finished: a quiet left-bar accent so the card reads "done", not "dead". Themed via
+		charts.* tokens so it follows the user's colour theme instead of a hardcoded hex.
+		overflow:visible also fixes the left-edge text clipping on the settled card. */
+	/* Uses a literal cool blue rather than charts.green: that token also drives
+		git-added indicators, where green is semantically correct and must stay. */
+	&.chat-subagent-completed {
+		border-color: color-mix(in srgb, #85b1d1 34%, var(--vscode-widget-border, #2A2A30));
+		box-shadow: inset 2px 0 0 color-mix(in srgb, #85b1d1 55%, transparent);
+		opacity: 1;
+		overflow: visible;
+	}
+
+	/* Blocked/failed workers must NOT wear the success accent — an unverified or denied
+		worker looking identical to a successful one is the false-success bug in the UI. */
+	&.chat-subagent-blocked {
+		border-color: color-mix(in srgb, var(--vscode-charts-yellow, #cca700) 40%, var(--vscode-widget-border, #2A2A30));
+		box-shadow: inset 2px 0 0 color-mix(in srgb, var(--vscode-charts-yellow, #cca700) 60%, transparent);
+		opacity: 1;
+		overflow: visible;
+	}
+
+	&.chat-subagent-failed {
+		border-color: color-mix(in srgb, var(--vscode-charts-red, #f14c4c) 40%, var(--vscode-widget-border, #2A2A30));
+		box-shadow: inset 2px 0 0 color-mix(in srgb, var(--vscode-charts-red, #f14c4c) 60%, transparent);
+		opacity: 1;
+		overflow: visible;
+	}
+
+	/* Collapsed + streaming: show only the last item with max-height */
+	&.chat-used-context-collapsed .chat-used-context-list.chat-thinking-collapsible.chat-thinking-streaming {
+		max-height: var(--chat-subagent-last-item-height, 200px);
+		overflow: hidden;
+		display: block;
+	}
+
+	/* Expanded: show all content, no max-height, no scrolling */
+	.chat-used-context-list.chat-thinking-collapsible {
+		max-height: none;
+		overflow: visible;
+	}
+
+	/* Prompt and result section styling */
+	.chat-subagent-section {
+		padding: 4px 12px 4px 18px;
+
+		.chat-used-context {
+			margin-bottom: 0px;
+			margin-left: 2px;
+			padding-left: 2px;
+		}
+
+		/* Hide the border for subagent prompt/result sections */
+		.chat-used-context-list {
+			border: none;
+			padding: 0px 2px;
+		}
+	}
+
+	.chat-thinking-tool-wrapper {
+
+		/* Hide the collapsible button's icon since we use the thinking icon */
+		.codicon:not(.chat-thinking-icon) {
+			display: none;
+		}
+
+		/* renable icons in confirmation widget */
+		.chat-confirmation-widget-container .codicon:not(.codicon-terminal) {
+			display: inline-flex;
+		}
+
+		/* Remove padding from tool invocation part when it displays a confirmation widget */
+		.chat-tool-invocation-part.has-confirmation {
+			padding: 4px;
+		}
+
+		.chat-collapsible-markdown-content {
+			.rendered-markdown {
+				font-size: var(--vscode-chat-font-size-body-s);
+				line-height: 1.5em;
+			}
+		}
+	}
+
+	button.chat-subagent-confirmation-placeholder {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px 6px 24px;
+		background: none;
+		border: none;
+		outline: none;
+		color: var(--vscode-descriptionForeground);
+		cursor: pointer;
+		font-size: var(--vscode-chat-font-size-body-s);
+		position: relative;
+
+		&::before {
+			content: '\2022';
+			position: absolute;
+			left: 8px;
+			color: var(--vscode-descriptionForeground);
+		}
+
+		&:hover {
+			color: var(--vscode-textLink-foreground);
+		}
+
+		&:focus-visible {
+			outline: 1px solid var(--vscode-focusBorder);
+			outline-offset: 2px;
+		}
+	}
+}
+
+@keyframes chat-subagent-glow-pulse {
+	0%, 100% {
+		box-shadow:
+			inset 2px 0 0 rgba(80, 168, 230, 0.85),
+			0 0 0 1px color-mix(in srgb, #6AA3CC 18%, transparent),
+			0 0 10px color-mix(in srgb, #6AA3CC 12%, transparent);
+	}
+	50% {
+		box-shadow:
+			inset 2px 0 0 rgba(80, 168, 230, 1),
+			0 0 0 1px color-mix(in srgb, #6AA3CC 30%, transparent),
+			0 0 18px color-mix(in srgb, #6AA3CC 28%, transparent);
+	}
+}

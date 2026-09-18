@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <title>V3Code — Prismatic V</title>
+  <!--
+    Three chamfered prism "bars" arranged as a stylized V:
+      LEFT  bar : dark face (in shadow, away from light)
+      MID   bar : short interior stroke, light face
+      RIGHT bar : light face (catches upper-right light)
+    Light source: upper-right.
+  -->
+  <defs>
+    <!-- Soft warm-grey background with subtle radial vignette -->
+    <radialGradient id="bg" cx="0.5" cy="0.42" r="0.85">
+      <stop offset="0%"  stop-color="#34373D"/>
+      <stop offset="60%" stop-color="#26282E"/>
+      <stop offset="100%" stop-color="#16181C"/>
+    </radialGradient>
+
+    <!-- LEFT bar (dark): top-right slightly less dark than bottom-left -->
+    <linearGradient id="leftFace" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#23252A"/>
+      <stop offset="60%" stop-color="#14161A"/>
+      <stop offset="100%" stop-color="#0A0B0E"/>
+    </linearGradient>
+
+    <!-- MIDDLE bar (light) -->
+    <linearGradient id="midFace" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%"  stop-color="#C4C8CD"/>
+      <stop offset="60%" stop-color="#9DA1A6"/>
+      <stop offset="100%" stop-color="#7B7F85"/>
+    </linearGradient>
+
+    <!-- RIGHT bar (lit) -->
+    <linearGradient id="rightFace" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#D6D9DD"/>
+      <stop offset="55%" stop-color="#A8ACB1"/>
+      <stop offset="100%" stop-color="#6F7378"/>
+    </linearGradient>
+
+    <!-- Side face (extrusion shadow) on RIGHT bar -->
+    <linearGradient id="rightSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#5C5F64"/>
+      <stop offset="100%" stop-color="#2E3035"/>
+    </linearGradient>
+    <!-- Side face on MID bar -->
+    <linearGradient id="midSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#55585D"/>
+      <stop offset="100%" stop-color="#2A2C30"/>
+    </linearGradient>
+
+    <!-- Soft drop shadow filter -->
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="135%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
+      <feOffset dx="6" dy="14" result="off"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Bar highlight (thin bevel rim) -->
+    <linearGradient id="rimLight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- Subtle noise-ish vignette overlay (radial dark) -->
+  <radialGradient id="vignette" cx="0.5" cy="0.5" r="0.75">
+    <stop offset="60%" stop-color="#000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+  </radialGradient>
+  <rect width="1024" height="1024" fill="url(#vignette)"/>
+
+  <!-- ===================== V GROUP (with shadow) ===================== -->
+  <g filter="url(#shadow)">
+
+    <!-- ============ LEFT BAR (dark, in shadow) ============
+         Chamfered outer-top corner. Bar diagonal: upper-left → V-tip.
+         CW vertices:
+           (302,275) → (385,275) → (512,760) → (430,760) → (282,295) → close
+    -->
+    <polygon points="302,275 385,275 512,760 430,760 282,295"
+             fill="url(#leftFace)"/>
+    <!-- Subtle inner-top edge rim (very faint, since face is in shadow) -->
+    <polyline points="302,275 385,275" fill="none"
+              stroke="#3A3D42" stroke-width="2" stroke-opacity="0.55"/>
+    <polyline points="282,295 302,275" fill="none"
+              stroke="#3A3D42" stroke-width="2" stroke-opacity="0.45"/>
+
+    <!-- ============ MIDDLE BAR (light) ============
+         Slightly leaned right; small chamfer on top-left.
+         CW: (430,310) → (510,310) → (560,545) → (475,545) → (415,330) → close
+    -->
+    <!-- Side face on right of middle bar for slight 3D depth -->
+    <polygon points="510,310 525,322 575,557 560,545"
+             fill="url(#midSide)"/>
+    <polygon points="430,310 510,310 560,545 475,545 415,330"
+             fill="url(#midFace)"/>
+    <!-- Top rim highlight -->
+    <polyline points="430,310 510,310" fill="none"
+              stroke="#E8EBEE" stroke-width="2.5" stroke-opacity="0.75"/>
+    <polyline points="415,330 430,310" fill="none"
+              stroke="#E8EBEE" stroke-width="2" stroke-opacity="0.55"/>
+
+    <!-- ============ RIGHT BAR (lit) ============
+         Mirror of LEFT bar across x=512. Chamfered outer-top.
+         CW: (639,275) → (722,275) → (742,295) → (594,760) → (512,760) → close
+    -->
+    <!-- Side face on right edge of right bar (3D extrusion depth) -->
+    <polygon points="722,275 742,275 762,300 762,315 758,330 742,295"
+             fill="url(#rightSide)" opacity="0.85"/>
+    <!-- Front face -->
+    <polygon points="639,275 722,275 742,295 594,760 512,760"
+             fill="url(#rightFace)"/>
+    <!-- Top rim highlight -->
+    <polyline points="639,275 722,275" fill="none"
+              stroke="#F0F2F5" stroke-width="2.5" stroke-opacity="0.85"/>
+    <polyline points="722,275 742,295" fill="none"
+              stroke="#F0F2F5" stroke-width="2.5" stroke-opacity="0.75"/>
+
+    <!-- V-tip subtle highlight where outer bars meet -->
+    <polyline points="430,760 512,760 594,760" fill="none"
+              stroke="#3A3D42" stroke-width="2" stroke-opacity="0.6"/>
+  </g>
+</svg>

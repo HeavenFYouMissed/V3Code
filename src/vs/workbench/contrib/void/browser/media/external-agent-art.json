@@ -1,0 +1,9 @@
+{
+	"purpose": "Provider identification in the ACP settings illustration. Marks identify integrations, not endorsement.",
+	"retrieved": "2026-09-15",
+	"assets": [
+		{ "file": "external-agent-1.svg", "source": "https://cdn.agentclientprotocol.com/registry/v1/latest/claude-acp.svg" },
+		{ "file": "external-agent-2.svg", "source": "https://cdn.agentclientprotocol.com/registry/v1/latest/grok-build.svg" },
+		{ "file": "external-agent-3.svg", "source": "https://cdn.agentclientprotocol.com/registry/v1/latest/github-copilot-cli.svg" }
+	]
+}

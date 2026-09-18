@@ -1,0 +1,112 @@
+{
+	"iconDefinitions": {
+		"file-duo": {
+			"iconPath": "./file-duo.svg"
+		},
+		"file-duo_light": {
+			"iconPath": "./file-duo-light.svg"
+		},
+		"file-text-duo": {
+			"iconPath": "./file-text-duo.svg"
+		},
+		"file-text-duo_light": {
+			"iconPath": "./file-text-duo-light.svg"
+		},
+		"image-duo": {
+			"iconPath": "./image-duo.svg"
+		},
+		"image-duo_light": {
+			"iconPath": "./image-duo-light.svg"
+		},
+		"folder-duo": {
+			"iconPath": "./folder-duo.svg"
+		},
+		"folder-duo_light": {
+			"iconPath": "./folder-duo-light.svg"
+		},
+		"folder-open-duo": {
+			"iconPath": "./folder-open-duo.svg"
+		},
+		"folder-open-duo_light": {
+			"iconPath": "./folder-open-duo-light.svg"
+		}
+	},
+	"file": "file-duo",
+	"folder": "folder-duo",
+	"folderExpanded": "folder-open-duo",
+	"fileExtensions": {
+		"txt": "file-text-duo",
+		"md": "file-text-duo",
+		"mdx": "file-text-duo",
+		"markdown": "file-text-duo",
+		"rst": "file-text-duo",
+		"rtf": "file-text-duo",
+		"log": "file-text-duo",
+		"csv": "file-text-duo",
+		"tsv": "file-text-duo",
+		"ini": "file-text-duo",
+		"cfg": "file-text-duo",
+		"conf": "file-text-duo",
+		"env": "file-text-duo",
+		"env.local": "file-text-duo",
+		"env.development": "file-text-duo",
+		"env.production": "file-text-duo",
+		"editorconfig": "file-text-duo",
+		"LICENSE": "file-text-duo",
+		"AUTHORS": "file-text-duo",
+		"CONTRIBUTORS": "file-text-duo",
+		"CHANGELOG": "file-text-duo",
+		"png": "image-duo",
+		"jpg": "image-duo",
+		"jpeg": "image-duo",
+		"gif": "image-duo",
+		"svg": "image-duo",
+		"webp": "image-duo",
+		"avif": "image-duo",
+		"ico": "image-duo",
+		"icns": "image-duo",
+		"bmp": "image-duo",
+		"tiff": "image-duo",
+		"tif": "image-duo"
+	},
+	"light": {
+		"file": "file-duo_light",
+		"folder": "folder-duo_light",
+		"folderExpanded": "folder-open-duo_light",
+		"fileExtensions": {
+			"txt": "file-text-duo_light",
+			"md": "file-text-duo_light",
+			"mdx": "file-text-duo_light",
+			"markdown": "file-text-duo_light",
+			"rst": "file-text-duo_light",
+			"rtf": "file-text-duo_light",
+			"log": "file-text-duo_light",
+			"csv": "file-text-duo_light",
+			"tsv": "file-text-duo_light",
+			"ini": "file-text-duo_light",
+			"cfg": "file-text-duo_light",
+			"conf": "file-text-duo_light",
+			"env": "file-text-duo_light",
+			"env.local": "file-text-duo_light",
+			"env.development": "file-text-duo_light",
+			"env.production": "file-text-duo_light",
+			"editorconfig": "file-text-duo_light",
+			"LICENSE": "file-text-duo_light",
+			"AUTHORS": "file-text-duo_light",
+			"CONTRIBUTORS": "file-text-duo_light",
+			"CHANGELOG": "file-text-duo_light",
+			"png": "image-duo_light",
+			"jpg": "image-duo_light",
+			"jpeg": "image-duo_light",
+			"gif": "image-duo_light",
+			"svg": "image-duo_light",
+			"webp": "image-duo_light",
+			"avif": "image-duo_light",
+			"ico": "image-duo_light",
+			"icns": "image-duo_light",
+			"bmp": "image-duo_light",
+			"tiff": "image-duo_light",
+			"tif": "image-duo_light"
+		}
+	}
+}

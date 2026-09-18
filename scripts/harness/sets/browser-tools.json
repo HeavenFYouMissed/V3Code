@@ -1,0 +1,58 @@
+{
+	"id": "browser-tools",
+	"description": "Playwright-backed browser automation from main chat: open, read, click, type, screenshot, reuse-vs-duplicate.",
+	"newThreadAtStart": true,
+	"autoApprove": true,
+	"timeoutMs": 240000,
+	"turns": [
+		{
+			"send": "Open this URL with open_browser_page (forceNew true): {{fixture_file_url}}. Reply with the pageId only.",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_used", "tool": "open_browser_page" }
+			]
+		},
+		{
+			"send": "On the browser page you just opened, call read_page ONLY (do not use read_file or open_browser). Report the document title and whether you see a button labeled \"Run test action\".",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_first", "tool": "read_page" },
+				{ "type": "tool_used", "tool": "read_page" },
+				{ "type": "not_contains", "values": ["[tool:read_file]"], "ci": true },
+				{ "type": "contains_all", "values": ["V3Code Browser Harness Fixture", "Run test action"], "ci": true }
+			]
+		},
+		{
+			"send": "On that same page, use click_element to click the \"Run test action\" button, then read_page again and confirm the result area shows \"Action completed\".",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_used", "tool": "click_element" },
+				{ "type": "contains_any", "values": ["Action completed"], "ci": true }
+			]
+		},
+		{
+			"send": "Type harness-ok into the test input field with type_in_page, then read_page and confirm the typed text appears in the page state.",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_used", "tool": "type_in_page" },
+				{ "type": "contains_any", "values": ["harness-ok"], "ci": true }
+			]
+		},
+		{
+			"send": "Take a screenshot_page of the current browser page (same pageId). Say \"screenshot captured\" when done.",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_used", "tool": "screenshot_page" },
+				{ "type": "not_contains", "values": ["V3Code agent active"], "ci": true }
+			]
+		},
+		{
+			"send": "The user wants to see the harness fixture again. Reuse the existing shared page — do NOT call open_browser_page again. Only read_page to confirm the title.",
+			"checks": [
+				{ "type": "status", "equals": "completed" },
+				{ "type": "tool_used", "tool": "read_page" },
+				{ "type": "not_contains", "values": ["[tool:open_browser_page]"], "ci": true }
+			]
+		}
+	]
+}
