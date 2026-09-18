@@ -1,0 +1,27 @@
+V3Code Mixed-License Notice
+
+This repository is not licensed as a whole under the MIT License.
+
+Different parts of this repository are governed by different licenses. The
+authoritative component-by-component scope is defined in LICENSING.md:
+
+  https://github.com/HeavenFYouMissed/V3Code/blob/main/LICENSING.md
+
+In summary:
+
+- Microsoft Code - OSS and other Microsoft-origin material remains under the
+  MIT License in LICENSE.txt and applicable file notices.
+- Void Editor / Glass Devtools-origin material remains under the Apache
+  License 2.0 and applicable file notices.
+- GitHub Copilot Chat material under extensions/copilot/ remains under its
+  accompanying MIT License.
+- KandD Labs-owned V3Code product material identified by LICENSING.md is
+  source-available under the Business Source License 1.1 in
+  LICENSE-V3CODE.txt. That material is not Open Source before its Change Date.
+- Some V3Code components carry explicit MIT or Apache-2.0 notices and retain
+  those licenses as described in LICENSING.md.
+
+This notice summarizes the repository's license layout. It is not an
+additional license grant and does not replace any license or file-level notice.
+Read LICENSING.md, LICENSE-V3CODE.txt, LICENSE.txt, NOTICE.txt, and applicable
+file headers before using or redistributing material from this repository.

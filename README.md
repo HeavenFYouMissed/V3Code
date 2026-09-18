@@ -118,8 +118,9 @@ This is a mixed-license repository:
   License 1.1 and changes to Apache-2.0 four years after each version's first
   public release.
 
-Read [LICENSING.md](LICENSING.md), [LICENSE-V3CODE.txt](LICENSE-V3CODE.txt),
-[LICENSE.txt](LICENSE.txt), and [NOTICE.txt](NOTICE.txt) for the actual scope.
+Read the [mixed-license notice](LICENSE), [LICENSING.md](LICENSING.md),
+[LICENSE-V3CODE.txt](LICENSE-V3CODE.txt), [LICENSE.txt](LICENSE.txt), and
+[NOTICE.txt](NOTICE.txt) for the actual scope.
 
 V3Code is not uniformly Open Source while BSL-covered code is before its Change
 Date. The source can be read, modified, redistributed, and used under the terms
