@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="void_icons/v3-wordmark.svg" alt="V3Code" width="180">
+  <img src="void_icons/v3-prismatic-v.svg" alt="V3Code emblem" width="132">
 </p>
 
 <h1 align="center">V3Code</h1>
@@ -31,9 +31,9 @@ before redistributing it or building a competing product.
 - **Memory that survives the chat.** V3Code keeps persistent workspace memory and
   searchable conversation history so useful project context is not trapped in one
   session.
-- **Local codebase intelligence.** Lexical and vector search feed a local semantic
-  index that agents can use to retrieve relevant code instead of relying only on
-  the files currently open.
+- **Local codebase intelligence.** Structural, exact, lexical, vector, graph, and
+  recent-edit signals help agents retrieve relevant code instead of relying only
+  on the files currently open.
 - **Agents are part of the editor.** Use the native V3Code agent or run compatible
   Agent Client Protocol agents in editor chats, with the workspace, diffs, and
   review flow close at hand.
@@ -50,6 +50,29 @@ Memory and code indexing can run locally. Cloud models, cloud indexing, external
 agents, and browser-backed services send relevant context to the services you
 choose to enable. Computer use also requires the native helper and operating-system
 permission.
+
+## Beast and the local retrieval stack
+
+**Your whole codebase is searchable.** V3Code does not flatten a repository into
+one undifferentiated vector store. It reads code as structure, text, meaning,
+history, and relationships, then combines those signals before an agent sees the
+result.
+
+| Layer | What it does |
+| --- | --- |
+| **V3Code Index** | Tree-sitter structural chunks, exact phrase/name/path matching, IDF-weighted lexical search, and local code embeddings fused with weighted Reciprocal Rank Fusion. |
+| **Vector engine** | Potion Code builds the fast 256-dimensional first pass so the whole corpus becomes searchable quickly. Qwen3-Embedding-0.6B then backfills the higher-quality 1024-dimensional space in the background. Both spaces remain searchable during the upgrade; Potion vectors retire only after Qwen coverage is complete. |
+| **Beast** | Native Rust sidecar for confirmed trigram BM25 search, symbols, references, impact tracing, and code-anchored memory. Every hit resolves back to a file and line; its search results can join retrieval as an optional rank channel. |
+| **Code graph** | Dependency neighbors and budgeted LSP-resolved definitions, references, and symbols add relationships that text similarity alone cannot see. |
+| **Ranker** | Exact, lexical, vector, optional Beast, graph, and recent-edit evidence are combined; child matches collapse into useful parent blocks, sparse queries widen automatically, and weak tails are separated at an adaptive score knee. |
+| **Precision passes** | Contextual embedding headers preserve file and symbol identity. Semantic search can add a bounded rerank pass while latency-sensitive editor paths stay fast. |
+| **Local durability** | Paged persistence and a content-addressed cache reuse indexed work across restarts and branches. Missing models or sidecars degrade to the remaining local channels instead of breaking search. |
+
+That retrieval layer is why smaller and less expensive models can still work with
+useful repository context: the model receives a compact set of relevant symbols,
+blocks, neighbors, and files instead of being asked to discover the codebase from
+scratch. The default path runs locally; optional cloud indexing and model-backed
+reranking are used only when configured.
 
 ## Download
 
