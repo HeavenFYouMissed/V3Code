@@ -185,12 +185,16 @@ function clearInheritedNpmrcConfig(dir: string, env: NodeJS.ProcessEnv): void {
 	}
 }
 
-function ensureAgentHarnessLink(sourceRelativePath: string, linkPath: string): 'existing' | 'junction' | 'symlink' | 'hard link' {
+function ensureAgentHarnessLink(sourceRelativePath: string, linkPath: string): 'existing' | 'missing' | 'junction' | 'symlink' | 'hard link' {
 	if (fs.existsSync(linkPath)) {
 		return 'existing';
 	}
 
 	const sourcePath = path.resolve(path.dirname(linkPath), sourceRelativePath);
+	// Public source exports omit private agent instructions and skills.
+	if (!fs.existsSync(sourcePath)) {
+		return 'missing';
+	}
 	const isDirectory = fs.statSync(sourcePath).isDirectory();
 
 	try {
@@ -324,13 +328,13 @@ async function main() {
 
 	const claudeMdLink = path.join(claudeDir, 'CLAUDE.md');
 	const claudeMdLinkType = ensureAgentHarnessLink(path.join('..', '.github', 'copilot-instructions.md'), claudeMdLink);
-	if (claudeMdLinkType !== 'existing') {
+	if (claudeMdLinkType !== 'existing' && claudeMdLinkType !== 'missing') {
 		log('.', `Created ${claudeMdLinkType} .claude/CLAUDE.md -> .github/copilot-instructions.md`);
 	}
 
 	const claudeSkillsLink = path.join(claudeDir, 'skills');
 	const claudeSkillsLinkType = ensureAgentHarnessLink(path.join('..', '.agents', 'skills'), claudeSkillsLink);
-	if (claudeSkillsLinkType !== 'existing') {
+	if (claudeSkillsLinkType !== 'existing' && claudeSkillsLinkType !== 'missing') {
 		log('.', `Created ${claudeSkillsLinkType} .claude/skills -> .agents/skills`);
 	}
 

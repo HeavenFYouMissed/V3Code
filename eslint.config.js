@@ -145,6 +145,7 @@ export default defineConfig(
 	{
 		files: [
 			'build/public-source/**/*.{js,mjs,cjs}',
+			'build/npm/postinstall.test.mjs',
 		],
 		rules: {
 			'header/header': 'off',
