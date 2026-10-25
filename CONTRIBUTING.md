@@ -6,8 +6,8 @@ Thanks for helping improve V3Code.
 
 - Search existing issues before opening another one.
 - Keep pull requests focused on one problem.
-- Read [LICENSING.md](LICENSING.md). This is a mixed-license, source-available
-  project rather than a uniformly Open Source repository.
+- Read [LICENSING.md](LICENSING.md). V3Code is open source under the Apache License 2.0,
+  with some upstream parts under MIT.
 - Do not remove existing copyright, license, SPDX, or attribution notices.
 - Do not include credentials, private code, copied product assets, or material you
   cannot legally contribute.
@@ -40,9 +40,9 @@ and what you did not run.
   `NOTICE.txt` when required.
 - Disclose material AI assistance and confirm you reviewed the resulting code.
 
-Before a pull request can merge, its author must accept [CLA.md](CLA.md) through
-the repository's recorded acceptance flow. Opening a pull request alone is not
-acceptance.
+Contributions are accepted under the Apache License 2.0 (section 5 of
+[LICENSE](LICENSE)): what you submit is licensed under the same terms as the
+project. No separate agreement is needed.
 
 ## Review
 
