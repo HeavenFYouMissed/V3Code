@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*  Copyright (c) 2025-2026 KandD Labs. Proprietary. See LICENSE-V3CODE.txt  */
+/*  Copyright (c) 2025-2026 KandD Labs. Licensed under the Apache License, Version 2.0. See LICENSE  */
 
 // Stable stdio -> Streamable HTTP bridge for V3Code.
 //

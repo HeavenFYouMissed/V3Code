@@ -5,7 +5,7 @@
   "author": {
     "name": "Microsoft Corporation"
   },
-  "license": "SEE LICENSE IN LICENSE-V3CODE.txt",
+  "license": "Apache-2.0",
   "main": "./out/main.js",
   "type": "module",
   "private": true,

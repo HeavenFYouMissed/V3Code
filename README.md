@@ -12,7 +12,7 @@
 	
 </p>
 <p align="center">
-  <strong>The most capable AI code editor available. Free. Source-available. No data collection. No subscription required.</strong>
+  <strong>The most capable AI code editor available. Free. Open source. No data collection. No subscription required.</strong>
 </p>
 
 <p align="center">
@@ -125,7 +125,7 @@ Guides for every feature at [docs.v3code.dev](https://docs.v3code.dev) — inclu
 
 ## How it's built
 
-V3Code was built by one developer over A year — [Daniel Castellani](https://github.com/HeavenFYouMissed) at [KandD Labs](https://kanddlabs.com). AI tools were used extensively Autocomplete --( Cursor- agent forgetting mid task pushed me to start this project, Claude, Codex, and V3Code itself over the last 3-4 months). The architecture, product direction, and every shipped decision are human-directed and every line of code is read before i use it and understood. Ai Writes code faster i was able to ship a vscode fork solo on hot-pockets and Monster late nights and persistence and feedback from users and now friends on x @v3code_editor and anyone can contact me on x or support v3code.
+V3Code was built by one developer over A year — [KandD Labs](https://kanddlabs.com). AI tools were used extensively Autocomplete --( Cursor- agent forgetting mid task pushed me to start this project, Claude, Codex, and V3Code itself over the last 3-4 months). The architecture, product direction, and every shipped decision are human-directed and every line of code is read before i use it and understood. Ai Writes code faster i was able to ship a vscode fork solo on hot-pockets and Monster late nights and persistence and feedback from users and now friends on x @v3code_editor and anyone can contact me on x or support v3code.
 
 ### Core systems
 
@@ -169,28 +169,32 @@ scripts\code.bat          # Windows
 
 Bug reports, focused fixes, tests, docs, and well-scoped features are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) first.
 
-All contributors sign a [CLA](CLA.md) on their first pull request. Interface changes need a screenshot or recording. Every PR says what was tested.
+Contributions are accepted under the Apache License 2.0. Interface changes need a screenshot or recording. Every PR says what was tested.
 
  Maintainers are responsible for what gets merged.
 
 ---
 
+## Built on Void
+
+V3Code started as a fork of [Void Editor](https://github.com/voideditor/void), the open source AI code editor by the Void team, which is itself built on Microsoft's [Code - OSS](https://github.com/microsoft/vscode). Void laid the foundation: the React workbench, the provider layer, streaming diffs and the build and update pipeline. Thank you to the Void team and every Void contributor for building it in the open and leaving it as a reference for everyone who forks VS Code. V3Code would not exist without your work.
+
+---
+
 ## Licensing
 
-Mixed-license repository:
+V3Code is open source under the [Apache License 2.0](LICENSE).
 
 | Code | License |
 |---|---|
-| Code - OSS | MIT |
+| V3Code | Apache-2.0 |
 | Void Editor | Apache-2.0 |
-| Select V3Code components | MIT or Apache-2.0 |
-| V3Code product code (KandD Labs) | BSL 1.1 → Apache-2.0 after 4 years |
+| Code - OSS | MIT |
+| Select components | MIT or Apache-2.0, per file |
 
-**What this means:** Use V3Code for anything — personal, commercial, internal, learning, contributing. The one restriction: don't redistribute it as a competing code editor without a commercial license.
+**What this means:** use, change, share and ship V3Code for anything, including commercial work. Keep the notices in [NOTICE.txt](NOTICE.txt). See [LICENSING.md](LICENSING.md) for the component map.
 
-Read [LICENSING.md](LICENSING.md), [LICENSE-V3CODE.txt](LICENSE-V3CODE.txt), [LICENSE.txt](LICENSE.txt), and [NOTICE.txt](NOTICE.txt) for the full picture.
-
-V3Code, the V3 logo, and associated branding are trademarks of KandD Labs LLC.
+V3Code, the V3 logo, and associated branding are trademarks of KandD Labs.
 
 ---
 
@@ -199,7 +203,7 @@ V3Code, the V3 logo, and associated branding are trademarks of KandD Labs LLC.
 </p>
 
 <p align="center">
-  <strong>Built by <a href="https://github.com/HeavenFYouMissed">Daniel Castellani</a> at <a href="https://kanddlabs.com">KandD Labs LLC</a></strong>
+  <strong>Built by <a href="https://kanddlabs.com">KandD Labs</a></strong>
   <br>
   <em>"Building things that probably shouldn't be possible yet."</em>
 </p>

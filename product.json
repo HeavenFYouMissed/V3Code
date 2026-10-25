@@ -39,7 +39,7 @@
 	"win32TunnelMutex": "v3code-tunnel",
 	"darwinBundleIdentifier": "dev.v3code.code",
 	"linuxIconName": "v3code",
-	"licenseFileName": "LICENSE-V3CODE.txt",
+	"licenseFileName": "LICENSE",
 	"reportIssueUrl": "https://github.com/HeavenFYouMissed/V3Code/issues/new",
 	"updateUrl": "https://update.v3code.dev",
 	"v3codeBroadcastUrl": "https://update.v3code.dev/api/notifications",

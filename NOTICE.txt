@@ -1,9 +1,14 @@
-V3Code - Third-Party Notices
+V3Code
 Copyright (c) 2025-2026 KandD Labs
 
+V3Code is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+V3Code is built on Void Editor and on Microsoft's Code - OSS. Thank you to the
+Void team and every Void contributor: V3Code would not exist without your open
+source work.
+
 This product incorporates third-party software. The following notices apply to
-those portions. KandD-owned V3Code material is source-available under the
-Business Source License 1.1 where identified in LICENSING.md.
+those portions.
 
 ================================================================================
 Microsoft Visual Studio Code (Code - OSS)
@@ -81,11 +86,10 @@ CONDITIONS OF ANY KIND, either express or implied. See the License for the
 specific language governing permissions and limitations under the License.
 
 ================================================================================
-V3Code BSL-Covered Components
+V3Code
 ================================================================================
-Copyright (c) 2025-2026 KandD Labs LLC.
-License: LICENSE-V3CODE.txt
-Scope: see LICENSING.md
+Copyright (c) 2025-2026 KandD Labs
+License: Apache License 2.0 (LICENSE)
 
 The distribution label added to source files is not an ownership or license
 claim. File-specific and upstream notices remain applicable.
